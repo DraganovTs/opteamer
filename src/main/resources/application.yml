@@ -1,0 +1,6 @@
+spring:
+  application:
+    name: "opteamer"
+  profiles:
+    active: local
+
