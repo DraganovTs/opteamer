@@ -19,5 +19,5 @@ public class AssessmentId implements Serializable {
     private Long patientId;
 
     @Column(name = "pre_op_a_id")
-    private Long preOpAId;
+    private String preOpAId;
 }
