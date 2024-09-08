@@ -10,7 +10,7 @@ import java.util.HashSet;
 import java.util.Set;
 
 @Entity
-@Table(name = "operation_type")
+@Table(name = "operation_types")
 @NoArgsConstructor
 @Getter
 @Setter
@@ -27,8 +27,8 @@ public class OperationType {
     private Integer durationHours;
 
     @ManyToMany(fetch = FetchType.EAGER)
-    @JoinTable(name = "optype_assets",
-    joinColumns = @JoinColumn(name = "optype_id"),
+    @JoinTable(name = "opType_assets",
+    joinColumns = @JoinColumn(name = "opType_id"),
     inverseJoinColumns = @JoinColumn(name = "asset_id"))
     private Set<Asset> assets = new HashSet<Asset>();
 
@@ -39,7 +39,7 @@ public class OperationType {
     private Set<OperationProvider> operationProviders = new HashSet<OperationProvider>();
 
     @ManyToMany(fetch = FetchType.EAGER)
-    @JoinTable(name = "optype_pre_op",
+    @JoinTable(name = "optype_pre_op_a",
             joinColumns = @JoinColumn(name = "optype_id"),
             inverseJoinColumns = @JoinColumn(name = "pre_op_a_id"))
     private Set<PreOperativeAssessment> preOperativeAssessments = new HashSet<PreOperativeAssessment>();

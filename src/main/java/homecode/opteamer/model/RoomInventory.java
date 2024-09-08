@@ -7,7 +7,7 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 @Entity
-@Table(name = "room_inventory")
+@Table(name = "room_inventories")
 @NoArgsConstructor
 @Getter
 @Setter
@@ -17,14 +17,15 @@ public class RoomInventory {
     private RoomInventoryId roomInventoryId;
 
     @ManyToOne
-    @MapsId("asset")
-    @JoinColumn(name = "asset_id")
-    private Asset asset;
+    @MapsId("roomId")
+    @JoinColumn(name = "room_id",columnDefinition = "BIGINT")
+    private OperationRoom operationRoom;
 
     @ManyToOne
-    @MapsId("operationRoom")
-    @JoinColumn(name = "room_id")
-    private OperationRoom operationRoom;
+    @MapsId("assetId")
+    @JoinColumn(name = "asset_id",columnDefinition = "BIGINT")
+    private Asset asset;
+
 
     private Integer count;
 }
