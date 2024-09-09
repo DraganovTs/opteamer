@@ -19,13 +19,15 @@ public class SecurityConfig {
         http
                 .csrf(AbstractHttpConfigurer::disable)
                 .authorizeHttpRequests((requests) -> requests
-                        .requestMatchers("/api/assessments/**").permitAll()
-                        .requestMatchers("/api/").permitAll()
+                        .requestMatchers("/api/assets").permitAll()
+                        .requestMatchers("/api/assets/**").permitAll()
+                        .requestMatchers("/api/inventories").permitAll()
+                        .requestMatchers("/api/inventories/**").permitAll()
+                        .anyRequest().authenticated()
                 )
                 .logout(LogoutConfigurer::permitAll);
 
 
         return http.build();
-
     }
 }

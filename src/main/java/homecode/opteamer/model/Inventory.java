@@ -13,6 +13,7 @@ import lombok.Setter;
 public class Inventory {
     @Id
     @Column(name = "asset_id")
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long assetId;
 
     @OneToOne
