@@ -20,9 +20,9 @@ public class AssetService {
     }
 
     public AssetDTO save(AssetDTO assetDTO) {
-        Asset asset = mapAssetDTOToAsset(assetDTO);
+        Asset asset = mapDTOToEntity(assetDTO);
         asset = assetRepository.save(asset);
-        return mapAssetToAssetDTO(asset);
+        return mapEntityToDTO(asset);
     }
 
     public Optional<AssetDTO> updateAsset(Long id,AssetDTO assetDTO) {
@@ -30,21 +30,21 @@ public class AssetService {
             asset.setType(assetDTO.getType());
             asset.setName(assetDTO.getName());
             assetRepository.save(asset);
-            return mapAssetToAssetDTO(asset);
+            return mapEntityToDTO(asset);
         });
     }
 
     public List<AssetDTO> getAllAssets() {
         List<AssetDTO> list = new ArrayList<>();
         Iterable<Asset> assets = assetRepository.findAll();
-        assets.forEach(asset -> list.add(mapAssetToAssetDTO(asset)));
+        assets.forEach(asset -> list.add(mapEntityToDTO(asset)));
         return list;
     }
 
     public Optional<AssetDTO> getAssetById(Long id) {
         try {
             Asset asset = assetRepository.findById(id).orElseThrow();
-            return Optional.of(mapAssetToAssetDTO(asset));
+            return Optional.of(mapEntityToDTO(asset));
         } catch (Exception e) {
             return Optional.empty();
         }
@@ -58,12 +58,12 @@ public class AssetService {
         }).orElse(false);
     }
 
-    private Asset mapAssetDTOToAsset(AssetDTO assetDTO) {
+    private Asset mapDTOToEntity(AssetDTO assetDTO) {
         ModelMapper modelMapper = new ModelMapper();
         return modelMapper.map(assetDTO, Asset.class);
     }
 
-    private AssetDTO mapAssetToAssetDTO(Asset asset) {
+    private AssetDTO mapEntityToDTO(Asset asset) {
         ModelMapper modelMapper = new ModelMapper();
         return modelMapper.map(asset, AssetDTO.class);
     }

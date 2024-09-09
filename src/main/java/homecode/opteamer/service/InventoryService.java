@@ -6,9 +6,7 @@ import homecode.opteamer.model.dtos.AssetDTO;
 import homecode.opteamer.model.dtos.InventoryDTO;
 import homecode.opteamer.repository.AssetRepository;
 import homecode.opteamer.repository.InventoryRepository;
-import lombok.RequiredArgsConstructor;
 import org.modelmapper.ModelMapper;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
@@ -17,12 +15,17 @@ import java.util.NoSuchElementException;
 import java.util.Optional;
 
 @Service
-@RequiredArgsConstructor
+
 public class InventoryService {
-    @Autowired
+
     private final InventoryRepository inventoryRepository;
-    @Autowired
+
     private final AssetRepository assetRepository;
+
+    public InventoryService(InventoryRepository inventoryRepository, AssetRepository assetRepository) {
+        this.inventoryRepository = inventoryRepository;
+        this.assetRepository = assetRepository;
+    }
 
 
     public InventoryDTO createInventory(InventoryDTO inventoryDTO) {
@@ -41,21 +44,21 @@ public class InventoryService {
         return inventoryRepository.findById(id).map(inventory -> {
             inventory.setCount(inventoryDTO.getCount());
             inventoryRepository.save(inventory);
-            return mapInventoryToInventoryDTO(inventory);
+            return mapEntityToDTO(inventory);
         });
     }
 
     public List<InventoryDTO> getAllInventories() {
         List<InventoryDTO> list = new ArrayList<>();
         Iterable<Inventory> inventories = inventoryRepository.findAll();
-        inventories.forEach(inventory -> list.add(mapInventoryToInventoryDTO(inventory)));
+        inventories.forEach(inventory -> list.add(mapEntityToDTO(inventory)));
         return list;
     }
 
     public Optional<InventoryDTO> getInventoryById(Long id) {
         try {
             Inventory inventory = inventoryRepository.findById(id).orElseThrow();
-            return Optional.of(mapInventoryToInventoryDTO(inventory));
+            return Optional.of(mapEntityToDTO(inventory));
         } catch (Exception e) {
             return Optional.empty();
         }
@@ -69,12 +72,12 @@ public class InventoryService {
         }).orElse(false);
     }
 
-    private Inventory mapInventoryDTOToInventory(InventoryDTO inventoryDTO) {
+    private Inventory mapDTOToEntity(InventoryDTO inventoryDTO) {
         ModelMapper modelMapper = new ModelMapper();
         return modelMapper.map(inventoryDTO, Inventory.class);
     }
 
-    private InventoryDTO mapInventoryToInventoryDTO(Inventory inventory) {
+    private InventoryDTO mapEntityToDTO(Inventory inventory) {
         ModelMapper modelMapper = new ModelMapper();
         return modelMapper.map(inventory, InventoryDTO.class);
     }

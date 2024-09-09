@@ -1,9 +1,11 @@
 package homecode.opteamer.service;
 
-import homecode.opteamer.model.*;
+import homecode.opteamer.model.Assessment;
+import homecode.opteamer.model.Patient;
+import homecode.opteamer.model.PreOperativeAssessment;
+import homecode.opteamer.model.TeamMember;
 import homecode.opteamer.model.dtos.*;
 import homecode.opteamer.model.embededIds.AssessmentId;
-import homecode.opteamer.model.embededIds.RoomInventoryId;
 import homecode.opteamer.repository.*;
 import org.springframework.stereotype.Service;
 

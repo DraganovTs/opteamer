@@ -8,5 +8,5 @@ import java.util.Optional;
 
 @Repository
 public interface PreOperativeAssessmentRepository extends CrudRepository<PreOperativeAssessment,String> {
-   Optional<PreOperativeAssessment> findByName(String PreOpAssessmentId);
+   Optional<PreOperativeAssessment> findByName(String name);
 }
