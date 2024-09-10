@@ -53,7 +53,7 @@ public class PreOperativeAssessmentService {
     }
 
 
-    private boolean deletePreOperativeAssessment(String name) {
+    public boolean deletePreOperativeAssessment(String name) {
         return preOperativeAssessmentRepository.findByName(name).map(preOperativeAssessment -> {
             preOperativeAssessmentRepository.delete(preOperativeAssessment);
             return true;

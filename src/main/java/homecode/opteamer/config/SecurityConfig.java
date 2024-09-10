@@ -23,6 +23,8 @@ public class SecurityConfig {
                         .requestMatchers("/api/assets/**").permitAll()
                         .requestMatchers("/api/inventories").permitAll()
                         .requestMatchers("/api/inventories/**").permitAll()
+                        .requestMatchers("/api/preOperativeAssessments").permitAll()
+                        .requestMatchers("/api/preOperativeAssessments/**").permitAll()
                         .anyRequest().authenticated()
                 )
                 .logout(LogoutConfigurer::permitAll);
