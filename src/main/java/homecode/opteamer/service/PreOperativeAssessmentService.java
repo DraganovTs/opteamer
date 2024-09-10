@@ -38,9 +38,10 @@ public class PreOperativeAssessmentService {
     }
 
     public PreOperativeAssessmentDTO createPreOperativeAssessment(PreOperativeAssessmentDTO preOperativeAssessmentDTO) {
-        PreOperativeAssessment preOperativeAssessment = mapDTOToEntity(preOperativeAssessmentDTO);
-        preOperativeAssessment = preOperativeAssessmentRepository.save(preOperativeAssessment);
-        return mapEntityToDTO(preOperativeAssessment);
+        PreOperativeAssessment preOperativeAssessment = new PreOperativeAssessment();
+        preOperativeAssessment.setName(preOperativeAssessmentDTO.getName());
+        PreOperativeAssessment preOperativeAssessmentSave = preOperativeAssessmentRepository.save(preOperativeAssessment);
+        return mapEntityToDTO(preOperativeAssessmentSave);
     }
 
     public Optional<PreOperativeAssessmentDTO> updatePreOperativeAssessment(String name,

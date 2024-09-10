@@ -19,7 +19,7 @@ public class PreOperativeAssessmentController {
         this.preOperativeAssessmentService = preOperativeAssessmentService;
     }
 
-    @GetMapping("/{id}")
+    @GetMapping("/{name}")
     public ResponseEntity<PreOperativeAssessmentDTO> getPreOperativeAssessmentById(@PathVariable String name) {
         Optional<PreOperativeAssessmentDTO> operativeAssessmentDTOOptional =
                 preOperativeAssessmentService.getPreOperativeAssessment(name);
@@ -36,8 +36,9 @@ public class PreOperativeAssessmentController {
     @PostMapping
     public ResponseEntity<PreOperativeAssessmentDTO> createPreOperativeAssessment(@RequestBody PreOperativeAssessmentDTO
                                                                                           preOperativeAssessmentDTO) {
-        preOperativeAssessmentService.createPreOperativeAssessment(preOperativeAssessmentDTO);
-        return ResponseEntity.status(HttpStatus.CREATED).body(preOperativeAssessmentDTO);
+        PreOperativeAssessmentDTO preOperativeAssessment = preOperativeAssessmentService
+                .createPreOperativeAssessment(preOperativeAssessmentDTO);
+        return ResponseEntity.status(HttpStatus.CREATED).body(preOperativeAssessment);
     }
 
     @PutMapping("/{name}")
