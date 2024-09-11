@@ -1,6 +1,5 @@
 package homecode.opteamer.controller;
 
-import homecode.opteamer.model.OperationProvider;
 import homecode.opteamer.model.dtos.OperationProviderDTO;
 import homecode.opteamer.service.OperationProviderService;
 import org.springframework.http.HttpStatus;

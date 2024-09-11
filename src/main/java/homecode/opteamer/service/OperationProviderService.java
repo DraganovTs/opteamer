@@ -33,9 +33,9 @@ public class OperationProviderService {
 
     public List<OperationProviderDTO> getAllOperationProviders() {
         List<OperationProviderDTO> operationProviderDTOList = new ArrayList<>();
-        operationProviderRepository.findAll().forEach(operationProvider -> {
-            operationProviderDTOList.add(mapEntityToDTO(operationProvider));
-        });
+        operationProviderRepository.findAll().forEach(operationProvider ->
+            operationProviderDTOList.add(mapEntityToDTO(operationProvider))
+        );
         return operationProviderDTOList;
     }
 
