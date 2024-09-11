@@ -44,13 +44,9 @@ public class PreOperativeAssessmentService {
         return mapEntityToDTO(preOperativeAssessmentSave);
     }
 
-    public Optional<PreOperativeAssessmentDTO> updatePreOperativeAssessment(String name,
-                                                                            PreOperativeAssessmentDTO preOperativeAssessmentDTO) {
-        return preOperativeAssessmentRepository.findByName(name).map(preOperativeAssessment -> {
-            preOperativeAssessment.setName(preOperativeAssessmentDTO.getName());
-            preOperativeAssessmentRepository.save(preOperativeAssessment);
-            return mapEntityToDTO(preOperativeAssessment);
-        });
+    public Optional<PreOperativeAssessmentDTO> updatePreOperativeAssessment(String name, PreOperativeAssessmentDTO preOperativeAssessmentDTO) {
+        deletePreOperativeAssessment(name);
+        return Optional.of(createPreOperativeAssessment(preOperativeAssessmentDTO));
     }
 
 
