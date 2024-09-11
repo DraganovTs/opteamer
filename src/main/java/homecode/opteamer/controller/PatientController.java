@@ -40,7 +40,7 @@ public class PatientController {
 
     @PutMapping("/{id}")
     public ResponseEntity<PatientDTO> updatePatient(@PathVariable Long id, @RequestBody PatientDTO patientDTO) {
-        Optional<PatientDTO> patientDTOOptional = patientService.getPatientById(id);
+        Optional<PatientDTO> patientDTOOptional = patientService.updatePatient(id,patientDTO);
         return patientDTOOptional.map(ResponseEntity::ok)
                 .orElse(ResponseEntity.status(HttpStatus.NOT_FOUND).build());
     }

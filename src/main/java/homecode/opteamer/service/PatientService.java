@@ -32,9 +32,9 @@ public class PatientService {
     public List<PatientDTO> getAllPatients() {
         List<PatientDTO> patients = new ArrayList<>();
         Iterable<Patient> patientIterable = patientRepository.findAll();
-        patientIterable.forEach(patient -> {
-            patients.add(mapEntityToDTO(patient));
-        });
+        patientIterable.forEach(patient ->
+            patients.add(mapEntityToDTO(patient))
+        );
         return patients;
     }
 
