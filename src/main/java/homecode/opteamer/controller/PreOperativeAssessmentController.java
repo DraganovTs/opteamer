@@ -48,7 +48,7 @@ public class PreOperativeAssessmentController {
         Optional<PreOperativeAssessmentDTO> operativeAssessmentDTOOptional =
                 preOperativeAssessmentService.updatePreOperativeAssessment(name, preOperativeAssessmentDTO);
         return operativeAssessmentDTOOptional.map(ResponseEntity::ok)
-                .orElse(ResponseEntity.status(HttpStatus.NOT_FOUND).build());
+                .orElseGet(() -> ResponseEntity.status(HttpStatus.NOT_FOUND).build());
     }
 
 

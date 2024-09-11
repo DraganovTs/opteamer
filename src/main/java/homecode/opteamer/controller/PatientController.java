@@ -40,9 +40,9 @@ public class PatientController {
 
     @PutMapping("/{id}")
     public ResponseEntity<PatientDTO> updatePatient(@PathVariable Long id, @RequestBody PatientDTO patientDTO) {
-        Optional<PatientDTO> patientDTOOptional = patientService.updatePatient(id,patientDTO);
+        Optional<PatientDTO> patientDTOOptional = patientService.updatePatient(id, patientDTO);
         return patientDTOOptional.map(ResponseEntity::ok)
-                .orElse(ResponseEntity.status(HttpStatus.NOT_FOUND).build());
+                .orElseGet(() -> ResponseEntity.status(HttpStatus.NOT_FOUND).build());
     }
 
     @DeleteMapping("/{id}")
@@ -50,7 +50,7 @@ public class PatientController {
         boolean deleted = patientService.deletePatient(id);
         if (deleted) {
             return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
-        }else {
+        } else {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
         }
     }

@@ -30,7 +30,7 @@ public class InventoryController {
     public ResponseEntity<InventoryDTO> updateAsset(@PathVariable Long id, @RequestBody InventoryDTO inventoryDTO) {
         Optional<InventoryDTO> inventoryDTOOptional = inventoryService.updateInventory(id, inventoryDTO);
         return inventoryDTOOptional.map(ResponseEntity::ok)
-                .orElse(ResponseEntity.status(HttpStatus.NOT_FOUND).build());
+                .orElseGet(()->ResponseEntity.status(HttpStatus.NOT_FOUND).build());
     }
 
     @GetMapping()

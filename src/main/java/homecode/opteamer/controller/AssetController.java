@@ -42,7 +42,7 @@ public class AssetController {
     public ResponseEntity<AssetDTO> getAssetById(@PathVariable Long id) {
         Optional<AssetDTO> assetDTOOptional = assetService.getAssetById(id);
         return assetDTOOptional.map(ResponseEntity::ok)
-                .orElse(ResponseEntity.status(HttpStatus.NOT_FOUND).build());
+                .orElseGet(()->ResponseEntity.status(HttpStatus.NOT_FOUND).build());
     }
 
     @DeleteMapping("/{id}")
