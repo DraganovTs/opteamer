@@ -3,6 +3,7 @@ package homecode.opteamer.service;
 import homecode.opteamer.model.Asset;
 import homecode.opteamer.model.dtos.AssetDTO;
 import homecode.opteamer.repository.AssetRepository;
+import homecode.opteamer.util.MapperUtility;
 import org.modelmapper.ModelMapper;
 import org.springframework.stereotype.Service;
 
@@ -20,9 +21,9 @@ public class AssetService {
     }
 
     public AssetDTO save(AssetDTO assetDTO) {
-        Asset asset = mapDTOToEntity(assetDTO);
+        Asset asset = MapperUtility.mapDTOToEntity(assetDTO, Asset.class);
         asset = assetRepository.save(asset);
-        return mapEntityToDTO(asset);
+        return MapperUtility.mapEntityToDTO(asset , AssetDTO.class);
     }
 
     public Optional<AssetDTO> updateAsset(Long id,AssetDTO assetDTO) {
@@ -30,21 +31,21 @@ public class AssetService {
             asset.setType(assetDTO.getType());
             asset.setName(assetDTO.getName());
             assetRepository.save(asset);
-            return mapEntityToDTO(asset);
+            return MapperUtility.mapEntityToDTO(asset , AssetDTO.class);
         });
     }
 
     public List<AssetDTO> getAllAssets() {
         List<AssetDTO> list = new ArrayList<>();
         Iterable<Asset> assets = assetRepository.findAll();
-        assets.forEach(asset -> list.add(mapEntityToDTO(asset)));
+        assets.forEach(asset -> list.add(MapperUtility.mapEntityToDTO(asset , AssetDTO.class)));
         return list;
     }
 
     public Optional<AssetDTO> getAssetById(Long id) {
         try {
             Asset asset = assetRepository.findById(id).orElseThrow();
-            return Optional.of(mapEntityToDTO(asset));
+            return Optional.of(MapperUtility.mapEntityToDTO(asset , AssetDTO.class));
         } catch (Exception e) {
             return Optional.empty();
         }
@@ -58,13 +59,4 @@ public class AssetService {
         }).orElse(false);
     }
 
-    private Asset mapDTOToEntity(AssetDTO assetDTO) {
-        ModelMapper modelMapper = new ModelMapper();
-        return modelMapper.map(assetDTO, Asset.class);
-    }
-
-    private AssetDTO mapEntityToDTO(Asset asset) {
-        ModelMapper modelMapper = new ModelMapper();
-        return modelMapper.map(asset, AssetDTO.class);
-    }
 }

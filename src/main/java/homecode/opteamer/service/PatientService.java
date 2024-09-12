@@ -3,6 +3,7 @@ package homecode.opteamer.service;
 import homecode.opteamer.model.Patient;
 import homecode.opteamer.model.dtos.PatientDTO;
 import homecode.opteamer.repository.PatientRepository;
+import homecode.opteamer.util.MapperUtility;
 import org.modelmapper.ModelMapper;
 import org.springframework.stereotype.Service;
 
@@ -23,7 +24,7 @@ public class PatientService {
     public Optional<PatientDTO> getPatientById(Long id) {
         try {
             Patient patient = patientRepository.findById(id).orElse(null);
-            return Optional.of(mapEntityToDTO(patient));
+            return Optional.of(MapperUtility.mapEntityToDTO(patient, PatientDTO.class));
         } catch (NoSuchElementException e) {
             return Optional.empty();
         }
@@ -33,15 +34,15 @@ public class PatientService {
         List<PatientDTO> patients = new ArrayList<>();
         Iterable<Patient> patientIterable = patientRepository.findAll();
         patientIterable.forEach(patient ->
-            patients.add(mapEntityToDTO(patient))
+                patients.add(MapperUtility.mapEntityToDTO(patient, PatientDTO.class))
         );
         return patients;
     }
 
     public PatientDTO createPatient(PatientDTO patientDTO) {
-        Patient patient = mapDTOToEntity(patientDTO);
+        Patient patient = MapperUtility.mapDTOToEntity(patientDTO, Patient.class);
         patient = patientRepository.save(patient);
-        return mapEntityToDTO(patient);
+        return MapperUtility.mapEntityToDTO(patient, PatientDTO.class);
     }
 
     public Optional<PatientDTO> updatePatient(Long id, PatientDTO patientDTO) {
@@ -49,7 +50,7 @@ public class PatientService {
             patient.setName(patientDTO.getName());
             patient.setNin(patientDTO.getNin());
             patientRepository.save(patient);
-            return mapEntityToDTO(patient);
+            return MapperUtility.mapEntityToDTO(patient, PatientDTO.class);
         });
     }
 
@@ -60,14 +61,4 @@ public class PatientService {
         }).orElse(false);
     }
 
-
-    private Patient mapDTOToEntity(PatientDTO patientDTO) {
-        ModelMapper modelMapper = new ModelMapper();
-        return modelMapper.map(patientDTO, Patient.class);
-    }
-
-    private PatientDTO mapEntityToDTO(Patient patient) {
-        ModelMapper modelMapper = new ModelMapper();
-        return modelMapper.map(patient, PatientDTO.class);
-    }
 }

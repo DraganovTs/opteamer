@@ -17,7 +17,7 @@ import java.util.Optional;
 @Service
 public class TeamMemberService {
 
-    private TeamMemberRepository teamMemberRepository;
+    private final TeamMemberRepository teamMemberRepository;
 
     public TeamMemberService(TeamMemberRepository teamMemberRepository) {
         this.teamMemberRepository = teamMemberRepository;
@@ -27,7 +27,7 @@ public class TeamMemberService {
     public Optional<TeamMemberDTO> findTeamMemberById(Long id) {
         try {
             TeamMember teamMember = teamMemberRepository.findById(id).orElse(null);
-            return Optional.of(mapEntityToDTO(teamMember));
+            return Optional.of(MapperUtility.mapEntityToDTO(teamMember, TeamMemberDTO.class));
         } catch (NoSuchElementException e) {
             return Optional.empty();
         }
@@ -36,9 +36,9 @@ public class TeamMemberService {
     public List<TeamMemberDTO> findAllTeamMembers() {
         List<TeamMemberDTO> teamMemberDTOList = new ArrayList<>();
         Iterable<TeamMember> teamMembersOptional = teamMemberRepository.findAll();
-        teamMembersOptional.forEach(teamMember -> {
-            teamMemberDTOList.add(mapEntityToDTO(teamMember));
-        });
+        teamMembersOptional.forEach(teamMember ->
+                teamMemberDTOList.add(MapperUtility.mapEntityToDTO(teamMember, TeamMemberDTO.class))
+        );
         return teamMemberDTOList;
     }
 
@@ -48,7 +48,7 @@ public class TeamMemberService {
         TeamMember teamMember = MapperUtility.mapDTOToEntity(teamMemberDTO, TeamMember.class);
         teamMember.setOperationProvider(operationProvider);
         teamMember = teamMemberRepository.save(teamMember);
-        return mapEntityToDTO(teamMember);
+        return MapperUtility.mapEntityToDTO(teamMember, TeamMemberDTO.class);
     }
 
     public Optional<TeamMemberDTO> updateTeamMember(Long id, TeamMemberDTO teamMemberDTO) {
@@ -57,7 +57,7 @@ public class TeamMemberService {
         return teamMemberRepository.findById(id).map(teamMember -> {
             teamMember.setName(teamMemberDTO.getName());
             teamMember.setOperationProvider(operationProvider);
-            return mapEntityToDTO(teamMemberRepository.save(teamMember));
+            return MapperUtility.mapEntityToDTO(teamMemberRepository.save(teamMember), TeamMemberDTO.class);
         });
 
     }
@@ -70,13 +70,4 @@ public class TeamMemberService {
     }
 
 
-    private TeamMember mapDTOToEntity(TeamMemberDTO teamMemberDTO) {
-        ModelMapper modelMapper = new ModelMapper();
-        return modelMapper.map(teamMemberDTO, TeamMember.class);
-    }
-
-    private TeamMemberDTO mapEntityToDTO(TeamMember teamMember) {
-        ModelMapper modelMapper = new ModelMapper();
-        return modelMapper.map(teamMember, TeamMemberDTO.class);
-    }
 }

@@ -3,6 +3,7 @@ package homecode.opteamer.service;
 import homecode.opteamer.model.PreOperativeAssessment;
 import homecode.opteamer.model.dtos.PreOperativeAssessmentDTO;
 import homecode.opteamer.repository.PreOperativeAssessmentRepository;
+import homecode.opteamer.util.MapperUtility;
 import org.modelmapper.ModelMapper;
 import org.springframework.stereotype.Service;
 
@@ -24,7 +25,7 @@ public class PreOperativeAssessmentService {
     public Optional<PreOperativeAssessmentDTO> getPreOperativeAssessment(String id) {
         try {
             PreOperativeAssessment preOperativeAssessment = preOperativeAssessmentRepository.findById(id).orElseThrow();
-            return Optional.of(mapEntityToDTO(preOperativeAssessment));
+            return Optional.of(MapperUtility.mapEntityToDTO(preOperativeAssessment, PreOperativeAssessmentDTO.class));
         } catch (NoSuchElementException e) {
             return Optional.empty();
         }
@@ -33,14 +34,14 @@ public class PreOperativeAssessmentService {
     public List<PreOperativeAssessmentDTO> getAllPreOperativeAssessments() {
         List<PreOperativeAssessmentDTO> list = new ArrayList<>();
         Iterable<PreOperativeAssessment> allPreOperativeAssessments = preOperativeAssessmentRepository.findAll();
-        allPreOperativeAssessments.forEach(preOperativeAssessment -> list.add(mapEntityToDTO(preOperativeAssessment)));
+        allPreOperativeAssessments.forEach(preOperativeAssessment -> list.add(MapperUtility.mapEntityToDTO(preOperativeAssessment, PreOperativeAssessmentDTO.class)));
         return list;
     }
 
     public PreOperativeAssessmentDTO createPreOperativeAssessment(PreOperativeAssessmentDTO preOperativeAssessmentDTO) {
-        PreOperativeAssessment preOperativeAssessment = mapDTOToEntity(preOperativeAssessmentDTO);
+        PreOperativeAssessment preOperativeAssessment = MapperUtility.mapDTOToEntity(preOperativeAssessmentDTO, PreOperativeAssessment.class);
         PreOperativeAssessment preOperativeAssessmentSave = preOperativeAssessmentRepository.save(preOperativeAssessment);
-        return mapEntityToDTO(preOperativeAssessmentSave);
+        return MapperUtility.mapEntityToDTO(preOperativeAssessmentSave,PreOperativeAssessmentDTO.class);
     }
 
     public Optional<PreOperativeAssessmentDTO> updatePreOperativeAssessment(String name, PreOperativeAssessmentDTO preOperativeAssessmentDTO) {
@@ -56,14 +57,4 @@ public class PreOperativeAssessmentService {
         }).orElse(false);
     }
 
-
-    private PreOperativeAssessment mapDTOToEntity(PreOperativeAssessmentDTO preOperativeAssessmentDTO) {
-        ModelMapper modelMapper = new ModelMapper();
-        return modelMapper.map(preOperativeAssessmentDTO, PreOperativeAssessment.class);
-    }
-
-    private PreOperativeAssessmentDTO mapEntityToDTO(PreOperativeAssessment preOperativeAssessment) {
-        ModelMapper modelMapper = new ModelMapper();
-        return modelMapper.map(preOperativeAssessment, PreOperativeAssessmentDTO.class);
-    }
 }

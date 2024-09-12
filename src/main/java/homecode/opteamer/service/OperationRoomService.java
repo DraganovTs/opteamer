@@ -3,6 +3,7 @@ package homecode.opteamer.service;
 import homecode.opteamer.model.OperationRoom;
 import homecode.opteamer.model.dtos.OperationRoomDTO;
 import homecode.opteamer.repository.OperationRoomRepository;
+import homecode.opteamer.util.MapperUtility;
 import org.modelmapper.ModelMapper;
 import org.springframework.stereotype.Service;
 
@@ -24,7 +25,7 @@ public class OperationRoomService {
     public Optional<OperationRoomDTO> getOperationRoomById(Long id) {
         try {
             OperationRoom operationRoom = operationRoomRepository.findById(id).orElse(null);
-            return Optional.of(mapEntityToDTO(operationRoom));
+            return Optional.of(MapperUtility.mapEntityToDTO(operationRoom , OperationRoomDTO.class));
         } catch (NoSuchElementException e) {
             return Optional.empty();
         }
@@ -35,15 +36,15 @@ public class OperationRoomService {
         List<OperationRoomDTO> operationRooms = new ArrayList<>();
         Iterable<OperationRoom> allOperationRooms = operationRoomRepository.findAll();
         allOperationRooms.forEach(operationRoom ->
-                operationRooms.add(mapEntityToDTO(operationRoom))
+                operationRooms.add(MapperUtility.mapEntityToDTO(operationRoom , OperationRoomDTO.class))
         );
         return operationRooms;
     }
 
     public OperationRoomDTO createOperationRoom(OperationRoomDTO operationRoomDTO) {
-        OperationRoom operationRoom = mapDTOToEntity(operationRoomDTO);
+        OperationRoom operationRoom = MapperUtility.mapDTOToEntity(operationRoomDTO , OperationRoom.class);
         operationRoom = operationRoomRepository.save(operationRoom);
-        return mapEntityToDTO(operationRoom);
+        return MapperUtility.mapEntityToDTO(operationRoom , OperationRoomDTO.class);
     }
 
     public Optional<OperationRoomDTO> updateOperationRoom(Long id, OperationRoomDTO operationRoomDTO) {
@@ -55,7 +56,7 @@ public class OperationRoomService {
             operationRoom.setState(operationRoomDTO.getState());
 
             operationRoomRepository.save(operationRoom);
-            return mapEntityToDTO(operationRoom);
+            return MapperUtility.mapEntityToDTO(operationRoom , OperationRoomDTO.class);
         });
     }
 
@@ -66,14 +67,4 @@ public class OperationRoomService {
         }).orElse(false);
     }
 
-
-    private OperationRoom mapDTOToEntity(OperationRoomDTO operationRoomDTO) {
-        ModelMapper modelMapper = new ModelMapper();
-        return modelMapper.map(operationRoomDTO, OperationRoom.class);
-    }
-
-    private OperationRoomDTO mapEntityToDTO(OperationRoom operationRoom) {
-        ModelMapper modelMapper = new ModelMapper();
-        return modelMapper.map(operationRoom, OperationRoomDTO.class);
-    }
 }
