@@ -4,7 +4,6 @@ import homecode.opteamer.model.PreOperativeAssessment;
 import homecode.opteamer.model.dtos.PreOperativeAssessmentDTO;
 import homecode.opteamer.repository.PreOperativeAssessmentRepository;
 import homecode.opteamer.util.MapperUtility;
-import org.modelmapper.ModelMapper;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;

@@ -5,7 +5,6 @@ import homecode.opteamer.model.dtos.OperationProviderDTO;
 import homecode.opteamer.model.enums.OperationProviderType;
 import homecode.opteamer.repository.OperationProviderRepository;
 import homecode.opteamer.util.MapperUtility;
-import org.modelmapper.ModelMapper;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;

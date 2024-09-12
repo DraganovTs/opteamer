@@ -4,7 +4,6 @@ import homecode.opteamer.model.Patient;
 import homecode.opteamer.model.dtos.PatientDTO;
 import homecode.opteamer.repository.PatientRepository;
 import homecode.opteamer.util.MapperUtility;
-import org.modelmapper.ModelMapper;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;

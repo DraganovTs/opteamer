@@ -4,7 +4,6 @@ import homecode.opteamer.model.Asset;
 import homecode.opteamer.model.dtos.AssetDTO;
 import homecode.opteamer.repository.AssetRepository;
 import homecode.opteamer.util.MapperUtility;
-import org.modelmapper.ModelMapper;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
