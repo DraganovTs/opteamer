@@ -61,10 +61,14 @@ public class RoomInventoryService {
         OperationRoom operationRoom = operationRoomRepository.findById(roomInventoryDTO.getOperationRoomId()).get();
         if (asset == null || operationRoom == null)
             throw new NoSuchElementException();
+        RoomInventoryId roomInventoryId = new RoomInventoryId();
+        roomInventoryId.setAssetId(asset.getId());
+        roomInventoryId.setRoomId(operationRoom.getId());
 
+        roomInventory.setRoomInventoryId(roomInventoryId);
         roomInventory.setAsset(asset);
         roomInventory.setOperationRoom(operationRoom);
-        roomInventory.setCount(roomInventory.getCount());
+        roomInventory.setCount(roomInventoryDTO.getCount());
         roomInventory = roomInventoryRepository.save(roomInventory);
         return getRoomInventoryDTO(roomInventory,
                 roomInventory.getAsset(),
