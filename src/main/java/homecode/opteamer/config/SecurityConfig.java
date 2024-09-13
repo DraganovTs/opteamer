@@ -35,6 +35,8 @@ public class SecurityConfig {
                         .requestMatchers("/api/teamMembers/**").permitAll()
                         .requestMatchers("/api/roomInventories/").permitAll()
                         .requestMatchers("/api/roomInventories/**").permitAll()
+                        .requestMatchers("/api/operationTypes/").permitAll()
+                        .requestMatchers("/api/operationTypes/**").permitAll()
                         .anyRequest().authenticated()
                 )
                 .logout(LogoutConfigurer::permitAll);
