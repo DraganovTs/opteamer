@@ -52,6 +52,10 @@ public class OperationTypeService {
 
     public OperationTypeDTO createOperationType(OperationTypeDTO operationTypeDTO) {
 
+        if (operationTypeDTO.getName() == null || operationTypeDTO.getName().isEmpty()) {
+            throw new IllegalArgumentException("OperationType name cannot be null or empty");
+        }
+
         OperationType operationType = OperationTypeMapper.INSTANCE.toOperationType(operationTypeDTO);
 
         setChildEntities(operationTypeDTO, operationType);

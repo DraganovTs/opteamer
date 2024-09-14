@@ -41,7 +41,7 @@ public class OperationTypeController {
     @PutMapping("/{name}")
     public ResponseEntity<OperationTypeDTO> update(@PathVariable String name,
                                                    @RequestBody OperationTypeDTO operationTypeDTO) {
-        Optional<OperationTypeDTO> operationTypeDTOOptional = operationTypeService.getOperationTypeById(name);
+        Optional<OperationTypeDTO> operationTypeDTOOptional = operationTypeService.updateOperationType(name, operationTypeDTO);
         return operationTypeDTOOptional.map(ResponseEntity::ok)
                 .orElseGet(() -> ResponseEntity.status(HttpStatus.NOT_FOUND).build());
     }

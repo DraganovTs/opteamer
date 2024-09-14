@@ -17,7 +17,6 @@ import java.util.Set;
 public class OperationType {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private String name;
 
     @Enumerated(EnumType.STRING)

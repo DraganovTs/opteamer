@@ -6,7 +6,7 @@ import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
 import org.mapstruct.factory.Mappers;
 
-@Mapper(uses = {AssetMapper.class, PreOperativeAssessmentMapper.class, OperationProviderMapper.class})
+@Mapper(uses = {AssetMapper.class, OperationTypeMapper.class ,PreOperativeAssessmentMapper.class, OperationProviderMapper.class})
 public interface OperationTypeMapper {
 
     OperationTypeMapper INSTANCE = Mappers.getMapper(OperationTypeMapper.class);
