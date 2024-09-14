@@ -1,6 +1,5 @@
 package homecode.opteamer.model.dtos;
 
-import homecode.opteamer.model.OperationProvider;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -17,5 +16,5 @@ public class TeamMemberDTO {
 
     private String name;
 
-    private OperationProviderDTO operationProvider;
+    private OperationProviderDTO operationProviderDTO;
 }

@@ -42,5 +42,5 @@ public class OperationType {
     @JoinTable(name = "optype_pre_op_a",
             joinColumns = @JoinColumn(name = "optype_id"),
             inverseJoinColumns = @JoinColumn(name = "pre_op_a_id"))
-    private Set<PreOperativeAssessment> preOperativeAssessments = new HashSet<PreOperativeAssessment>();
+    private Set<PreOperativeAssessment> preOperativeAssessments = new HashSet<>();
 }

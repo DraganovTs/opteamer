@@ -45,6 +45,6 @@ public class Operation {
     @JoinTable(name = "optype_team_member",
             joinColumns = @JoinColumn(name = "operation_id"),
             inverseJoinColumns = @JoinColumn(name = "team_member_id"))
-    private Set<TeamMember> teamMembers = new HashSet<TeamMember>();
+    private Set<TeamMember> teamMembers = new HashSet<>();
 
 }

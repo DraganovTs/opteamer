@@ -42,7 +42,7 @@ public class TeamMemberService {
     }
 
     public TeamMemberDTO createTeamMember(TeamMemberDTO teamMemberDTO) {
-        OperationProvider operationProvider = MapperUtility.mapDTOToEntity(teamMemberDTO.getOperationProvider(),
+        OperationProvider operationProvider = MapperUtility.mapDTOToEntity(teamMemberDTO.getOperationProviderDTO(),
                 OperationProvider.class);
         TeamMember teamMember = MapperUtility.mapDTOToEntity(teamMemberDTO, TeamMember.class);
         teamMember.setOperationProvider(operationProvider);
@@ -52,7 +52,7 @@ public class TeamMemberService {
 
     public Optional<TeamMemberDTO> updateTeamMember(Long id, TeamMemberDTO teamMemberDTO) {
         OperationProvider operationProvider = new OperationProvider();
-        operationProvider.setType(OperationProviderType.valueOf(teamMemberDTO.getOperationProvider().getType().name()));
+        operationProvider.setType(OperationProviderType.valueOf(teamMemberDTO.getOperationProviderDTO().getType().name()));
         return teamMemberRepository.findById(id).map(teamMember -> {
             teamMember.setName(teamMemberDTO.getName());
             teamMember.setOperationProvider(operationProvider);
