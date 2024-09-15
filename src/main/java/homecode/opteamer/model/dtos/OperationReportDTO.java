@@ -12,9 +12,7 @@ import lombok.Setter;
 public class OperationReportDTO {
 
     private Long teamMemberId;
-
     private Long operationId;
-
 
     private TeamMemberDTO teamMemberDTO;
     private OperationDTO operationDTO;

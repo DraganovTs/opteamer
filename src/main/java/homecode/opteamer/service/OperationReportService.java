@@ -62,6 +62,7 @@ public class OperationReportService {
         operationReport.setOperation(operation);
         operationReport.setReport(operationReportDTO.getReport());
 
+        operationReport = operationReportRepository.save(operationReport);
         return OperationReportMapper.INSTANCE.toOperationReportDTO(operationReport);
     }
 
