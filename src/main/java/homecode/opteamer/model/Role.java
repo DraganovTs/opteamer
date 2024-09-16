@@ -29,7 +29,7 @@ public class Role {
     @JoinTable(
             name = "role_privileges",
             joinColumns = @JoinColumn(name = "role_id"),
-            inverseJoinColumns = @JoinColumn(name = "privileges_id")
+            inverseJoinColumns = @JoinColumn(name = "privilege_id")
     )
     private Set<Privilege> privileges;
 

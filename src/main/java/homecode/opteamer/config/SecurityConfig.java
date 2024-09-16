@@ -1,5 +1,6 @@
 package homecode.opteamer.config;
 
+import homecode.opteamer.filter.JwtRequestFilter;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -15,6 +16,7 @@ import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
+import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 import org.springframework.web.cors.CorsConfiguration;
 import org.springframework.web.cors.CorsConfigurationSource;
 import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
@@ -27,7 +29,14 @@ import java.util.Arrays;
 public class SecurityConfig {
 
     @Qualifier("OpteamerUserDetailsServiceImpl")
-    private UserDetailsService userDetailsService;
+    private final UserDetailsService userDetailsService;
+
+    private final JwtRequestFilter jwtRequestFilter;
+
+    public SecurityConfig(UserDetailsService userDetailsService, JwtRequestFilter jwtRequestFilter) {
+        this.userDetailsService = userDetailsService;
+        this.jwtRequestFilter = jwtRequestFilter;
+    }
 
     @Bean
     public AuthenticationManager authenticationManager() throws Exception {
@@ -47,8 +56,8 @@ public class SecurityConfig {
         http
                 .csrf(AbstractHttpConfigurer::disable)
                 .authorizeHttpRequests((requests) -> requests
-                        .requestMatchers("/api/assets").permitAll()
-                        .requestMatchers("/api/assets/**").permitAll()
+//                        .requestMatchers("/api/assets").permitAll()
+//                        .requestMatchers("/api/assets/**").permitAll()
                         .requestMatchers("/api/inventories").permitAll()
                         .requestMatchers("/api/inventories/**").permitAll()
                         .requestMatchers("/api/preOperativeAssessments").permitAll()
@@ -69,16 +78,17 @@ public class SecurityConfig {
                         .requestMatchers("/api/operations/**").permitAll()
                         .requestMatchers("/api/operationReport/").permitAll()
                         .requestMatchers("/api/operationReport/**").permitAll()
-                        .requestMatchers("/api/userRegistration/").permitAll()
-                        .requestMatchers("/api/userRegistration/**").permitAll()
+                        .requestMatchers("/api/userRegistration").permitAll()
+                        .requestMatchers("/api/authenticate").permitAll()
                         .anyRequest().authenticated()
                 )
+                .addFilterBefore(jwtRequestFilter, UsernamePasswordAuthenticationFilter.class)
                 .logout(LogoutConfigurer::permitAll);
-
 
         return http.build();
     }
 
+    @Bean
     public CorsConfigurationSource corsConfigurationSource() {
         CorsConfiguration configuration = new CorsConfiguration();
         configuration.setAllowedOrigins(Arrays.asList("*"));
