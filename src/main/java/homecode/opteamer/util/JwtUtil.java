@@ -6,6 +6,7 @@ import io.jsonwebtoken.SignatureAlgorithm;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Service;
 
+import java.nio.charset.StandardCharsets;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
@@ -14,7 +15,7 @@ import java.util.function.Function;
 @Service
 public class JwtUtil {
 
-    private final String SECRET_KEY = "opteamer_secret_key"; // Secret must be consistent
+    private final String SECRET_KEY = "opteamer_secret_key";
 
     // Extract the username from the token
     public String extractUsername(String token) {
@@ -36,7 +37,7 @@ public class JwtUtil {
     private Claims extractAllClaims(String token) {
         try {
             return Jwts.parser()
-                    .setSigningKey(SECRET_KEY.getBytes()) // Use byte array for secret key
+                    .setSigningKey(SECRET_KEY.getBytes(StandardCharsets.UTF_8)) // Ensure encoding is consistent
                     .parseClaimsJws(token)
                     .getBody();
         } catch (Exception e) {
@@ -54,7 +55,7 @@ public class JwtUtil {
     public String generateToken(UserDetails userDetails) {
         Map<String, Object> claims = new HashMap<>();
         String token = createToken(claims, userDetails.getUsername());
-        System.out.println("Generated JWT Token: " + token); // Debugging log
+        System.out.println("Generated JWT Token: " + token);
         return token;
     }
 
@@ -64,15 +65,19 @@ public class JwtUtil {
                 .setClaims(claims)
                 .setSubject(subject)
                 .setIssuedAt(new Date(System.currentTimeMillis()))
-                .setExpiration(new Date(System.currentTimeMillis() + 1000 * 60 * 60 * 10)) // 10 hours expiry
-                .signWith(SignatureAlgorithm.HS256, SECRET_KEY.getBytes()) // Sign with byte array
+                .setExpiration(new Date(System.currentTimeMillis() + 1000 * 60 * 60 * 10))
+                .signWith(SignatureAlgorithm.HS256, "opteamer_secret_key".getBytes(StandardCharsets.UTF_8))
                 .compact();
     }
 
     // Validate the token
     public Boolean validateToken(String token, UserDetails userDetails) {
-        final String username = extractUsername(token);
-        System.out.println("Username extracted from JWT: " + username); // Debugging log
-        return (username != null && username.equals(userDetails.getUsername()) && !isTokenExpired(token));
+        try {
+            final String username = extractUsername(token);
+            return (username != null && username.equals(userDetails.getUsername()) && !isTokenExpired(token));
+        } catch (Exception e) {
+            System.out.println("Token validation failed: " + e.getMessage());
+            return false;
+        }
     }
 }
