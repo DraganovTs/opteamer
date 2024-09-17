@@ -1,0 +1,19 @@
+.navbar_panel {
+    background-color: 0ffffff;
+    margin-top: -1px;
+    box-shadow: 0 1px 2px 0 rgba(87, 84 ,0.1)
+}
+
+.navbar_brand_text {
+    color: #384265;
+    font-size: larger;
+    margin-top: 5px;
+}
+
+.navbar_link_text {
+
+}
+
+.navbar_link_container {
+    margin-left: 50em;
+}
