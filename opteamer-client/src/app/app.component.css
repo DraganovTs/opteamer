@@ -57,6 +57,43 @@
     font-family: "Baloo Tamma 2";
 }
 
-.font-laber {
-    
+.font-label {
+    color: #667496;
+    font-family: "PingFang HK";
+
+}
+.form-input {
+    color: #6f6f77;
+}
+
+
+
+
+.float-right {
+    margin-top: 10px;
+    margin-bottom: 10px;
+    float: right;
+    width: 20%;
+    outline: none;
+    box-shadow: none;
+}
+
+.float-right:active {
+    margin-top: 12px;
+    margin-bottom: 8px;
+    outline: none;
+    box-shadow: none;
+    border-color: transparent;
+}
+
+.float-right:focus {
+    border-color: transparent;
+}
+
+.text-with-link {
+    display: flex;
+}
+
+.common-link {
+    color: #317ef1;
 }
