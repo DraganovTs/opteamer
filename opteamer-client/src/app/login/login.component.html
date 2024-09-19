@@ -1,1 +1,21 @@
-<p>login works!</p>
+<form [formGroup]="loginForm" (ngSubmit)="onSubmit()" class="embedded_card">
+    <div class="form-container">
+        <h1 class="main-title">Login</h1> 
+        <div class="eb-3">
+            <label for="loginEmail" class="form-label main-text-style">Email address</label>
+            <input type="email" class="form-control text-content" id="LoginEmail" formControlName="email" placeholder="email@mail.com">
+        </div>
+        <div class="mb-3">
+            <label for="LoginPassword" class="form-label main-text-style">Password</label>
+            <input type="password" class="form-control text-content" id="LoginPassword" formControlName="password" placeholder="***********">
+        </div>
+        <div class="em-3">
+            <button class="btn btn-primary button-color float-right" type="submit">Send</button>
+        </div>
+        <div class="text-with-link main-text-style">
+            <p>If you do not have an account yet, please <a class="common-link" routerLink="/signup">sign up</a></p>
+        </div>
+    </div>
+
+    <img src="../../assets/operation_room_illustration.jpg" alt="" width="360" height="360">
+</form>

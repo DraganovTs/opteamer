@@ -28,7 +28,7 @@ public class AuthenticationController {
         this.jwtUtil = jwtUtil;
     }
 
-    @GetMapping
+    @PostMapping
     public ResponseEntity<?> getAuthenticationToken(@RequestBody AuthenticationRequestDTO authenticationRequestDTO) {
         try {
             authenticationManager.authenticate(

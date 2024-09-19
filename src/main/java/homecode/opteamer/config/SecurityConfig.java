@@ -23,6 +23,8 @@ import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
 
 import java.util.Arrays;
 
+import static org.springframework.security.config.Customizer.withDefaults;
+
 @Configuration
 @EnableWebSecurity
 @EnableMethodSecurity(securedEnabled = true, jsr250Enabled = true)
@@ -47,7 +49,7 @@ public class SecurityConfig {
     }
 
     @Bean
-    PasswordEncoder passwordEncoder() {
+    public PasswordEncoder passwordEncoder() {
         return new BCryptPasswordEncoder();
     }
 
@@ -55,28 +57,17 @@ public class SecurityConfig {
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         http
                 .csrf(AbstractHttpConfigurer::disable)
-                .authorizeHttpRequests((requests) -> requests
-//                        .requestMatchers("/api/assets").permitAll()
-//                        .requestMatchers("/api/assets/**").permitAll()
-                        .requestMatchers("/api/inventories").permitAll()
+                .cors(withDefaults())
+                .authorizeHttpRequests(requests -> requests
                         .requestMatchers("/api/inventories/**").permitAll()
-                        .requestMatchers("/api/preOperativeAssessments").permitAll()
                         .requestMatchers("/api/preOperativeAssessments/**").permitAll()
-                        .requestMatchers("/api/patients/").permitAll()
                         .requestMatchers("/api/patients/**").permitAll()
-                        .requestMatchers("/api/operationProviders/").permitAll()
                         .requestMatchers("/api/operationProviders/**").permitAll()
-                        .requestMatchers("/api/operationRooms/").permitAll()
                         .requestMatchers("/api/operationRooms/**").permitAll()
-                        .requestMatchers("/api/teamMembers/").permitAll()
                         .requestMatchers("/api/teamMembers/**").permitAll()
-                        .requestMatchers("/api/roomInventories/").permitAll()
                         .requestMatchers("/api/roomInventories/**").permitAll()
-                        .requestMatchers("/api/operationTypes/").permitAll()
                         .requestMatchers("/api/operationTypes/**").permitAll()
-                        .requestMatchers("/api/operations/").permitAll()
                         .requestMatchers("/api/operations/**").permitAll()
-                        .requestMatchers("/api/operationReport/").permitAll()
                         .requestMatchers("/api/operationReport/**").permitAll()
                         .requestMatchers("/api/userRegistration").permitAll()
                         .requestMatchers("/api/authenticate").permitAll()
@@ -91,7 +82,7 @@ public class SecurityConfig {
     @Bean
     public CorsConfigurationSource corsConfigurationSource() {
         CorsConfiguration configuration = new CorsConfiguration();
-        configuration.setAllowedOrigins(Arrays.asList("*"));
+        configuration.setAllowedOrigins(Arrays.asList("http://localhost:4200"));
         configuration.setAllowedMethods(Arrays.asList("GET", "POST", "PUT", "DELETE", "OPTIONS", "PATCH"));
         configuration.setAllowedHeaders(Arrays.asList("authorization", "content-type", "x-auth-token"));
         UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
