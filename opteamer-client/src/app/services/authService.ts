@@ -27,6 +27,7 @@ export class AuthService {
 
                     this.setToken(responseData.jwt);
                     this.isLoggedInSubject.next(true);
+                    this.router.navigate(['/operations']);
                     return responseData;
                 }),
                 catchError(errorResponse => {
@@ -50,5 +51,6 @@ export class AuthService {
     logout(){
         localStorage.removeItem(this.tokenKey);
         this.isLoggedInSubject.next(false);
+        this.router.navigate(['/']);
     }
 }

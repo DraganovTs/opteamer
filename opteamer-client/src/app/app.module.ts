@@ -5,15 +5,20 @@ import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
 import { HeaderComponent } from './header/header.component';
 import { LoginComponent } from './login/login.component';
-import { SignupComponent } from './signup/signup.component';
 import { ReactiveFormsModule } from '@angular/forms'; // <-- Import this
-import { HttpClientModule } from '@angular/common/http';
+import { HTTP_INTERCEPTORS, HttpClientModule } from '@angular/common/http';
+import { OperationsComponent } from './operations/operations.component';
+import { canActivate } from './services/auth-guard.service';
+import { JwtInterceptor } from './interceptors/jwt.interceptor';
+import { PatientsComponent } from './patients/patients.component';
 
 
 const appRoutes: Routes = [
   {path: '', component: LoginComponent},
-  {path: 'signup', component: SignupComponent},
+  {path: 'operations', component: OperationsComponent , canActivate: [canActivate]},
+  {path: 'patients', component: PatientsComponent , canActivate: [canActivate]},
 ]
+
 
 
 @NgModule({
@@ -21,7 +26,8 @@ const appRoutes: Routes = [
     AppComponent,
     HeaderComponent,
     LoginComponent,
-    SignupComponent
+    OperationsComponent,
+    PatientsComponent
   ],
   imports: [
     BrowserModule,
@@ -30,7 +36,9 @@ const appRoutes: Routes = [
     ReactiveFormsModule,
     HttpClientModule
   ],
-  providers: [],
+  providers: [
+    { provide: HTTP_INTERCEPTORS, useClass: JwtInterceptor, multi: true }
+  ],
   bootstrap: [AppComponent]
 })
 export class AppModule { }

@@ -1,11 +1,13 @@
-
 <nav class="navbar navbar-default navbar_panel">
     <div class="container-fluid">
 
         <p class="navbar_brand_text">Opteamer</p>
         <div class="navbar_link_text">
-            <a routerLink="/"><span class="navbar_link_text">Login</span></a>
-            <a routerLink="/signup"><span class="navbar_link_text">Sign Up</span></a>
+            <!-- <a routerLink="/" *ngIf="!(isLoggedIn$ | async)"><span class="navbar_link_text">Login</span></a> -->
+            <a routerLink="/patients" *ngIf="(isLoggedIn$ | async)"><span class="navbar_link_text">Patients</span></a>
+            <a routerLink="/operations" *ngIf="(isLoggedIn$ | async)"><span class="navbar_link_text">Operations</span></a>
+            <a (click)="logout()" *ngIf="(isLoggedIn$ | async)"><span class="navbar_link_text">Logout</span></a>
+            <!-- <a routerLink="/signup"><span class="navbar_link_text">Sign Up</span></a> -->
         </div>
 
     </div>

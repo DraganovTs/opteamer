@@ -1,1 +1,14 @@
-<p>operations works!</p>
+<div class="card_row_box">
+    <h1 class="main-title">Operations</h1>
+
+    <ng-container *ngIf="(operations$ | async) as operations">
+       
+        <div *ngFor="let operation of operations; let i = index">
+            {{operation.id}}
+            {{operation.patient.name}}
+        </div>
+        
+
+    </ng-container>
+
+</div>

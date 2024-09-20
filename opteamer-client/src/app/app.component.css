@@ -42,6 +42,19 @@
     box-shadow: rgb(50, 50, 50, 0.15) 0px 2px 5px 0px, rgb(0, 0, 0, 0.05) 0px 1px 1px 0px;
 }
 
+.card-wide {
+    margin-left: 5%;
+    margin-top: 5%;
+    width: 90%;
+    background-color: rgb(255, 255, 255);
+    border-radius: 8px;
+    display: flex;
+    flex-direction: column;
+    padding: 5px 25px;
+    gap: 13px;
+    box-shadow: rgb(50, 50, 50, 0.15) 0px 2px 5px 0px, rgb(0, 0, 0, 0.05) 0px 1px 1px 0px;
+}
+
 .main-title {
     margin-top: 20px;
     font-size: 35px;
@@ -128,6 +141,23 @@ img {
     margin-left: 10px;
     width: 360px;
     height: 360px;
+}
+
+::placeholder {
+    color: #ced1d9;
+}
+
+.table-header-font {
+    color: #475d7e;
+}
+
+.table-content-font {
+    color: #838da2;
+}
+
+.table-container {
+    width: 95%;
+    margin: 20px 20px 50px 20px;
 }
 
 @media (max-width: 768px) {
