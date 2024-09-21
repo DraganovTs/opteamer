@@ -24,7 +24,7 @@
                 <tr *ngFor="let teamMember of teamMembers; let i = index">
                     <th scope="row" class="table-content-font">{{teamMember.id}}</th>
                     <td class="table-content-font">{{teamMember.name}}</td>
-                    <td class="table-content-font">{{teamMember.operationProvider?.type}}</td>
+                    <td class="table-content-font">{{teamMember.operationProviderDTO.type}}</td>
                     <td class="table-header-font">
                         <button type="button" class="btn btn-outline-primary" (click)="openModal(teamMember)"
                             data-bs-toggle="modal" data-bs-target="#staticBackdrop">

@@ -44,7 +44,7 @@ export class TeammemberComponent implements OnInit {
 
     if (teamMember) {
       name = teamMember.name;
-      opType = teamMember.operationProvider.type;
+      opType = teamMember.operationProviderDTO.type;
       this.modalTitle = 'edit';
     }
     this.teamMemberForm.patchValue({
@@ -56,12 +56,12 @@ export class TeammemberComponent implements OnInit {
   onSubmit() {
 
     if (this.editTeamMember) {
-      this.teamMemberService.putTeamMember(this.editTeamMember.id, { name: this.editTeamMember.value.name, operationProvider: {type: this.teamMemberForm.value.op} }).subscribe({
+      this.teamMemberService.putTeamMember(this.editTeamMember.id, { name: this.editTeamMember.value.name, operationProviderDTO: {type: this.teamMemberForm.value.op} }).subscribe({
         next: this.handlePutResponse.bind(this),
         error: this.handleError.bind(this)
       })
     } else {
-      this.teamMemberService.postTeamMember({ name: this.teamMemberForm.value.name, operationProvider: {type: this.teamMemberForm.value.op} }).subscribe({
+      this.teamMemberService.postTeamMember({ name: this.teamMemberForm.value.name, operationProviderDTO: {type: this.teamMemberForm.value.op} }).subscribe({
         next: this.handlePutResponse.bind(this),
         error: this.handleError.bind(this)
       })
