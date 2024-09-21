@@ -7,9 +7,9 @@ import org.mapstruct.Mapping;
 import org.mapstruct.factory.Mappers;
 
 @Mapper(uses = {OperationProviderMapper.class})
-public interface TestMemberMapper {
+public interface TeamMemberMapper {
 
-    TestMemberMapper INSTANCE = Mappers.getMapper(TestMemberMapper.class);
+    TeamMemberMapper INSTANCE = Mappers.getMapper(TeamMemberMapper.class);
 
     @Mapping(source = "operationProvider", target = "operationProviderDTO")
     TeamMemberDTO toTeamMemberDTO(TeamMember teamMember);

@@ -28,7 +28,7 @@ public class TeamMemberController {
 
     @GetMapping
     public ResponseEntity<List<TeamMemberDTO>> getTeamMembers() {
-        List<TeamMemberDTO> teamMemberDTOList = teamMemberService.findAllTeamMembers();
+        List<TeamMemberDTO> teamMemberDTOList = teamMemberService.getAllTeamMembers();
         return ResponseEntity.status(HttpStatus.OK).body(teamMemberDTOList);
     }
 

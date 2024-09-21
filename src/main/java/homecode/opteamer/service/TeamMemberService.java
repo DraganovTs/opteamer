@@ -1,11 +1,12 @@
 package homecode.opteamer.service;
 
+import homecode.opteamer.mapper.OperationProviderMapper;
+import homecode.opteamer.mapper.TeamMemberMapper;
 import homecode.opteamer.model.OperationProvider;
 import homecode.opteamer.model.TeamMember;
 import homecode.opteamer.model.dtos.TeamMemberDTO;
-import homecode.opteamer.model.enums.OperationProviderType;
+import homecode.opteamer.repository.OperationProviderRepository;
 import homecode.opteamer.repository.TeamMemberRepository;
-import homecode.opteamer.util.MapperUtility;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
@@ -17,48 +18,57 @@ import java.util.Optional;
 public class TeamMemberService {
 
     private final TeamMemberRepository teamMemberRepository;
+    private final OperationProviderRepository operationProviderRepository;
 
-    public TeamMemberService(TeamMemberRepository teamMemberRepository) {
+    public TeamMemberService(TeamMemberRepository teamMemberRepository,
+                             OperationProviderRepository operationProviderRepository) {
         this.teamMemberRepository = teamMemberRepository;
+        this.operationProviderRepository = operationProviderRepository;
     }
 
 
     public Optional<TeamMemberDTO> findTeamMemberById(Long id) {
         try {
-            TeamMember teamMember = teamMemberRepository.findById(id).orElse(null);
-            return Optional.of(MapperUtility.mapEntityToDTO(teamMember, TeamMemberDTO.class));
+            TeamMember teamMember = teamMemberRepository.findById(id).orElseThrow();
+            return Optional.of(TeamMemberMapper.INSTANCE.toTeamMemberDTO(teamMember));
         } catch (NoSuchElementException e) {
             return Optional.empty();
         }
     }
 
-    public List<TeamMemberDTO> findAllTeamMembers() {
+    public List<TeamMemberDTO> getAllTeamMembers() {
         List<TeamMemberDTO> teamMemberDTOList = new ArrayList<>();
-        Iterable<TeamMember> teamMembersOptional = teamMemberRepository.findAll();
-        teamMembersOptional.forEach(teamMember ->
-                teamMemberDTOList.add(MapperUtility.mapEntityToDTO(teamMember, TeamMemberDTO.class))
+        Iterable<TeamMember> allTeamMembers = teamMemberRepository.findAll();
+        allTeamMembers.forEach(teamMember ->
+                teamMemberDTOList.add(TeamMemberMapper.INSTANCE.toTeamMemberDTO(teamMember))
         );
         return teamMemberDTOList;
     }
 
     public TeamMemberDTO createTeamMember(TeamMemberDTO teamMemberDTO) {
-        OperationProvider operationProvider = MapperUtility.mapDTOToEntity(teamMemberDTO.getOperationProviderDTO(),
-                OperationProvider.class);
-        TeamMember teamMember = MapperUtility.mapDTOToEntity(teamMemberDTO, TeamMember.class);
+        OperationProvider operationProvider = operationProviderRepository.findByType(teamMemberDTO.getOperationProviderDTO().getType())
+                .orElseGet(() -> {
+                    OperationProvider newOperationProvider = OperationProviderMapper.INSTANCE.toOperationProvider(teamMemberDTO.getOperationProviderDTO());
+                    return operationProviderRepository.save(newOperationProvider);
+                });
+
+        TeamMember teamMember = TeamMemberMapper.INSTANCE.toTeamMember(teamMemberDTO);
         teamMember.setOperationProvider(operationProvider);
         teamMember = teamMemberRepository.save(teamMember);
-        return MapperUtility.mapEntityToDTO(teamMember, TeamMemberDTO.class);
+
+        return TeamMemberMapper.INSTANCE.toTeamMemberDTO(teamMember);
     }
 
     public Optional<TeamMemberDTO> updateTeamMember(Long id, TeamMemberDTO teamMemberDTO) {
-        OperationProvider operationProvider = new OperationProvider();
-        operationProvider.setType(OperationProviderType.valueOf(teamMemberDTO.getOperationProviderDTO().getType().name()));
         return teamMemberRepository.findById(id).map(teamMember -> {
             teamMember.setName(teamMemberDTO.getName());
-            teamMember.setOperationProvider(operationProvider);
-            return MapperUtility.mapEntityToDTO(teamMemberRepository.save(teamMember), TeamMemberDTO.class);
-        });
 
+            OperationProvider operationProvider = OperationProviderMapper.INSTANCE.toOperationProvider(teamMemberDTO.getOperationProviderDTO());
+            teamMember.setOperationProvider(operationProvider);
+
+            teamMemberRepository.save(teamMember);
+            return TeamMemberMapper.INSTANCE.toTeamMemberDTO(teamMember);
+        });
     }
 
     public boolean deleteTeamMember(Long id) {

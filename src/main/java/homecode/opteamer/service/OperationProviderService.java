@@ -21,9 +21,9 @@ public class OperationProviderService {
         this.operationProviderRepository = operationProviderRepository;
     }
 
-    public Optional<OperationProviderDTO> getOperationProviderById(String id) {
+    public Optional<OperationProviderDTO> getOperationProviderById(String type) {
         try {
-            OperationProvider operationProvider = operationProviderRepository.findById(OperationProviderType.valueOf(id)).orElse(null);
+            OperationProvider operationProvider = operationProviderRepository.findByType(OperationProviderType.valueOf(type)).orElseThrow();
             return Optional.of(MapperUtility.mapEntityToDTO(operationProvider , OperationProviderDTO.class));
         } catch (NoSuchElementException e) {
             return Optional.empty();
