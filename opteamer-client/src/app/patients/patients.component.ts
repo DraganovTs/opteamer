@@ -1,8 +1,6 @@
 import { Component, OnInit } from '@angular/core';
-import { Observable } from 'rxjs';
 import { PatientService } from '../services/patient.service';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
-import {Modal} from 'bootstrap'
 
 @Component({
   selector: 'app-patients',
@@ -42,7 +40,6 @@ export class PatientsComponent implements OnInit {
     this.modalTitle = 'create';
 
     if (patient) {
-      console.log(patient.id)
       name = patient.name;
       nin = patient.nin;
       this.modalTitle = 'edit';
@@ -53,44 +50,40 @@ export class PatientsComponent implements OnInit {
     })
   }
 
-  onSubmit(){
+  onSubmit() {
 
-    if(this.editPatient){
-      this.patientService.putPatient(this.editPatient.id,{name: this.patientForm.value.name, nin: this.patientForm.value.nin}).subscribe({
-      next:  this.handlePutResponse.bind(this),
-      error:  this.handleError.bind(this)
-    })
+    if (this.editPatient) {
+      this.patientService.putPatient(this.editPatient.id, { name: this.patientForm.value.name, nin: this.patientForm.value.nin }).subscribe({
+        next: this.handlePutResponse.bind(this),
+        error: this.handleError.bind(this)
+      })
     } else {
-      this.patientService.postPatient({name: this.patientForm.value.name, nin: this.patientForm.value.nin}).subscribe({
-        next:  this.handlePutResponse.bind(this),
-        error:  this.handleError.bind(this)
+      this.patientService.postPatient({ name: this.patientForm.value.name, nin: this.patientForm.value.nin }).subscribe({
+        next: this.handlePutResponse.bind(this),
+        error: this.handleError.bind(this)
       })
     }
 
-    console.log('reload1')
-    setTimeout(()=> {
+    setTimeout(() => {
       this.reloadPatients();
     }, 500);
-    console.log('reload2')
   }
 
-  onDelete(id: string){
+  onDelete(id: string) {
     this.patientService.deletePatient(id).subscribe({
-      next:  this.handleDeleteResponse.bind(this),
-      error:  this.handleError.bind(this)
+      next: this.handleDeleteResponse.bind(this),
+      error: this.handleError.bind(this)
     });
-    console.log('reload1')
-    setTimeout(()=> {
+    setTimeout(() => {
       this.reloadPatients();
     }, 500);
-    console.log('reload2')
   }
 
 
-  handlePutResponse(){}
-  handlePostResponse(){} 
-   handleDeleteResponse(){}
+  handlePutResponse() { }
+  handlePostResponse() { }
+  handleDeleteResponse() { }
 
-  handleError(){}
+  handleError() { }
 
 }

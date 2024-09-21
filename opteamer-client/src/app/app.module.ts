@@ -11,12 +11,14 @@ import { OperationsComponent } from './operations/operations.component';
 import { canActivate } from './services/auth-guard.service';
 import { JwtInterceptor } from './interceptors/jwt.interceptor';
 import { PatientsComponent } from './patients/patients.component';
+import { TeammemberComponent } from './teammember/teammember.component';
 
 
 const appRoutes: Routes = [
   {path: '', component: LoginComponent},
   {path: 'operations', component: OperationsComponent , canActivate: [canActivate]},
   {path: 'patients', component: PatientsComponent , canActivate: [canActivate]},
+  {path: 'teamMembers', component: TeammemberComponent , canActivate: [canActivate]},
 ]
 
 
@@ -27,7 +29,8 @@ const appRoutes: Routes = [
     HeaderComponent,
     LoginComponent,
     OperationsComponent,
-    PatientsComponent
+    PatientsComponent,
+    TeammemberComponent
   ],
   imports: [
     BrowserModule,
