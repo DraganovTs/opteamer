@@ -1,1 +1,99 @@
-<p>operationtype works!</p>
+<div class="card-wide">
+    <h1 class="main-title">Operation Types</h1>
+
+    <ng-container *ngIf="(operationTypes$ | async) as operationTypes">
+
+        <div class="d-grid gap-2 d-md-block">
+            <button type="button" class="btn btn-light btn-sm" (click)="openModal(null)" data-bs-toggle="modal"
+                data-bs-target="#staticBackdrop">
+                Create Operation Type
+            </button>
+        </div>
+
+        <table class="table table-sm table-hover">
+            <thead>
+                <tr>
+                    <th scope="col" class="table-header-font">Name</th>
+                    <th scope="col" class="table-header-font">Room Type</th>
+                    <th scope="col" class="table-header-font"></th>
+                    <th scope="col" class="table-header-font"></th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr *ngFor="let oeprationType of operationTypes; let i = index">
+                    <th scope="row" class="table-content-font">{{oeprationType.name}}</th>
+                    <td class="table-content-font">{{oeprationType.roomType}}</td>
+                    <td class="table-header-font">
+                        <button type="button" class="btn btn-outline-primary" (click)="openModal(oeprationType)"
+                            data-bs-toggle="modal" data-bs-target="#staticBackdrop">
+                            Edit
+                        </button>
+                    </td>
+                    <td class="table-header-font">
+                        <button type="button" class="btn btn-outline-danger"
+                            (click)="onDeleteOperationType(oeprationType.id)">
+                            Delete
+                        </button>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+    </ng-container>
+</div>
+
+<!-- Modal -->
+<div class="modal fade" id="staticBackdrop" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1"
+    aria-labelledby="staticBackdropLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-scrollable">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h1 class="modal-title fs-5" id="staticBackdropLabel">Operation type {{modalTitle}}</h1>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <ng-container *ngIf="(combined$ | async) as combined">
+                <form [formGroup]="operationTypeForm" (ngSubmit)="onSubmit()" class="modal_card">
+
+                    <div class="mb-3">
+                        <label for="teamMemberName" class="form-label main-text-style">Name</label>
+                        <input type="text" class="form-control text-content" id="teamMemberName" formControlName="name">
+                    </div>
+
+                    <div class="mb-3">
+                        <label for="teamMemberRT" class="form-label main-text-style">Room type</label>
+                        <input type="text" class="form-control text-content" id="teamMemberName"
+                            formControlName="roomType">
+                    </div>
+
+                    <div class="mb-3">
+                        <label for="teamMemberOP" class="form-label main-text-style">Operation provider</label>
+                        <select id="teamMemberOP" formControlName="operationProviders" class="form-select form-select">
+                            <option *ngFor="let operationProvider of combined[0]" [value]="operationProvider.type">
+                                {{operationProvider.type}}</option>
+                        </select>
+                    </div>
+
+                    <div class="mb-3">
+                        <label for="teamMemberAsset" class="form-label main-text-style">Asset</label>
+                        <select id="teamMemberAsset" formControlName="assets" class="form-select form-select">
+                            <option *ngFor="let asset of combined[1]" [value]="asset.id">{{asset.name}}</option>
+                        </select>
+                    </div>
+
+                    <div class="mb-3">
+                        <label for="teamMemberPreOpA" class="form-label main-text-style">Pre operative assessment
+                        </label>
+                        <select id="teamMemberPreOpA" formControlName="preOperatioveAssessments"
+                            class="form-select form-select">
+                            <option *ngFor="let preOpA of combined[2]" [value]="preOpA.name">{{preOpA.name}}</option>
+                        </select>
+                    </div>
+
+                    <div class="mb-3">
+                        <button type="submit" class="btn btn-primary button-color float-right"
+                            data-bs-dismiss="modal">Save</button>
+                    </div>
+                </form>
+            </ng-container>
+        </div>
+    </div>
+</div>

@@ -7,6 +7,7 @@
             <a routerLink="/patients" *ngIf="(isLoggedIn$ | async)"><span class="navbar_link_text">Patients</span></a>
             <a routerLink="/operations" *ngIf="(isLoggedIn$ | async)"><span class="navbar_link_text">Operations</span></a>
             <a routerLink="/teamMembers" *ngIf="(isLoggedIn$ | async)"><span class="navbar_link_text">TeamMembers</span></a>
+            <a routerLink="/operationTypes" *ngIf="(isLoggedIn$ | async)"><span class="navbar_link_text">Operation types</span></a>
             <a (click)="logout()" *ngIf="(isLoggedIn$ | async)"><span class="navbar_link_text">Logout</span></a>
             <!-- <a routerLink="/signup"><span class="navbar_link_text">Sign Up</span></a> -->
         </div>
