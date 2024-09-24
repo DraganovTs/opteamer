@@ -54,15 +54,90 @@ export class OperationtypeComponent {
   }
 
   openModal(operationType: any) {
+    this.editOperatioType = operationType;
 
+    let name = '';
+    let roomType;
+    let assets;
+    let op;
+    let prOpA;
+    this.modalTitle = 'create';
+
+    if (operationType) {
+      name = operationType.name;
+      roomType = operationType.roomType;
+      this.modalTitle = 'edit';
+    
+       this.operationTypeForm.patchValue({
+      'name': name,
+      'roomType': operationType.roomType,
+      'durationHours': operationType.durationHours,
+      'assets': operationType.assets.map((obj:any) => obj.id),
+      'operationProviders': operationType.operationProviders.map((obj:any) => obj.type),
+      'preOperatioveAssessments': operationType.preopassessments.map((obj:any) => obj.name)
+    })
+    
+    }
+   
   }
 
   onSubmit() {
+
+    let ops;
+    this.operationProviders$.subscribe(data=>{
+      let ids:any[] = this.operationTypeForm.value.operationProviders;
+      ops = data.filter(obj => ids.includes(obj.type))
+    });
+
+    let assets;
+    this.assets$.subscribe(data=>{
+      let ids:any[] = this.operationTypeForm.value.assets;
+      assets = data.filter(obj => ids.includes(obj.type))
+    });
+
+    let preOpAs;
+    this.preOpAssisstments$.subscribe(data=>{
+      let ids:any[] = this.operationTypeForm.value.preOperatioveAssessments;
+      assets = data.filter(obj => ids.includes(obj.name))
+    });
+    
+    let bodyObj = {
+      name:this.operationTypeForm.value.name,
+      roomType: this.operationTypeForm.value.roomType,
+      durationHours: this.operationTypeForm.value.durationHours,
+      assets: assets,
+      operationProviders: ops,
+      preOperativeAssessmets: preOpAs
+    };
+  
+    if (this.editOperatioType) {
+      this.operationTypeService.putOperationType(this.editOperatioType.name, bodyObj).subscribe({
+        next: this.handlePutResponse.bind(this),
+        error: this.handleError.bind(this)
+      })
+    } else {
+      this.operationTypeService.postOperationType(bodyObj).subscribe({
+        next: this.handlePutResponse.bind(this),
+        error: this.handleError.bind(this)
+      })
+    }
+
+    setTimeout(() => {
+      this.reloadOperationTypes();
+    }, 500);
 
   }
 
   onDeleteOperationType(id: string) {
 
+    this.operationTypeService.deleteOperationType(id).subscribe({
+      next: this.handleDeleteResponse.bind(this),
+      error: this.handleError.bind(this)
+    })
+
+    setTimeout(() => {
+      this.reloadOperationTypes();
+    }, 500);
   }
 
   

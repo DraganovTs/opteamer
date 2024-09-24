@@ -31,7 +31,7 @@
                     </td>
                     <td class="table-header-font">
                         <button type="button" class="btn btn-outline-danger"
-                            (click)="onDeleteOperationType(oeprationType.id)">
+                            (click)="onDeleteOperationType(oeprationType.name)">
                             Delete
                         </button>
                     </td>
@@ -54,36 +54,45 @@
                 <form [formGroup]="operationTypeForm" (ngSubmit)="onSubmit()" class="modal_card">
 
                     <div class="mb-3">
-                        <label for="teamMemberName" class="form-label main-text-style">Name</label>
-                        <input type="text" class="form-control text-content" id="teamMemberName" formControlName="name">
+                        <label for="operationTypeName" class="form-label main-text-style">Name</label>
+                        <input type="text" class="form-control text-content" id="operationTypeName"
+                            formControlName="name">
                     </div>
 
                     <div class="mb-3">
-                        <label for="teamMemberRT" class="form-label main-text-style">Room type</label>
-                        <input type="text" class="form-control text-content" id="teamMemberName"
+                        <label for="operationTypeRT" class="form-label main-text-style">Room type</label>
+                        <input type="text" class="form-control text-content" id="operationTypeRT"
                             formControlName="roomType">
                     </div>
 
                     <div class="mb-3">
-                        <label for="teamMemberOP" class="form-label main-text-style">Operation provider</label>
-                        <select id="teamMemberOP" formControlName="operationProviders" class="form-select form-select">
+                        <label for="operationTypeOH" class="form-label main-text-style">Duration hours</label>
+                        <input type="text" class="form-control text-content" id="operationTypeOH"
+                            formControlName="durationHours">
+                    </div>
+
+                    <div class="mb-3">
+                        <label for="operationTypeOP" class="form-label main-text-style">Operation provider</label>
+                        <select id="operationTypeOP" formControlName="operationProviders"
+                            class="form-select form-select-multiple text-content" multiple>
                             <option *ngFor="let operationProvider of combined[0]" [value]="operationProvider.type">
                                 {{operationProvider.type}}</option>
                         </select>
                     </div>
 
                     <div class="mb-3">
-                        <label for="teamMemberAsset" class="form-label main-text-style">Asset</label>
-                        <select id="teamMemberAsset" formControlName="assets" class="form-select form-select">
+                        <label for="operationTypeAsset" class="form-label main-text-style">Asset</label>
+                        <select id="operationTypeAsset" formControlName="assets"
+                            class="form-select form-select-multiple text-content" multiple>
                             <option *ngFor="let asset of combined[1]" [value]="asset.id">{{asset.name}}</option>
                         </select>
                     </div>
 
                     <div class="mb-3">
-                        <label for="teamMemberPreOpA" class="form-label main-text-style">Pre operative assessment
+                        <label for="operationTypePreOpA" class="form-label main-text-style">Pre operative assessment
                         </label>
-                        <select id="teamMemberPreOpA" formControlName="preOperatioveAssessments"
-                            class="form-select form-select">
+                        <select id="operationTypePreOpA" formControlName="preOperatioveAssessments"
+                            class="form-select form-select-multiple text-content" multiple>
                             <option *ngFor="let preOpA of combined[2]" [value]="preOpA.name">{{preOpA.name}}</option>
                         </select>
                     </div>
