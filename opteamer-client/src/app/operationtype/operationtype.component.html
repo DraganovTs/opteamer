@@ -20,18 +20,18 @@
                 </tr>
             </thead>
             <tbody>
-                <tr *ngFor="let oeprationType of operationTypes; let i = index">
-                    <th scope="row" class="table-content-font">{{oeprationType.name}}</th>
-                    <td class="table-content-font">{{oeprationType.roomType}}</td>
+                <tr *ngFor="let operationType of operationTypes; let i = index">
+                    <th scope="row" class="table-content-font">{{operationType.name}}</th>
+                    <td class="table-content-font">{{operationType.roomType}}</td>
                     <td class="table-header-font">
-                        <button type="button" class="btn btn-outline-primary" (click)="openModal(oeprationType)"
+                        <button type="button" class="btn btn-outline-primary" (click)="openModal(operationType)"
                             data-bs-toggle="modal" data-bs-target="#staticBackdrop">
                             Edit
                         </button>
                     </td>
                     <td class="table-header-font">
                         <button type="button" class="btn btn-outline-danger"
-                            (click)="onDeleteOperationType(oeprationType.name)">
+                            (click)="onDeleteOperationType(operationType.name)">
                             Delete
                         </button>
                     </td>

@@ -53,8 +53,8 @@ export class OperationtypeComponent {
     this.operationTypeService.refreshData();
   }
 
-  openModal(operationType: any) {
-    this.editOperatioType = operationType;
+  openModal(operationTypeDTO: any) {
+    this.editOperatioType = operationTypeDTO;
 
     let name = '';
     let roomType;
@@ -63,21 +63,27 @@ export class OperationtypeComponent {
     let prOpA;
     this.modalTitle = 'create';
 
-    if (operationType) {
-      name = operationType.name;
-      roomType = operationType.roomType;
+    if (operationTypeDTO) {
+      name = operationTypeDTO.name;
+      roomType = operationTypeDTO.roomType;
       this.modalTitle = 'edit';
-    
-       this.operationTypeForm.patchValue({
-      'name': name,
-      'roomType': operationType.roomType,
-      'durationHours': operationType.durationHours,
-      'assets': operationType.assets.map((obj:any) => obj.id),
-      'operationProviders': operationType.operationProviders.map((obj:any) => obj.type),
-      'preOperatioveAssessments': operationType.preopassessments.map((obj:any) => obj.name)
-    })
-    
-    }
+  
+      const assetsDTOS = operationTypeDTO.assetsDTOS || [];
+      const operationProvidersDTO = operationTypeDTO.operationProvidersDTO || [];
+      const preOperatioveAssessmentsDTO = operationTypeDTO.preOperatioveAssessmentsDTO || [];
+  
+      this.operationTypeForm.patchValue({
+        'name': name,
+        'roomType': operationTypeDTO.roomType,
+        'durationHours': operationTypeDTO.durationHours,
+        'assets': assetsDTOS.map((obj:any) => obj.id),
+        'operationProviders': operationProvidersDTO.map((obj:any) => obj.type),
+        'preOperatioveAssessments': preOperatioveAssessmentsDTO.map((obj:any) => obj.name)
+      });
+  }
+  
+  
+  
    
   }
 
@@ -105,10 +111,12 @@ export class OperationtypeComponent {
       name:this.operationTypeForm.value.name,
       roomType: this.operationTypeForm.value.roomType,
       durationHours: this.operationTypeForm.value.durationHours,
-      assets: assets,
-      operationProviders: ops,
-      preOperativeAssessmets: preOpAs
+      assetsDTOS: assets,
+      operationProvidersDTO: ops,
+      preOperativeAssessmetsDTO: preOpAs
     };
+
+    console.log(bodyObj)
   
     if (this.editOperatioType) {
       this.operationTypeService.putOperationType(this.editOperatioType.name, bodyObj).subscribe({
