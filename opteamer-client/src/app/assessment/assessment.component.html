@@ -1,1 +1,101 @@
-<p>assessment works!</p>
+<div class="card-wide">
+    <h1 class="main-title">Assessments</h1>
+
+    <ng-container *ngIf="(assessments$ | async) as assessments">
+
+        <div class="d-grid gap-2 d-md-block">
+            <button type="button" class="btn btn-light btn-sm" (click)="openModal(null)" data-bs-toggle="modal"
+                data-bs-target="#staticBackdrop">
+                Create Assessment
+            </button>
+        </div>
+
+        <table class="table table-sm table-hover">
+            <thead>
+                <tr>
+                    <th scope="col" class="table-header-font">Pre Op Assessment</th>
+                    <th scope="col" class="table-header-font">Team Member</th>
+                    <th scope="col" class="table-header-font">Patient</th>
+                    <th scope="col" class="table-header-font">Start date</th>
+                    <th scope="col" class="table-header-font"></th>
+                    <th scope="col" class="table-header-font"></th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr *ngFor="let assessment of assessments; let i = index">
+                    <td class="table-content-font">{{assessment.preOperativeAssessmentDTO.name}}</td>
+                    <th scope="row" class="table-content-font">{{assessment.teamMemberDTO.name}}</th>
+                    <td class="table-content-font">{{assessment.patientDTO.name}}</td>
+                    <td class="table-content-font">{{assessment.startDate}}</td>
+                    <td class="table-header-font">
+                        <button type="button" class="btn btn-outline-primary" (click)="openModal(assessment)"
+                            data-bs-toggle="modal" data-bs-target="#staticBackdrop">
+                            Edit
+                        </button>
+                    </td>
+                    <td class="table-header-font">
+                        <button type="button" class="btn btn-outline-danger"
+                            (click)="onDeleteAssessment(assessment.teamMemberDTO.id,assessment.patientDTO.id,assessment.preOperativeAssessmentDTO.name)">
+                            Delete
+                        </button>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+    </ng-container>
+</div>
+
+<!-- Modal -->
+<div class="modal fade" id="staticBackdrop" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1"
+    aria-labelledby="staticBackdropLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-scrollable">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h1 class="modal-title fs-5" id="staticBackdropLabel">Assessment {{modalTitle}}</h1>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <ng-container *ngIf="(combined$ | async) as combined">
+                <form [formGroup]="AssessmentForm" (ngSubmit)="onSubmit()" class="modal_card">
+
+                    <div class="mb-3">
+                        <label for="assessmentPreOpA" class="form-label main-text-style">Pre operative assessment</label>
+                        <select id="assessmentPreOpA" formControlName="preOperativeAssessments" class="form-select form-select text-content">
+                            <option *ngFor="let preOpA of combined[0]" [value]="preOpA.name">{{preOpA.name}}</option>
+                        </select>
+                    </div>
+
+                    <div class="mb-3">
+                        <label for="assessmentTeamMemeber" class="form-label main-text-style">Team member
+                        </label>
+                        <select id="assessmentTeamMemeber" formControlName="teamMember"
+                            class="form-select form-select text-content">
+                            <option *ngFor="let teamMember of combined[1]" [value]="teamMember.id">{{teamMember.name}}
+                            </option>
+                        </select>
+                    </div>
+
+                    <div class="mb-3">
+                        <label for="assessmentPatient" class="form-label main-text-style">Patient
+                        </label>
+                        <select id="assessmentPatient" formControlName="patient"
+                            class="form-select form-select text-content">
+                            <option *ngFor="let patient of combined[2]" [value]="patient.id">{{patient.name}}</option>
+                        </select>
+                    </div>
+
+                    <div class="mb-3">
+                        <label for="assessmentSD" class="form-label main-text-style">Start date</label>
+                        <input type="text" class="form-control text-content" id="assessmentSD"
+                            formControlName="startDate">
+                    </div>
+
+                    <div class="mb-3">
+                        <button type="submit" class="btn btn-primary button-color float-right"
+                            data-bs-dismiss="modal">Save</button>
+                    </div>
+
+                </form>
+            </ng-container>
+        </div>
+    </div>
+</div>

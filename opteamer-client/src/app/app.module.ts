@@ -13,6 +13,7 @@ import { JwtInterceptor } from './interceptors/jwt.interceptor';
 import { PatientsComponent } from './patients/patients.component';
 import { TeammemberComponent } from './teammember/teammember.component';
 import { OperationtypeComponent } from './operationtype/operationtype.component';
+import { AssessmentComponent } from './assessment/assessment.component';
 
 
 const appRoutes: Routes = [
@@ -20,7 +21,8 @@ const appRoutes: Routes = [
   {path: 'operations', component: OperationsComponent , canActivate: [canActivate]},
   {path: 'patients', component: PatientsComponent , canActivate: [canActivate]},
   {path: 'teamMembers', component: TeammemberComponent , canActivate: [canActivate]},
-  {path: 'operationTypes', component: OperationtypeComponent , canActivate: [canActivate]}
+  {path: 'operationTypes', component: OperationtypeComponent , canActivate: [canActivate]},
+  {path: 'assessments', component: AssessmentComponent , canActivate: [canActivate]}
 ]
 
 
@@ -33,7 +35,8 @@ const appRoutes: Routes = [
     OperationsComponent,
     PatientsComponent,
     TeammemberComponent,
-    OperationtypeComponent
+    OperationtypeComponent,
+    AssessmentComponent
   ],
   imports: [
     BrowserModule,

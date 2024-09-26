@@ -27,7 +27,7 @@ export class AuthService {
 
                     this.setToken(responseData.jwt);
                     this.isLoggedInSubject.next(true);
-                    this.router.navigate(['/operations']);
+                    this.router.navigate(['/patients']);
                     return responseData;
                 }),
                 catchError(errorResponse => {
