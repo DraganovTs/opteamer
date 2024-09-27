@@ -14,6 +14,7 @@ import { PatientsComponent } from './patients/patients.component';
 import { TeammemberComponent } from './teammember/teammember.component';
 import { OperationtypeComponent } from './operationtype/operationtype.component';
 import { AssessmentComponent } from './assessment/assessment.component';
+import { RoominventoryComponent } from './roominventory/roominventory.component';
 
 
 const appRoutes: Routes = [
@@ -22,7 +23,8 @@ const appRoutes: Routes = [
   {path: 'patients', component: PatientsComponent , canActivate: [canActivate]},
   {path: 'teamMembers', component: TeammemberComponent , canActivate: [canActivate]},
   {path: 'operationTypes', component: OperationtypeComponent , canActivate: [canActivate]},
-  {path: 'assessments', component: AssessmentComponent , canActivate: [canActivate]}
+  {path: 'assessments', component: AssessmentComponent , canActivate: [canActivate]},
+  {path: 'roomInventory', component: RoominventoryComponent , canActivate: [canActivate]}
 ]
 
 
@@ -36,7 +38,8 @@ const appRoutes: Routes = [
     PatientsComponent,
     TeammemberComponent,
     OperationtypeComponent,
-    AssessmentComponent
+    AssessmentComponent,
+    RoominventoryComponent
   ],
   imports: [
     BrowserModule,

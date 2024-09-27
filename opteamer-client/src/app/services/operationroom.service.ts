@@ -6,7 +6,7 @@ import { BehaviorSubject, Observable , map} from "rxjs";
 @Injectable({
     providedIn: 'root'
 })
-export class OperationProviderService {
+export class OperationRoomService {
 
     private readonly serverUrl: string = 'http://localhost:8080' 
     private dataSubject = new BehaviorSubject<any[]>([]);
@@ -14,8 +14,8 @@ export class OperationProviderService {
 
     constructor(private httpClient: HttpClient){}
 
-    loadAllOperationProviders(): Observable<any> {
-        return this.httpClient.get<any>(`${this.serverUrl}/api/operationProviders`)
+    loadAllOperationRooms(): Observable<any> {
+        return this.httpClient.get<any>(`${this.serverUrl}/api/operationRooms`)
         .pipe(
             map( response => {
                 const sortedData = response.sort( (a: { id: number; },b: { id: number; }) => a.id - b.id);
@@ -26,7 +26,7 @@ export class OperationProviderService {
     }
 
     refreshData(){
-        this.loadAllOperationProviders().subscribe();
+        this.loadAllOperationRooms().subscribe();
     }
 
 }
