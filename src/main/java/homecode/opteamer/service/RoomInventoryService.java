@@ -57,6 +57,8 @@ public class RoomInventoryService {
 
     public RoomInventoryDTO createRoomInventory(RoomInventoryDTO roomInventoryDTO) {
         RoomInventory roomInventory = new RoomInventory();
+        System.out.println(roomInventoryDTO.getAssetDTO().getId());
+        System.out.println(roomInventoryDTO.getOperationRoomId());
         Asset asset = assetRepository.findById(roomInventoryDTO.getAssetDTO().getId()).get();
         OperationRoom operationRoom = operationRoomRepository.findById(roomInventoryDTO.getOperationRoomId()).get();
         if (asset == null || operationRoom == null)

@@ -77,11 +77,18 @@ export class RoominventoryComponent implements OnInit {
       operationRoom = data.filter(obj => ids.includes(obj.type))
     });
 
-    let bodyObj = {
-      roomInventoryId: this.RoomInventoryForm.value.roomInventory,
-      operationRoomId: this.RoomInventoryForm.value.operationRoom,
-      count: this.RoomInventoryForm.value.count
-    }
+
+    if (!assets || !operationRoom) {
+      console.error("Asset or Operation Room selection is invalid.");
+      return;
+  }
+
+let bodyObj = {
+  count: this.RoomInventoryForm.value.count,  
+  assetDTO: assets[0], 
+  operationRoomDTO: operationRoom[0], 
+};
+
 
     console.log(bodyObj)
 
@@ -94,7 +101,7 @@ export class RoominventoryComponent implements OnInit {
         })
     } else {
       this.roomInventoryService.postRoomInventory(bodyObj).subscribe({
-        next: this.handlePutResponse.bind(this),
+        next: this.handlePostResponse.bind(this),
         error: this.handleError.bind(this)
       })
     }

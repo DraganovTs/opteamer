@@ -6,7 +6,7 @@
         <div class="d-grid gap-2 d-md-block">
             <button type="button" class="btn btn-light btn-sm" (click)="openModal(null)" data-bs-toggle="modal"
                 data-bs-target="#staticBackdrop">
-                Create Room Inventory
+                Create 
             </button>
         </div>
 
@@ -61,7 +61,7 @@
                         </label>
                         <select id="roomInvetoryOR" formControlName="operationRoom"
                             class="form-select form-select text-content">
-                            <option *ngFor="let operationRoom of combined[0]" [value]="operationRoom.id">{{operationRoom.type}}
+                            <option *ngFor="let operationRoom of combined[0]" [value]="operationRoom.type">{{operationRoom.type}}
                             </option>
                         </select>
                     </div>
