@@ -60,7 +60,7 @@ public class RoomInventoryService {
         System.out.println(roomInventoryDTO.getAssetDTO().getId());
         System.out.println(roomInventoryDTO.getOperationRoomId());
         Asset asset = assetRepository.findById(roomInventoryDTO.getAssetDTO().getId()).get();
-        OperationRoom operationRoom = operationRoomRepository.findById(roomInventoryDTO.getOperationRoomId()).get();
+        OperationRoom operationRoom = operationRoomRepository.findById(roomInventoryDTO.getOperationRoomDTO().getId()).get();
         if (asset == null || operationRoom == null)
             throw new NoSuchElementException();
         RoomInventoryId roomInventoryId = new RoomInventoryId();
