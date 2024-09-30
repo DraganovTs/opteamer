@@ -81,10 +81,6 @@ export class OperationtypeComponent {
         'preOperatioveAssessments': preOperatioveAssessmentsDTO.map((obj:any) => obj.name)
       });
   }
-  
-  
-  
-   
   }
 
   onSubmit() {

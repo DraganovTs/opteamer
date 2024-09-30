@@ -1,1 +1,88 @@
-<p>operationroom works!</p>
+<div class="card-wide">
+    <h1 class="main-title">Operation Rooms</h1>
+
+    <ng-container *ngIf="(operationRooms$ | async) as operationRooms">
+
+        <div class="d-grid gap-2 d-md-block">
+            <button type="button" class="btn btn-light btn-sm" (click)="openModal(null)" data-bs-toggle="modal"
+                data-bs-target="#staticBackdrop">
+                Create Operation Room
+            </button>
+        </div>
+
+        <table class="table table-sm table-hover">
+            <thead>
+                <tr>
+                    <th scope="col" class="table-header-font">Id</th>
+                    <th scope="col" class="table-header-font">Room Nr.</th>
+                    <th scope="col" class="table-header-font">Building Block</th>
+                    <th scope="col" class="table-header-font">Floor</th>
+                    <th scope="col" class="table-header-font">Type</th>
+                    <th scope="col" class="table-header-font">State</th>
+                    <th scope="col" class="table-header-font"></th>
+                    <th scope="col" class="table-header-font"></th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr *ngFor="let room of operationRooms; let i = index">
+                    <th scope="row" class="table-content-font">{{room.id}}</th>
+                    <td class="table-content-font">{{room.roomNr}}</td>
+                    <td class="table-content-font">{{room.buildingBlock}}</td>
+                    <td class="table-content-font">{{room.floor}}</td>
+                    <td class="table-content-font">{{room.type}}</td>
+                    <td class="table-content-font">{{room.state}}</td>
+                    <td class="table-header-font">
+                        <button type="button" class="btn btn-outline-primary" (click)="openModal(room)"
+                            data-bs-toggle="modal" data-bs-target="#staticBackdrop">
+                            Edit
+                        </button>
+                    </td>
+                    <td class="table-header-font">
+                        <button type="button" class="btn btn-outline-danger" (click)="onDeleteOperationRoom(room.id)">
+                            Delete
+                        </button>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+    </ng-container>
+</div>
+
+<!-- Modal -->
+<div class="modal fade" id="staticBackdrop" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1"
+    aria-labelledby="staticBackdropLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-scrollable">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h1 class="modal-title fs-5" id="staticBackdropLabel">Operation Room Edit {{modalTitle}}</h1>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+                <form [formGroup]="OperationRoomForm" (ngSubmit)="onSubmit()" class="modal_card">
+                    <div class="mb-3">
+                        <label for="ORRoomNr" class="form-label main-text-style">Room Number</label>
+                        <input type="text" class="form-control text-content" id="ORRoomNr" formControlName="roomNr">
+                    </div>
+                    <div class="mb-3">
+                        <label for="ORBuildingBlock" class="form-label main-text-style">Building Block</label>
+                        <input type="text" class="form-control text-content" id="ORBuildingBlock" formControlName="buildingBlock">
+                    </div>
+                    <div class="mb-3">
+                        <label for="ORFloor" class="form-label main-text-style">Floor</label>
+                        <input type="text" class="form-control text-content" id="ORFloor" formControlName="floor">
+                    </div>
+                    <div class="mb-3">
+                        <label for="ORType" class="form-label main-text-style">Type</label>
+                        <input type="text" class="form-control text-content" id="ORType" formControlName="type">
+                    </div>
+                    <div class="mb-3">
+                        <label for="ORState" class="form-label main-text-style">State</label>
+                        <input type="text" class="form-control text-content" id="ORState" formControlName="state">
+                    </div>
+                    <div class="mb-3">
+                        <button type="submit" class="btn btn-primary button-color float-right"
+                            data-bs-dismiss="modal">Save</button>
+                    </div>
+                </form>
+        </div>
+    </div>
+</div>

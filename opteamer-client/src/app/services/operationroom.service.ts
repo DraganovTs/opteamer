@@ -29,4 +29,17 @@ export class OperationRoomService {
         this.loadAllOperationRooms().subscribe();
     }
 
+    postOperationRoom(body: any): Observable<any> {
+        console.log(body);
+        return this.httpClient.post<any>(`${this.serverUrl}/api/operationRooms`,body);
+       
+    }
+
+    putOperationRoom(id: string, body: any): Observable<any> {
+        return this.httpClient.put<any>(`${this.serverUrl}/api/operationRooms/${id}`,body);
+    }
+
+    deleteOperationRoom(id: string){
+        return this.httpClient.delete<any>(`${this.serverUrl}/api/operationRooms/${id}`)
+    }
 }

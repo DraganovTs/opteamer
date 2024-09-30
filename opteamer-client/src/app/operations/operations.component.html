@@ -1,14 +1,114 @@
-<div class="card_row_box">
+<div class="card-wide">
     <h1 class="main-title">Operations</h1>
 
     <ng-container *ngIf="(operations$ | async) as operations">
-       
-        <div *ngFor="let operation of operations; let i = index">
-            {{operation.id}}
-            {{operation.patient.name}}
+
+        <div class="d-grid gap-2 d-md-block">
+            <button type="button" class="btn btn-light btn-sm" (click)="openModal(null)" data-bs-toggle="modal"
+                data-bs-target="#staticBackdrop">
+                Create Operation
+            </button>
         </div>
-        
 
+        <table class="table table-sm table-hover">
+            <thead>
+                <tr>
+                    <th scope="col" class="table-header-font">Id</th>
+                    <th scope="col" class="table-header-font">Type</th>
+                    <th scope="col" class="table-header-font">Patient</th>
+                    <th scope="col" class="table-header-font">State</th>
+                    <th scope="col" class="table-header-font">Start Date</th>
+                    <th scope="col" class="table-header-font"></th>
+                    <th scope="col" class="table-header-font"></th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr *ngFor="let operation of operations; let i = index">
+                    <th scope="row" class="table-content-font">{{operation.id}}</th>
+                    <td class="table-content-font">{{operation.operationType}}</td>
+                    <td class="table-content-font">{{operation.patient}}</td>
+                    <td class="table-content-font">{{operation.state}}</td>
+                    <td class="table-content-font">{{operation.startDate}}</td>
+                    <td class="table-header-font">
+                        <button type="button" class="btn btn-outline-primary" (click)="openModal(operation)"
+                            data-bs-toggle="modal" data-bs-target="#staticBackdrop">
+                            Edit
+                        </button>
+                    </td>
+                    <td class="table-header-font">
+                        <button type="button" class="btn btn-outline-danger"
+                            (click)="onDeleteOperations(operation.id)">
+                            Delete
+                        </button>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
     </ng-container>
+</div>
 
+<!-- Modal -->
+<div class="modal fade" id="staticBackdrop" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1"
+    aria-labelledby="staticBackdropLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-scrollable">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h1 class="modal-title fs-5" id="staticBackdropLabel">Operation type {{modalTitle}}</h1>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <ng-container *ngIf="(combined$ | async) as combined">
+                <form [formGroup]="operationsForm" (ngSubmit)="onSubmit()" class="modal_card">
+
+                    <div class="mb-3">
+                        <label for="operationTypeName" class="form-label main-text-style">Name</label>
+                        <input type="text" class="form-control text-content" id="operationTypeName"
+                            formControlName="name">
+                    </div>
+
+                    <div class="mb-3">
+                        <label for="operationTypeRT" class="form-label main-text-style">Room type</label>
+                        <input type="text" class="form-control text-content" id="operationTypeRT"
+                            formControlName="roomType">
+                    </div>
+
+                    <div class="mb-3">
+                        <label for="operationTypeOH" class="form-label main-text-style">Duration hours</label>
+                        <input type="text" class="form-control text-content" id="operationTypeOH"
+                            formControlName="durationHours">
+                    </div>
+
+                    <div class="mb-3">
+                        <label for="operationTypeOP" class="form-label main-text-style">Operation provider</label>
+                        <select id="operationTypeOP" formControlName="operationProviders"
+                            class="form-select form-select-multiple text-content" multiple>
+                            <option *ngFor="let operationProvider of combined[0]" [value]="operationProvider.type">
+                                {{operationProvider.type}}</option>
+                        </select>
+                    </div>
+
+                    <div class="mb-3">
+                        <label for="operationTypeAsset" class="form-label main-text-style">Asset</label>
+                        <select id="operationTypeAsset" formControlName="assets"
+                            class="form-select form-select-multiple text-content" multiple>
+                            <option *ngFor="let asset of combined[1]" [value]="asset.id">{{asset.name}}</option>
+                        </select>
+                    </div>
+
+                    <div class="mb-3">
+                        <label for="operationTypePreOpA" class="form-label main-text-style">Pre operative assessment
+                        </label>
+                        <select id="operationTypePreOpA" formControlName="preOperatioveAssessments"
+                            class="form-select form-select-multiple text-content" multiple>
+                            <option *ngFor="let preOpA of combined[2]" [value]="preOpA.name">{{preOpA.name}}</option>
+                        </select>
+                    </div>
+
+                    <div class="mb-3">
+                        <button type="submit" class="btn btn-primary button-color float-right"
+                            data-bs-dismiss="modal">Save</button>
+                    </div>
+                </form>
+            </ng-container>
+        </div>
+    </div>
 </div>

@@ -1,6 +1,6 @@
 import { HttpClient } from "@angular/common/http";
 import { Injectable } from "@angular/core";
-import { Observable , map} from "rxjs";
+import { BehaviorSubject, Observable , map} from "rxjs";
 
 
 @Injectable({
@@ -9,15 +9,34 @@ import { Observable , map} from "rxjs";
 export class OperationService {
 
     constructor( private httpClient: HttpClient){}
+    private readonly serverUrl: string = 'http://localhost:8080' 
+    private dataSubject = new BehaviorSubject<any[]>([]);
+    data$: Observable<any[]> = this.dataSubject.asObservable();
 
 
     loadAllOperations(): Observable<any> {
-        return this.httpClient.get<any>('http://localhost:8080/api/operations')
+        return this.httpClient.get<any>(`${this.serverUrl}/api/operations`)
         .pipe(
             map( response => {
-                console.log(response);
+                const sortedData = response.sort( (a: { id: number; },b: { id: number; }) => a.id - b.id);
+                this.dataSubject.next(sortedData)
+                return response
             })
         )
+    }
+
+    postOperations(body: any): Observable<any> {
+        console.log(body);
+        return this.httpClient.post<any>(`${this.serverUrl}/api/operationRooms`,body);
+       
+    }
+
+    putOperations(id: string, body: any): Observable<any> {
+        return this.httpClient.put<any>(`${this.serverUrl}/api/operationRooms/${id}`,body);
+    }
+
+    deleteOperations(id: string){
+        return this.httpClient.delete<any>(`${this.serverUrl}/api/operationRooms/${id}`)
     }
 
 }
