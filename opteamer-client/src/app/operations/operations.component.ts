@@ -107,33 +107,41 @@ export class OperationsComponent implements OnInit {
   }
 
   openModal(operation: any) {
+    
       this.editOperation = operation;
+      this.operationsForm.reset();
 
-    //   let name = '';
-    //   let roomType;
-    //   let assets;
-    //   let op;
-    //   let prOpA;
-    //   this.modalTitle = 'create';
+      let operationType = '';
+      let operationRoom = '';
+      let patient = '';
+      let state = '';
+      let startDate = '';
+      let teamMembers = [];
+      this.modalTitle = 'create';
 
-    //   if (operationTypeDTO) {
-    //     name = operationTypeDTO.name;
-    //     roomType = operationTypeDTO.roomType;
-    //     this.modalTitle = 'edit';
+      if (operation) {
+        // Ensure operation contains all the necessary properties
+        operationType = operation.operationTypeDTO?.id || '';
+        operationRoom = operation.operationRoomDTO?.id || '';
+        patient = operation.patientDTO?.id || '';
+        state = operation.state || '';
+        startDate = operation.startDate || '';
+        teamMembers = operation.teamMemberDTO?.map((member: any) => member.id) || [];
+    
+        this.modalTitle = 'edit';
+    
+        // Patch the form with the retrieved values
+        this.operationsForm.patchValue({
+          'operationType': operationType,
+          'operationRoom': operationRoom,
+          'patient': patient,
+          'state': state,
+          'startDate': startDate,
+          'teamMembers': teamMembers
+        });
+    }
 
-    //     const assetsDTOS = operationTypeDTO.assetsDTOS || [];
-    //     const operationProvidersDTO = operationTypeDTO.operationProvidersDTO || [];
-    //     const preOperatioveAssessmentsDTO = operationTypeDTO.preOperatioveAssessmentsDTO || [];
-
-    //     this.operationTypeForm.patchValue({
-    //       'name': name,
-    //       'roomType': operationTypeDTO.roomType,
-    //       'durationHours': operationTypeDTO.durationHours,
-    //       'assets': assetsDTOS.map((obj:any) => obj.id),
-    //       'operationProviders': operationProvidersDTO.map((obj:any) => obj.type),
-    //       'preOperatioveAssessments': preOperatioveAssessmentsDTO.map((obj:any) => obj.name)
-    //     });
-    // }
+    console.log(operation)
   }
 
 

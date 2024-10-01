@@ -26,8 +26,14 @@
                 <tr *ngFor="let operation of operations; let i = index">
                     <th scope="row" class="table-content-font">{{operation.id}}</th>
                     <td class="table-content-font">{{operation.operationType}}</td>
-                    <td class="table-content-font">{{operation.patient}}</td>
-                    <td class="table-content-font">{{operation.state}}</td>
+                    <td class="table-content-font">{{operation.patientDTO.name}}</td>
+
+                    <td class="table-content-font"><span [ngClass]="[operation.state === 'IN_PROGRESS' ? 'badge bg-warning text-dark' : '' ,
+                                                                     operation.state === 'SCHEDULED' ? 'badge bg-primary' : '',
+                                                                     operation.state === 'COMPLETED' ? 'badge badge-info' : '',
+                                                                     operation.state === 'CANCELLED' ? 'badge badge-danger' : '',
+                                                                     operation.state === 'READY_TO_BEGIN' ? 'badge badge-success' : '']">{{operation.state}}</span></td>
+
                     <td class="table-content-font">{{operation.startDate}}</td>
                     <td class="table-header-font">
                         <button type="button" class="btn btn-outline-primary" (click)="openModal(operation)"
@@ -36,8 +42,7 @@
                         </button>
                     </td>
                     <td class="table-header-font">
-                        <button type="button" class="btn btn-outline-danger"
-                            (click)="onDeleteOperations(operation.id)">
+                        <button type="button" class="btn btn-outline-danger" (click)="onDeleteOperations(operation.id)">
                             Delete
                         </button>
                     </td>
@@ -53,54 +58,57 @@
     <div class="modal-dialog modal-dialog-scrollable">
         <div class="modal-content">
             <div class="modal-header">
-                <h1 class="modal-title fs-5" id="staticBackdropLabel">Operation type {{modalTitle}}</h1>
+                <h1 class="modal-title fs-5" id="staticBackdropLabel">Operations {{modalTitle}}</h1>
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
             <ng-container *ngIf="(combined$ | async) as combined">
                 <form [formGroup]="operationsForm" (ngSubmit)="onSubmit()" class="modal_card">
 
                     <div class="mb-3">
-                        <label for="operationTypeName" class="form-label main-text-style">Name</label>
-                        <input type="text" class="form-control text-content" id="operationTypeName"
-                            formControlName="name">
-                    </div>
+                        <label for="operationType" class="form-label main-text-style">Operation Type</label>
+                        <select id="operationOType" formControlName="operationType" class="form-select text-content">
+                          <option *ngFor="let operationType of combined[0]" [value]="operationType.id">
+                            {{ operationType.name }}
+                          </option>
+                        </select>
+                      </div>
+                      
 
                     <div class="mb-3">
-                        <label for="operationTypeRT" class="form-label main-text-style">Room type</label>
-                        <input type="text" class="form-control text-content" id="operationTypeRT"
-                            formControlName="roomType">
-                    </div>
-
-                    <div class="mb-3">
-                        <label for="operationTypeOH" class="form-label main-text-style">Duration hours</label>
-                        <input type="text" class="form-control text-content" id="operationTypeOH"
-                            formControlName="durationHours">
-                    </div>
-
-                    <div class="mb-3">
-                        <label for="operationTypeOP" class="form-label main-text-style">Operation provider</label>
-                        <select id="operationTypeOP" formControlName="operationProviders"
-                            class="form-select form-select-multiple text-content" multiple>
-                            <option *ngFor="let operationProvider of combined[0]" [value]="operationProvider.type">
-                                {{operationProvider.type}}</option>
+                        <label for="operationORoom" class="form-label main-text-style">Operation Room</label>
+                        <select id="operationORoom" formControlName="operationRoom" class="form-select text-content">
+                            <option *ngFor="let operationRoom of combined[1]" [value]="operationRoom.id">
+                                {{operationRoom.type}}</option>
                         </select>
                     </div>
 
                     <div class="mb-3">
-                        <label for="operationTypeAsset" class="form-label main-text-style">Asset</label>
-                        <select id="operationTypeAsset" formControlName="assets"
+                        <label for="oPatient" class="form-label main-text-style">Patient</label>
+                        <select id="oPatient" formControlName="patient" class="form-select text-content">
+                            <option *ngFor="let patient of combined[2]" [value]="patient.id">{{patient.name}}</option>
+                        </select>
+                    </div>
+                   
+                    <div class="mb-3">
+                        <label for="operationTeamMembers" class="form-label main-text-style">Team Member</label>
+                        <select id="operationTeamMembers" formControlName="teamMembers"
                             class="form-select form-select-multiple text-content" multiple>
-                            <option *ngFor="let asset of combined[1]" [value]="asset.id">{{asset.name}}</option>
+                            <option *ngFor="let teamMember of combined[3]" [value]="teamMember.id">
+                                {{teamMember.name}}</option>
                         </select>
                     </div>
 
                     <div class="mb-3">
-                        <label for="operationTypePreOpA" class="form-label main-text-style">Pre operative assessment
-                        </label>
-                        <select id="operationTypePreOpA" formControlName="preOperatioveAssessments"
-                            class="form-select form-select-multiple text-content" multiple>
-                            <option *ngFor="let preOpA of combined[2]" [value]="preOpA.name">{{preOpA.name}}</option>
-                        </select>
+                        <label for="operationState" class="form-label main-text-style">State</label>
+                        <input type="text" class="form-control text-content" id="operationState"
+                            formControlName="state">
+                    </div>
+
+    
+                    <div class="mb-3">
+                        <label for="operationStartDate" class="form-label main-text-style">Start date</label>
+                        <input type="text" class="form-control text-content" id="operationStartDate"
+                            formControlName="startDate">
                     </div>
 
                     <div class="mb-3">
