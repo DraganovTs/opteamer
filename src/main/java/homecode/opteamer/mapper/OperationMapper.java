@@ -13,6 +13,7 @@ public interface OperationMapper {
 
     @Mapping(source = "operationRoom" , target = "operationRoomDTO")
     @Mapping(source = "patient" , target = "patientDTO")
+    @Mapping(source = "operationType" , target = "operationTypeDTO")
     @Mapping(source = "teamMembers" , target = "teamMembersDTO")
     OperationDTO toOperationDTO(Operation operation);
 

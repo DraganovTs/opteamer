@@ -25,14 +25,14 @@
             <tbody>
                 <tr *ngFor="let operation of operations; let i = index">
                     <th scope="row" class="table-content-font">{{operation.id}}</th>
-                    <td class="table-content-font">{{operation.operationType}}</td>
+                    <td class="table-content-font">{{operation.operationTypeDTO?.name}}</td>
                     <td class="table-content-font">{{operation.patientDTO.name}}</td>
 
-                    <td class="table-content-font"><span [ngClass]="[operation.state === 'IN_PROGRESS' ? 'badge bg-warning text-dark' : '' ,
+                    <td class="table-content-font"><span [ngClass]="[operation.state === 'IN_PROGRESS' ? 'badge bg-danger' : '' ,
                                                                      operation.state === 'SCHEDULED' ? 'badge bg-primary' : '',
-                                                                     operation.state === 'COMPLETED' ? 'badge badge-info' : '',
-                                                                     operation.state === 'CANCELLED' ? 'badge badge-danger' : '',
-                                                                     operation.state === 'READY_TO_BEGIN' ? 'badge badge-success' : '']">{{operation.state}}</span></td>
+                                                                     operation.state === 'COMPLETED' ? 'badge bg-success' : '',
+                                                                     operation.state === 'CANCELLED' ? 'badge bg-secondary' : '',
+                                                                     operation.state === 'READY_TO_BEGIN' ? 'badge bg-warning text-dark' : '']">{{operation.state}}</span></td>
 
                     <td class="table-content-font">{{operation.startDate}}</td>
                     <td class="table-header-font">
@@ -67,7 +67,7 @@
                     <div class="mb-3">
                         <label for="operationType" class="form-label main-text-style">Operation Type</label>
                         <select id="operationOType" formControlName="operationType" class="form-select text-content">
-                          <option *ngFor="let operationType of combined[0]" [value]="operationType.id">
+                          <option *ngFor="let operationType of combined[0]" [value]="operationType.name">
                             {{ operationType.name }}
                           </option>
                         </select>

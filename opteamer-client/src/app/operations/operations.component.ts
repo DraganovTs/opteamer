@@ -38,6 +38,8 @@ export class OperationsComponent implements OnInit {
     this.patientService.refreshData();
     this.teamMemberService.refreshData();
 
+    console.log(this.operationTypes$)
+
     //init form
     this.operationsForm = new FormGroup<any>({
       'operationType': new FormControl(null, [Validators.required]),
@@ -121,7 +123,7 @@ export class OperationsComponent implements OnInit {
 
       if (operation) {
         // Ensure operation contains all the necessary properties
-        operationType = operation.operationTypeDTO?.id || '';
+        operationType = operation.operationTypeDTO?.name || '';
         operationRoom = operation.operationRoomDTO?.id || '';
         patient = operation.patientDTO?.id || '';
         state = operation.state || '';
