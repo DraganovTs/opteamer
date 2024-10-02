@@ -60,87 +60,92 @@ export class OperationsComponent implements OnInit {
 
 
   onSubmit() {
-
-    // let ops;
-    // this.operationProviders$.subscribe(data=>{
-    //   let ids:any[] = this.operationTypeForm.value.operationProviders;
-    //   ops = data.filter(obj => ids.includes(obj.type))
-    // });
-
-    // let assets;
-    // this.assets$.subscribe(data=>{
-    //   let ids:any[] = this.operationTypeForm.value.assets;
-    //   assets = data.filter(obj => ids.includes(obj.type))
-    // });
-
-    // let preOpAs;
-    // this.preOpAssisstments$.subscribe(data=>{
-    //   let ids:any[] = this.operationTypeForm.value.preOperatioveAssessments;
-    //   assets = data.filter(obj => ids.includes(obj.name))
-    // });
-
-    // let bodyObj = {
-    //   name:this.operationTypeForm.value.name,
-    //   roomType: this.operationTypeForm.value.roomType,
-    //   durationHours: this.operationTypeForm.value.durationHours,
-    //   assetsDTOS: assets,
-    //   operationProvidersDTO: ops,
-    //   preOperativeAssessmetsDTO: preOpAs
-    // };
-
-    // console.log(bodyObj)
-
-    // if (this.editOperatioType) {
-    //   this.operationTypeService.putOperationType(this.editOperatioType.name, bodyObj).subscribe({
-    //     next: this.handlePutResponse.bind(this),
-    //     error: this.handleError.bind(this)
-    //   })
-    // } else {
-    //   this.operationTypeService.postOperationType(bodyObj).subscribe({
-    //     next: this.handlePutResponse.bind(this),
-    //     error: this.handleError.bind(this)
-    //   })
-    // }
-
-    // setTimeout(() => {
-    //   this.reloadOperationTypes();
-    // }, 500);
-
+    let operationType;
+    this.operationTypes$.subscribe(data => {
+      let id: any = this.operationsForm.value.operationType;
+      operationType = data.find(obj => String(id) === String(obj.name));
+    });
+  
+    let operationRoom;
+    this.operationRooms$.subscribe(data => {
+      let id: any = this.operationsForm.value.operationRoom;
+      operationRoom = data.find(obj => String(id) === String(obj.id));
+    });
+  
+    let patient;
+    this.patients$.subscribe(data => {
+      let id: any = this.operationsForm.value.patient;
+      patient = data.find(obj => String(id) === String(obj.id));
+    });
+  
+    let teamMembers: any[] = [];
+    this.teamMembers$.subscribe(data => {
+      let ids: any[] = this.operationsForm.value.teamMembers || []; // Prevent null issue
+      teamMembers = data.filter(obj => ids.includes(obj.id));
+    });
+  
+    let bodyObj = {
+      operationTypeDTO: operationType,
+      operationRoomDTO: operationRoom,
+      patientDTO: patient,
+      state: this.operationsForm.value.state,
+      startDate: this.operationsForm.value.startDate,
+      teamMembersDTO: teamMembers
+    };
+  
+    console.log(bodyObj);
+  
+    if (this.editOperation) {
+      this.operationService.putOperations(this.editOperation.id, bodyObj).subscribe({
+        next: this.handlePutResponse.bind(this),
+        error: this.handleError.bind(this)
+      });
+    } else {
+      this.operationService.postOperations(bodyObj).subscribe({
+        next: this.handlePutResponse.bind(this),
+        error: this.handleError.bind(this)
+      });
+    }
+  
+    setTimeout(() => {
+      this.reloadOperations();
+    }, 500);
   }
+  
 
   openModal(operation: any) {
-    
-      this.editOperation = operation;
-      this.operationsForm.reset();
 
-      let operationType = '';
-      let operationRoom = '';
-      let patient = '';
-      let state = '';
-      let startDate = '';
-      let teamMembers = [];
-      this.modalTitle = 'create';
+    this.editOperation = operation;
+    this.operationsForm.reset();
 
-      if (operation) {
-        // Ensure operation contains all the necessary properties
-        operationType = operation.operationTypeDTO?.name || '';
-        operationRoom = operation.operationRoomDTO?.id || '';
-        patient = operation.patientDTO?.id || '';
-        state = operation.state || '';
-        startDate = operation.startDate || '';
-        teamMembers = operation.teamMemberDTO?.map((member: any) => member.id) || [];
-    
-        this.modalTitle = 'edit';
-    
-        // Patch the form with the retrieved values
-        this.operationsForm.patchValue({
-          'operationType': operationType,
-          'operationRoom': operationRoom,
-          'patient': patient,
-          'state': state,
-          'startDate': startDate,
-          'teamMembers': teamMembers
-        });
+    let operationType = '';
+    let operationRoom = '';
+    let patient = '';
+    let state = '';
+    let startDate = '';
+    let teamMembers = [];
+    this.modalTitle = 'create';
+
+    if (operation) {
+      // Ensure operation contains all the necessary properties
+      operationType = operation.operationTypeDTO?.name || '';
+      operationRoom = operation.operationRoomDTO?.id || '';
+      patient = operation.patientDTO?.id || '';
+      state = operation.state || '';
+      startDate = operation.startDate || '';
+      teamMembers = operation.teamMemberDTO?.map((member: any) => member.id) || [];
+
+      this.modalTitle = 'edit';
+
+      // Patch the form with the retrieved values
+      this.operationsForm.patchValue({
+        'operationType': operationType,
+        'operationRoom': operationRoom,
+        'patient': patient,
+        'state': state,
+        'startDate': startDate,
+        'teamMembers': teamMembers
+      });
     }
 
     console.log(operation)
@@ -150,8 +155,7 @@ export class OperationsComponent implements OnInit {
 
 
   onDeleteOperations(id: string) {
-
-    this.operationTypeService.deleteOperationType(id).subscribe({
+    this.operationService.deleteOperations(id).subscribe({
       next: this.handleDeleteResponse.bind(this),
       error: this.handleError.bind(this)
     })

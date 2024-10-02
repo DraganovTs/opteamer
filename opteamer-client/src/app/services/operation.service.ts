@@ -27,16 +27,16 @@ export class OperationService {
 
     postOperations(body: any): Observable<any> {
         console.log(body);
-        return this.httpClient.post<any>(`${this.serverUrl}/api/operationRooms`,body);
+        return this.httpClient.post<any>(`${this.serverUrl}/api/operations`,body);
        
     }
 
     putOperations(id: string, body: any): Observable<any> {
-        return this.httpClient.put<any>(`${this.serverUrl}/api/operationRooms/${id}`,body);
+        return this.httpClient.put<any>(`${this.serverUrl}/api/operations/${id}`,body);
     }
 
     deleteOperations(id: string){
-        return this.httpClient.delete<any>(`${this.serverUrl}/api/operationRooms/${id}`)
+        return this.httpClient.delete<any>(`${this.serverUrl}/api/operations/${id}`)
     }
 
 }

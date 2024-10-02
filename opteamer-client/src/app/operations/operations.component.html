@@ -94,7 +94,7 @@
                         <select id="operationTeamMembers" formControlName="teamMembers"
                             class="form-select form-select-multiple text-content" multiple>
                             <option *ngFor="let teamMember of combined[3]" [value]="teamMember.id">
-                                {{teamMember.name}}</option>
+                                {{teamMember.name}} - {{ teamMember.operationProviderDTO.type}}</option>
                         </select>
                     </div>
 
