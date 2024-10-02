@@ -16,6 +16,7 @@ import { OperationtypeComponent } from './operationtype/operationtype.component'
 import { AssessmentComponent } from './assessment/assessment.component';
 import { RoominventoryComponent } from './roominventory/roominventory.component';
 import { OperationroomComponent } from './operationroom/operationroom.component';
+import { OperationreportComponent } from './operationreport/operationreport.component';
 
 
 const appRoutes: Routes = [
@@ -26,8 +27,10 @@ const appRoutes: Routes = [
   {path: 'operationTypes', component: OperationtypeComponent , canActivate: [canActivate]},
   {path: 'assessments', component: AssessmentComponent , canActivate: [canActivate]},
   {path: 'roomInventory', component: RoominventoryComponent , canActivate: [canActivate]},
-  {path: 'operationRoom', component: OperationroomComponent , canActivate: [canActivate]}
+  {path: 'operationRoom', component: OperationroomComponent , canActivate: [canActivate]},
+  {path: 'operationReport', component: OperationreportComponent , canActivate: [canActivate]}
 ]
+
 
 
 
@@ -42,7 +45,8 @@ const appRoutes: Routes = [
     OperationtypeComponent,
     AssessmentComponent,
     RoominventoryComponent,
-    OperationroomComponent
+    OperationroomComponent,
+    OperationreportComponent
   ],
   imports: [
     BrowserModule,
