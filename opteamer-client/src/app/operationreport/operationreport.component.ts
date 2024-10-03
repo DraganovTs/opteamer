@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
-import { FormGroup } from '@angular/forms';
-import { Observable } from 'rxjs';
+import { FormControl, FormGroup, Validators } from '@angular/forms';
+import { combineLatest, Observable } from 'rxjs';
 import { TeamMemebrService } from '../services/teammember.service';
 import { OperationService } from '../services/operation.service';
 import { OperationReportService } from '../services/operationreport.service';
@@ -26,39 +26,39 @@ export class OperationreportComponent implements OnInit {
   operations$ = this.operationService.data$;
 
   ngOnInit(): void {
-    // this.reloadRoomInventories();
-    // this.assetService.refreshData();
-    // this.operationRoomService.refreshData();
-    // this.RoomInventoryForm = new FormGroup<any>({
-    //   'assets': new FormControl(null, [Validators.required]),
-    //   'operationRoom': new FormControl(null, [Validators.required]),
-    //   'count': new FormControl(null, [Validators.required]),
-    // })
+    this.reloadOperationReport();
+    this.teamMemberService.refreshData();
+    this.operationService.refreshData();
+    this.OperationReportForm = new FormGroup<any>({
+      'teamMembers': new FormControl(null, [Validators.required]),
+      'operations': new FormControl(null, [Validators.required]),
+      'report': new FormControl(null, [Validators.required]),
+    })
 
-    // this.combined$ = combineLatest([ this.operationRooms$,this.assets$]);
+    this.combined$ = combineLatest([ this.teamMembers$,this.operations$]);
 
   }
 
-  reloadRoomInventories() {
+  reloadOperationReport() {
     this.operationReportService.refreshData();
   }
 
-  openModal(roomInventory: any) {
+  openModal(operationreport: any) {
 
-    // this.RoomInventoryForm.reset();
+    this.OperationReportForm.reset();
 
-    // this.modalTitle = 'create';
+    this.modalTitle = 'create';
 
-    // if (roomInventory) {
-    //   this.RoomInventoryForm.patchValue({
-    //     assets: roomInventory.assetDTO.name,
-    //     operationRoom: roomInventory.operationRoomDTO.type,
-    //     count: roomInventory.count,
-    //   });
+    if (operationreport) {
+      this.OperationReportForm.patchValue({
+        teamMembers: operationreport.teamMemberDTO.name,
+        operations: operationreport.operationDTO.type,
+        report: operationreport.report,
+      });
 
-    //   this.modalTitle = 'edit';
-    //   this.editRoomInventory = roomInventory;
-    // }
+      this.modalTitle = 'edit';
+      this.editOperationReport = operationreport;
+    }
 
 
   }
@@ -111,14 +111,14 @@ export class OperationreportComponent implements OnInit {
 //     }, 500);
   }
 
-  onDeleteRoomInventory(assetId: string, roomId: string) {
-    // this.roomInventoryService.deleteRoomInventory(assetId, roomId).subscribe({
-    //   next: this.handleDeleteResponse.bind(this),
-    //   error: this.handleError.bind(this)
-    // });
-    // setTimeout(() => {
-    //   this.reloadRoomInventories();
-    // }, 500);
+  onDeleteOperationReport(assetId: string, roomId: string) {
+    this.operationReportService.deleteOperationReport(assetId, roomId).subscribe({
+      next: this.handleDeleteResponse.bind(this),
+      error: this.handleError.bind(this)
+    });
+    setTimeout(() => {
+      this.reloadOperationReport();
+    }, 500);
   }
 
 

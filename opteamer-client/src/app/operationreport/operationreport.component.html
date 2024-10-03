@@ -1,1 +1,91 @@
-<p>operationreport works!</p>
+<div class="card-wide">
+    <h1 class="main-title">Operation Report</h1>
+
+    <ng-container *ngIf="(operationReports$ | async) as operationReports">
+
+        <div class="d-grid gap-2 d-md-block">
+            <button type="button" class="btn btn-light btn-sm" (click)="openModal(null)" data-bs-toggle="modal"
+                data-bs-target="#staticBackdrop">
+                Create Operation Report
+            </button>
+        </div>
+
+        <table class="table table-sm table-hover">
+            <thead>
+                <tr>
+                    <th scope="col" class="table-header-font">Team Member</th>
+                    <th scope="col" class="table-header-font">Operation</th>
+                    <th scope="col" class="table-header-font">Report</th>
+                    <th scope="col" class="table-header-font"></th>
+                    <th scope="col" class="table-header-font"></th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr *ngFor="let operationReport of operationReports; let i = index">
+                    <td class="table-content-font">{{operationReport.teamMemberDTO.name}}</td>
+                    <th scope="row" class="table-content-font">{{operationReport.operationDTO.operationTypeDTO.name}}</th>
+                    <td class="table-content-font">{{operationReport.report}}</td>
+                    <td class="table-header-font">
+                        <button type="button" class="btn btn-outline-primary" (click)="openModal(operationReport)"
+                        data-bs-toggle="modal" data-bs-target="#staticBackdrop">
+                        Edit
+                    </button>
+                </td>
+                <td class="table-header-font">
+                    <button type="button" class="btn btn-outline-danger"
+                        (click)="onDeleteOperationReport(operationReport.teamMember.id, operationReport.operation.id)">
+                        Delete
+                    </button>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+    </ng-container>
+</div>
+
+<!-- Modal -->
+<div class="modal fade" id="staticBackdrop" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1"
+    aria-labelledby="staticBackdropLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-scrollable">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h1 class="modal-title fs-5" id="staticBackdropLabel">Room Inventory {{modalTitle}}</h1>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <ng-container *ngIf="(combined$ | async) as combined">
+                <form [formGroup]="OperationReportForm" (ngSubmit)="onSubmit()" class="modal_card">
+
+                
+                    <div class="mb-3">
+                        <label for="roomInvetoryOR" class="form-label main-text-style">Operation Room
+                        </label>
+                        <select id="roomInvetoryOR" formControlName="operationRoom"
+                            class="form-select form-select text-content">
+                            <option *ngFor="let operationRoom of combined[0]" [value]="operationRoom.type">{{operationRoom.type}}
+                            </option>
+                        </select>
+                    </div>
+
+                    <div class="mb-3">
+                        <label for="roomInvetoryAsset" class="form-label main-text-style">Asset</label>
+                        <select id="roomInvetoryAsset" formControlName="assets" class="form-select form-select text-content">
+                            <option *ngFor="let asset of combined[1]" [value]="asset.name">{{asset.name}}</option>
+                        </select>
+                    </div>
+
+                    <div class="mb-3">
+                        <label for="roomInvetoryCount" class="form-label main-text-style">Count</label>
+                        <input type="text" class="form-control text-content" id="roomInvetoryCount"
+                            formControlName="count">
+                    </div>
+
+                    <div class="mb-3">
+                        <button type="submit" class="btn btn-primary button-color float-right"
+                            data-bs-dismiss="modal">Save</button>
+                    </div>
+
+                </form>
+            </ng-container>
+        </div>
+    </div>
+</div>

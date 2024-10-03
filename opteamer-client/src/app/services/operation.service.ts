@@ -25,6 +25,10 @@ export class OperationService {
         )
     }
 
+    refreshData() {
+        this.loadAllOperations().subscribe();
+    }
+
     postOperations(body: any): Observable<any> {
         console.log(body);
         return this.httpClient.post<any>(`${this.serverUrl}/api/operations`,body);
