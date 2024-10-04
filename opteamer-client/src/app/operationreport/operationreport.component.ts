@@ -17,7 +17,7 @@ export class OperationreportComponent implements OnInit {
   modalTitle: string;
   combined$: Observable<[any[], any[]]>
 
-  constructor( private operationReportService: OperationReportService ,private teamMemberService: TeamMemebrService,
+  constructor(private operationReportService: OperationReportService, private teamMemberService: TeamMemebrService,
     private operationService: OperationService) {
   }
 
@@ -35,7 +35,7 @@ export class OperationreportComponent implements OnInit {
       'report': new FormControl(null, [Validators.required]),
     })
 
-    this.combined$ = combineLatest([ this.teamMembers$,this.operations$]);
+    this.combined$ = combineLatest([this.teamMembers$, this.operations$]);
 
   }
 
@@ -65,50 +65,46 @@ export class OperationreportComponent implements OnInit {
 
   onSubmit() {
 
-//     let assets;
-//     this.assets$.subscribe(data=>{
-//       let ids:any[] = this.RoomInventoryForm.value.assets;
-//       assets = data.filter(obj => ids.includes(obj.type))
-//     });
+    let teamMembers: any[] = [];
+    this.teamMembers$.subscribe(data => {
+      let ids: any[] = this.OperationReportForm.value.teamMembers || [];
+      teamMembers = data.filter(obj => ids.includes(obj.id));
+    });
 
-//     let operationRoom;
-//     this.operationRooms$.subscribe(data => {
-//       let ids: any[] = this.RoomInventoryForm.value.operationRoom;
-//       operationRoom = data.filter(obj => ids.includes(obj.type))
-//     });
+    let operations;
+    this.operations$.subscribe(data => {
+      let id: any = this.OperationReportForm.value.operation;
+      operations = data.find(obj => String(id) === String(obj.id));
+    });
 
-
-//     if (!assets || !operationRoom) {
-//       console.error("Asset or Operation Room selection is invalid.");
-//       return;
-//   }
-
-// let bodyObj = {
-//   count: this.RoomInventoryForm.value.count,  
-//   assetDTO: assets[0], 
-//   operationRoomDTO: operationRoom[0], 
-// };
+    let bodyObj = {
+      teamMemberId: this.OperationReportForm.value.teamMember,
+      operationId: this.OperationReportForm.value.operation,
+      teamMemberDTO: teamMembers,
+      operationDTO: operations,
+      report: this.OperationReportForm.value.report
+    };
 
 
-//     console.log(bodyObj)
+    console.log(bodyObj)
 
-//     if (this.editRoomInventory) {
-//       this.roomInventoryService.putRoomInventory(this.editRoomInventory.assetDTO.id,
-//         this.editRoomInventory.operationRoomDTO.id, bodyObj)
-//         .subscribe({
-//           next: this.handlePutResponse.bind(this),
-//           error: this.handleError.bind(this)
-//         })
-//     } else {
-//       this.roomInventoryService.postRoomInventory(bodyObj).subscribe({
-//         next: this.handlePostResponse.bind(this),
-//         error: this.handleError.bind(this)
-//       })
-//     }
+    if (this.editOperationReport) {
+      this.operationReportService.putOperationReport(this.editOperationReport.teamMemberDTO.id,
+        this.editOperationReport.operation.id, bodyObj)
+        .subscribe({
+          next: this.handlePutResponse.bind(this),
+          error: this.handleError.bind(this)
+        })
+    } else {
+      this.operationReportService.postOperationReport(bodyObj).subscribe({
+        next: this.handlePostResponse.bind(this),
+        error: this.handleError.bind(this)
+      })
+    }
 
-//     setTimeout(() => {
-//       this.reloadRoomInventories();
-//     }, 500);
+    setTimeout(() => {
+      this.reloadOperationReport();
+    }, 500);
   }
 
   onDeleteOperationReport(assetId: string, roomId: string) {

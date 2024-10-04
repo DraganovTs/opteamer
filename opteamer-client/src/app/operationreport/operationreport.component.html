@@ -23,19 +23,20 @@
             <tbody>
                 <tr *ngFor="let operationReport of operationReports; let i = index">
                     <td class="table-content-font">{{operationReport.teamMemberDTO.name}}</td>
-                    <th scope="row" class="table-content-font">{{operationReport.operationDTO.operationTypeDTO.name}}</th>
+                    <th scope="row" class="table-content-font">{{operationReport.operationDTO.operationTypeDTO.name}}
+                    </th>
                     <td class="table-content-font">{{operationReport.report}}</td>
                     <td class="table-header-font">
                         <button type="button" class="btn btn-outline-primary" (click)="openModal(operationReport)"
-                        data-bs-toggle="modal" data-bs-target="#staticBackdrop">
-                        Edit
-                    </button>
-                </td>
-                <td class="table-header-font">
-                    <button type="button" class="btn btn-outline-danger"
-                        (click)="onDeleteOperationReport(operationReport.teamMember.id, operationReport.operation.id)">
-                        Delete
-                    </button>
+                            data-bs-toggle="modal" data-bs-target="#staticBackdrop">
+                            Edit
+                        </button>
+                    </td>
+                    <td class="table-header-font">
+                        <button type="button" class="btn btn-outline-danger"
+                            (click)="onDeleteOperationReport(operationReport.teamMember.id, operationReport.operation.id)">
+                            Delete
+                        </button>
                     </td>
                 </tr>
             </tbody>
@@ -49,34 +50,36 @@
     <div class="modal-dialog modal-dialog-scrollable">
         <div class="modal-content">
             <div class="modal-header">
-                <h1 class="modal-title fs-5" id="staticBackdropLabel">Room Inventory {{modalTitle}}</h1>
+                <h1 class="modal-title fs-5" id="staticBackdropLabel">Operation Report {{modalTitle}}</h1>
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
             <ng-container *ngIf="(combined$ | async) as combined">
                 <form [formGroup]="OperationReportForm" (ngSubmit)="onSubmit()" class="modal_card">
 
-                
+
                     <div class="mb-3">
-                        <label for="roomInvetoryOR" class="form-label main-text-style">Operation Room
-                        </label>
-                        <select id="roomInvetoryOR" formControlName="operationRoom"
+                        <label for="оperationReportTeamMember" class="form-label main-text-style">Team Member</label>
+                        <select id="оperationReportTeamMember" formControlName="teamMembers"
                             class="form-select form-select text-content">
-                            <option *ngFor="let operationRoom of combined[0]" [value]="operationRoom.type">{{operationRoom.type}}
+                            <option *ngFor="let teamMember of combined[0]" [value]="teamMember.name">
+                                {{teamMember.name}}
                             </option>
                         </select>
                     </div>
 
                     <div class="mb-3">
-                        <label for="roomInvetoryAsset" class="form-label main-text-style">Asset</label>
-                        <select id="roomInvetoryAsset" formControlName="assets" class="form-select form-select text-content">
-                            <option *ngFor="let asset of combined[1]" [value]="asset.name">{{asset.name}}</option>
+                        <label for="оperationReportOperation" class="form-label main-text-style">Operation</label>
+                        <select id="оperationReportOperation" formControlName="operations"
+                            class="form-select form-select text-content">
+                            <option *ngFor="let operation of combined[1]" [value]="operation.operationTypeDTO.id">
+                                {{operation.operationTypeDTO.name}}</option>
                         </select>
                     </div>
 
                     <div class="mb-3">
-                        <label for="roomInvetoryCount" class="form-label main-text-style">Count</label>
-                        <input type="text" class="form-control text-content" id="roomInvetoryCount"
-                            formControlName="count">
+                        <label for="оperationReportReport" class="form-label main-text-style">Report</label>
+                        <input type="text" class="form-control text-content" id="оperationReportReport"
+                            formControlName="report">
                     </div>
 
                     <div class="mb-3">

@@ -80,7 +80,7 @@ export class OperationsComponent implements OnInit {
   
     let teamMembers: any[] = [];
     this.teamMembers$.subscribe(data => {
-      let ids: any[] = this.operationsForm.value.teamMembers || []; // Prevent null issue
+      let ids: any[] = this.operationsForm.value.teamMembers || []; 
       teamMembers = data.filter(obj => ids.includes(obj.id));
     });
   
