@@ -34,7 +34,7 @@
                     </td>
                     <td class="table-header-font">
                         <button type="button" class="btn btn-outline-danger"
-                            (click)="onDeleteOperationReport(operationReport.teamMember.id, operationReport.operation.id)">
+                            (click)="onDeleteOperationReport(operationReport.teamMemberDTO.id, operationReport.operationDTO.id)">
                             Delete
                         </button>
                     </td>
@@ -61,7 +61,7 @@
                         <label for="оperationReportTeamMember" class="form-label main-text-style">Team Member</label>
                         <select id="оperationReportTeamMember" formControlName="teamMembers"
                             class="form-select form-select text-content">
-                            <option *ngFor="let teamMember of combined[0]" [value]="teamMember.name">
+                            <option *ngFor="let teamMember of combined[0]" [value]="teamMember.id">
                                 {{teamMember.name}}
                             </option>
                         </select>
@@ -71,8 +71,8 @@
                         <label for="оperationReportOperation" class="form-label main-text-style">Operation</label>
                         <select id="оperationReportOperation" formControlName="operations"
                             class="form-select form-select text-content">
-                            <option *ngFor="let operation of combined[1]" [value]="operation.operationTypeDTO.id">
-                                {{operation.operationTypeDTO.name}}</option>
+                            <option *ngFor="let operation of combined[1]" [value]="operation.id">
+                                {{operation.operationTypeDTO.name}} - {{operation.patientDTO.name}}</option>
                         </select>
                     </div>
 

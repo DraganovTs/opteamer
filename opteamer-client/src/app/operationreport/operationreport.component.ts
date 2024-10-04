@@ -44,44 +44,54 @@ export class OperationreportComponent implements OnInit {
   }
 
   openModal(operationreport: any) {
+   
+    this.editOperationReport = operationreport;
 
     this.OperationReportForm.reset();
+
+    this.OperationReportForm.controls['teamMembers'].enable();
+    this.OperationReportForm.controls['operations'].enable();
+
+    let teamMemberId = '';
+    let operationId = '';
+    let report = '';
 
     this.modalTitle = 'create';
 
     if (operationreport) {
-      this.OperationReportForm.patchValue({
-        teamMembers: operationreport.teamMemberDTO.name,
-        operations: operationreport.operationDTO.type,
-        report: operationreport.report,
-      });
+      report = operationreport.report;
+
+      teamMemberId = operationreport.teamMemberDTO.id;
+      operationId = operationreport.operationDTO.id;
+
+      console.log(teamMemberId);
+      console.log(operationId);
 
       this.modalTitle = 'edit';
-      this.editOperationReport = operationreport;
+
+      this.OperationReportForm.controls['teamMembers'].disable();
+      this.OperationReportForm.controls['operations'].disable();
+  
     }
 
+    this.OperationReportForm.patchValue({
+      teamMembers: teamMemberId,
+      operations: operationId,
+      report: report,
+    });
 
   }
 
   onSubmit() {
+    
+    this.OperationReportForm.controls['teamMembers'].enable();
+    this.OperationReportForm.controls['operations'].enable();
 
-    let teamMembers: any[] = [];
-    this.teamMembers$.subscribe(data => {
-      let ids: any[] = this.OperationReportForm.value.teamMembers || [];
-      teamMembers = data.filter(obj => ids.includes(obj.id));
-    });
-
-    let operations;
-    this.operations$.subscribe(data => {
-      let id: any = this.OperationReportForm.value.operation;
-      operations = data.find(obj => String(id) === String(obj.id));
-    });
+   
 
     let bodyObj = {
-      teamMemberId: this.OperationReportForm.value.teamMember,
-      operationId: this.OperationReportForm.value.operation,
-      teamMemberDTO: teamMembers,
-      operationDTO: operations,
+      teamMemberId: this.OperationReportForm.value.teamMembers,
+      operationId: this.OperationReportForm.value.operations,
       report: this.OperationReportForm.value.report
     };
 
@@ -89,8 +99,8 @@ export class OperationreportComponent implements OnInit {
     console.log(bodyObj)
 
     if (this.editOperationReport) {
-      this.operationReportService.putOperationReport(this.editOperationReport.teamMemberDTO.id,
-        this.editOperationReport.operation.id, bodyObj)
+      this.operationReportService.putOperationReport(this.OperationReportForm.value.teamMembers,
+        this.OperationReportForm.value.operations, bodyObj)
         .subscribe({
           next: this.handlePutResponse.bind(this),
           error: this.handleError.bind(this)
@@ -107,8 +117,8 @@ export class OperationreportComponent implements OnInit {
     }, 500);
   }
 
-  onDeleteOperationReport(assetId: string, roomId: string) {
-    this.operationReportService.deleteOperationReport(assetId, roomId).subscribe({
+  onDeleteOperationReport(teamMemberId: string, operationId: string) {
+    this.operationReportService.deleteOperationReport(teamMemberId, operationId).subscribe({
       next: this.handleDeleteResponse.bind(this),
       error: this.handleError.bind(this)
     });
