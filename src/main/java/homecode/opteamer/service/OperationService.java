@@ -44,9 +44,21 @@ public class OperationService {
         return OperationsDTOs;
     }
 
-    public OperationDTO createOperation(OperationDTO operationDTO) {
+    public OperationDTO createOperation(OperationDTO operationDTO) throws Exception {
         Operation operation = OperationMapper.INSTANCE.toOperation(operationDTO);
         setChildEntities(operationDTO, operation);
+
+        //validation
+        boolean isValidIoTypeOperationProvider = operation.getTeamMembers().stream()
+                .map(teamMember -> teamMember.getOperationProvider().getType().toString()).toList()
+                .containsAll(operation.getOperationType().getOperationProviders().stream()
+                        .map(op->op.getType().toString()).collect(Collectors.toList()));
+
+        if (isValidIoTypeOperationProvider){
+            throw new Exception("Based on operation type, the operation team is incomplete");
+        }
+        //----
+
         Operation savedOperation = operationRepository.save(operation);
         return OperationMapper.INSTANCE.toOperationDTO(savedOperation);
     }

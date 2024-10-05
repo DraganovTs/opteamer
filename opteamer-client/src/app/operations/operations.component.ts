@@ -127,7 +127,6 @@ export class OperationsComponent implements OnInit {
     this.modalTitle = 'create';
 
     if (operation) {
-      // Ensure operation contains all the necessary properties
       operationType = operation.operationTypeDTO?.name || '';
       operationRoom = operation.operationRoomDTO?.id || '';
       patient = operation.patientDTO?.id || '';
@@ -137,7 +136,6 @@ export class OperationsComponent implements OnInit {
 
       this.modalTitle = 'edit';
 
-      // Patch the form with the retrieved values
       this.operationsForm.patchValue({
         'operationType': operationType,
         'operationRoom': operationRoom,
