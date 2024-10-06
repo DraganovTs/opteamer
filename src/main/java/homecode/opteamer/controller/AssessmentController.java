@@ -1,14 +1,14 @@
 package homecode.opteamer.controller;
 
-import homecode.opteamer.model.Assessment;
+import homecode.opteamer.exception.InvalidRequestException;
 import homecode.opteamer.model.dtos.AssessmentDTO;
 import homecode.opteamer.service.AssessmentService;
+import jakarta.validation.Valid;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
-import java.util.Optional;
 
 @RestController
 @RequestMapping("/api/assessments")
@@ -24,21 +24,25 @@ public class AssessmentController {
     public ResponseEntity<AssessmentDTO> getAssessment(@PathVariable Long teamMemberId,
                                                        @PathVariable Long patientId,
                                                        @PathVariable String preOpAName) {
-        Optional<AssessmentDTO> assessmentDTOOptional = assessmentService.getAssessmentById(teamMemberId, preOpAName, patientId);
-        return assessmentDTOOptional.map(ResponseEntity::ok)
-                .orElseGet(() -> ResponseEntity.notFound().build());
+        return assessmentService.getAssessmentById(teamMemberId, preOpAName, patientId)
+                .map(ResponseEntity::ok)
+                .orElse(ResponseEntity.notFound().build());
     }
 
     @GetMapping
     public ResponseEntity<List<AssessmentDTO>> getAllAssessments() {
-        List<AssessmentDTO> assessmentDTOList = assessmentService.getAllAssessments();
-        return ResponseEntity.status(HttpStatus.CREATED).body(assessmentDTOList);
+        List<AssessmentDTO> assessments = assessmentService.getAllAssessments();
+        return ResponseEntity.ok(assessments);
     }
 
-    @PostMapping()
-    public ResponseEntity<AssessmentDTO> createAssessment(@RequestBody AssessmentDTO assessmentDTO) {
-        AssessmentDTO assessmentDTOCreated = assessmentService.createAssessment(assessmentDTO);
-        return ResponseEntity.status(HttpStatus.CREATED).body(assessmentDTOCreated);
+    @PostMapping
+    public ResponseEntity<AssessmentDTO> createAssessment(@Valid @RequestBody AssessmentDTO assessmentDTO) {
+        if (assessmentDTO.getStartDate() == null) {
+            throw new InvalidRequestException("Start date cannot be null");
+        }
+
+        AssessmentDTO createdAssessment = assessmentService.createAssessment(assessmentDTO);
+        return ResponseEntity.status(HttpStatus.CREATED).body(createdAssessment);
     }
 
     @PutMapping("/{teamMemberId}/{patientId}/{preOpAName}")
@@ -46,28 +50,17 @@ public class AssessmentController {
                                                           @PathVariable Long patientId,
                                                           @PathVariable String preOpAName,
                                                           @RequestBody AssessmentDTO assessmentDTO) {
-        Optional<AssessmentDTO> assessmentDTOOptional = assessmentService.updateAssessment(teamMemberId,
-                patientId,
-                preOpAName,
-                assessmentDTO);
-        return assessmentDTOOptional.map(ResponseEntity::ok)
-                .orElseGet(() -> ResponseEntity.notFound().build());
+        return assessmentService.updateAssessment(teamMemberId, patientId, preOpAName, assessmentDTO)
+                .map(ResponseEntity::ok)
+                .orElse(ResponseEntity.notFound().build());
     }
 
     @DeleteMapping("/{teamMemberId}/{patientId}/{preOpAName}")
-    public ResponseEntity<AssessmentDTO> deleteAssessment(@PathVariable Long teamMemberId,
-                                                          @PathVariable Long patientId,
-                                                          @PathVariable String preOpAName) {
+    public ResponseEntity<Void> deleteAssessment(@PathVariable Long teamMemberId,
+                                                 @PathVariable Long patientId,
+                                                 @PathVariable String preOpAName) {
         boolean deleted = assessmentService.deleteAssessment(teamMemberId, patientId, preOpAName);
-        if (deleted) {
-            return ResponseEntity.ok().build();
-        } else {
-            return ResponseEntity.notFound().build();
-        }
-    }
-
-    @GetMapping("/hello")
-    public String hello() {
-        return "Hello World";
+        return deleted ? ResponseEntity.ok().build() : ResponseEntity.notFound().build();
     }
 }
+

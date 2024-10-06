@@ -1,6 +1,6 @@
 package homecode.opteamer.controller;
 
-import homecode.opteamer.model.dtos.ErrorResponseDTO;
+
 import homecode.opteamer.model.dtos.OperationDTO;
 import homecode.opteamer.service.OperationService;
 import org.springframework.http.HttpStatus;
@@ -35,13 +35,11 @@ public class OperationController {
 
     @PostMapping
     public ResponseEntity<?> createOperation(@RequestBody OperationDTO operationDTO) {
-       try {
         OperationDTO operationDTOSaved = operationService.createOperation(operationDTO);
         return ResponseEntity.status(HttpStatus.CREATED).body(operationDTOSaved);
-       }catch (Exception e) {
-            return ResponseEntity.ok(new ErrorResponseDTO(  "Incorrect username or password",false ));
-       }
     }
+
+
 
     @PutMapping("/{id}")
     public ResponseEntity<OperationDTO> updateOperation(@PathVariable Long id, @RequestBody OperationDTO operationDTO) {

@@ -1,5 +1,6 @@
 package homecode.opteamer.service;
 
+import homecode.opteamer.exception.InvalidOperationException;
 import homecode.opteamer.mapper.OperationMapper;
 import homecode.opteamer.model.*;
 import homecode.opteamer.model.dtos.OperationDTO;
@@ -44,20 +45,21 @@ public class OperationService {
         return OperationsDTOs;
     }
 
-    public OperationDTO createOperation(OperationDTO operationDTO) throws Exception {
+    public OperationDTO createOperation(OperationDTO operationDTO) {
         Operation operation = OperationMapper.INSTANCE.toOperation(operationDTO);
         setChildEntities(operationDTO, operation);
 
-        //validation
-        boolean isValidIoTypeOperationProvider = operation.getTeamMembers().stream()
-                .map(teamMember -> teamMember.getOperationProvider().getType().toString()).toList()
-                .containsAll(operation.getOperationType().getOperationProviders().stream()
-                        .map(op->op.getType().toString()).collect(Collectors.toList()));
+        boolean isValidIoTypeOperationProvider = operation.getOperationType().getOperationProviders().stream()
+                .map(op -> op.getType().toString())
+                .collect(Collectors.toSet()) // Use Set to avoid duplicates
+                .containsAll(operation.getTeamMembers().stream()
+                        .map(teamMember -> teamMember.getOperationProvider().getType().toString())
+                        .collect(Collectors.toList()));
 
-        if (isValidIoTypeOperationProvider){
-            throw new Exception("Based on operation type, the operation team is incomplete");
+        if (!isValidIoTypeOperationProvider) {
+            throw new InvalidOperationException("Based on operation type, the operation team is incomplete");
         }
-        //----
+
 
         Operation savedOperation = operationRepository.save(operation);
         return OperationMapper.INSTANCE.toOperationDTO(savedOperation);
