@@ -1,6 +1,5 @@
 package homecode.opteamer.controller;
 
-import homecode.opteamer.exception.InvalidRequestException;
 import homecode.opteamer.model.dtos.AssessmentDTO;
 import homecode.opteamer.service.AssessmentService;
 import jakarta.validation.Valid;
@@ -37,10 +36,6 @@ public class AssessmentController {
 
     @PostMapping
     public ResponseEntity<AssessmentDTO> createAssessment(@Valid @RequestBody AssessmentDTO assessmentDTO) {
-        if (assessmentDTO.getStartDate() == null) {
-            throw new InvalidRequestException("Start date cannot be null");
-        }
-
         AssessmentDTO createdAssessment = assessmentService.createAssessment(assessmentDTO);
         return ResponseEntity.status(HttpStatus.CREATED).body(createdAssessment);
     }

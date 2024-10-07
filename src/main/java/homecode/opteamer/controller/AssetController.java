@@ -6,8 +6,9 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import jakarta.validation.Valid;
+
 import java.util.List;
-import java.util.Optional;
 
 @RestController
 @RequestMapping("/api/assets")
@@ -19,41 +20,33 @@ public class AssetController {
         this.assetService = assetService;
     }
 
-    @PostMapping()
-    public ResponseEntity<AssetDTO> createAsset(@RequestBody AssetDTO assetDTO) {
-        AssetDTO createAssetDTO = assetService.save(assetDTO);
-        return ResponseEntity.status(HttpStatus.CREATED).body(createAssetDTO);
+    @PostMapping
+    public ResponseEntity<AssetDTO> createAsset(@Valid @RequestBody AssetDTO assetDTO) {
+        AssetDTO createdAsset = assetService.save(assetDTO);
+        return ResponseEntity.status(HttpStatus.CREATED).body(createdAsset);
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<AssetDTO> updateAsset(@PathVariable Long id, @RequestBody AssetDTO assetDTO) {
-        Optional<AssetDTO> assetDTOOptional = assetService.updateAsset(id, assetDTO);
-        return assetDTOOptional.map(ResponseEntity::ok)
-                .orElse(ResponseEntity.status(HttpStatus.NOT_FOUND).build());
+    public ResponseEntity<AssetDTO> updateAsset(@PathVariable Long id, @Valid @RequestBody AssetDTO assetDTO) {
+        AssetDTO updatedAsset = assetService.updateAsset(id, assetDTO);
+        return ResponseEntity.ok(updatedAsset);
     }
 
-    @GetMapping()
+    @GetMapping
     public ResponseEntity<List<AssetDTO>> getAllAssets() {
-        List<AssetDTO> assetDTOList = assetService.getAllAssets();
-        return ResponseEntity.status(HttpStatus.OK).body(assetDTOList);
+        List<AssetDTO> assets = assetService.getAllAssets();
+        return ResponseEntity.ok(assets);
     }
 
     @GetMapping("/{id}")
     public ResponseEntity<AssetDTO> getAssetById(@PathVariable Long id) {
-        Optional<AssetDTO> assetDTOOptional = assetService.getAssetById(id);
-        return assetDTOOptional.map(ResponseEntity::ok)
-                .orElseGet(()->ResponseEntity.status(HttpStatus.NOT_FOUND).build());
+        AssetDTO asset = assetService.getAssetById(id);
+        return ResponseEntity.ok(asset);
     }
 
     @DeleteMapping("/{id}")
-    public ResponseEntity<String> deleteAssetById(@PathVariable Long id) {
-        boolean isDeleted = assetService.deleteAssetById(id);
-        if (isDeleted) {
-            return ResponseEntity.noContent().build();
-        } else {
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
-        }
+    public ResponseEntity<Void> deleteAssetById(@PathVariable Long id) {
+        assetService.deleteAssetById(id);
+        return ResponseEntity.noContent().build();
     }
-
-
 }
