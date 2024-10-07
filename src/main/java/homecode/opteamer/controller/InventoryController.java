@@ -4,13 +4,16 @@ import homecode.opteamer.model.dtos.InventoryDTO;
 import homecode.opteamer.service.InventoryService;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
+import jakarta.validation.Valid;
 import java.util.List;
-import java.util.Optional;
+
 
 @RestController
 @RequestMapping("/api/inventories")
+@Validated
 public class InventoryController {
 
     private final InventoryService inventoryService;
@@ -19,42 +22,36 @@ public class InventoryController {
         this.inventoryService = inventoryService;
     }
 
-
-    @PostMapping()
-    public ResponseEntity<InventoryDTO> createAsset(@RequestBody InventoryDTO inventoryDTO) {
-        InventoryDTO createInventoryDTO = inventoryService.createInventory(inventoryDTO);
-        return ResponseEntity.status(HttpStatus.CREATED).body(createInventoryDTO);
+    @PostMapping
+    public ResponseEntity<InventoryDTO> createInventory(@Valid @RequestBody InventoryDTO inventoryDTO) {
+        InventoryDTO createdInventoryDTO = inventoryService.createInventory(inventoryDTO);
+        return ResponseEntity.status(HttpStatus.CREATED).body(createdInventoryDTO);
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<InventoryDTO> updateAsset(@PathVariable Long id, @RequestBody InventoryDTO inventoryDTO) {
-        Optional<InventoryDTO> inventoryDTOOptional = inventoryService.updateInventory(id, inventoryDTO);
-        return inventoryDTOOptional.map(ResponseEntity::ok)
-                .orElseGet(()->ResponseEntity.status(HttpStatus.NOT_FOUND).build());
+    public ResponseEntity<InventoryDTO> updateInventory(@PathVariable Long id, @Valid @RequestBody InventoryDTO inventoryDTO) {
+        return inventoryService.updateInventory(id, inventoryDTO)
+                .map(ResponseEntity::ok)
+                .orElseGet(() -> ResponseEntity.status(HttpStatus.NOT_FOUND).build());
     }
 
-    @GetMapping()
-    public ResponseEntity<List<InventoryDTO>> getAllAssets() {
+    @GetMapping
+    public ResponseEntity<List<InventoryDTO>> getAllInventories() {
         List<InventoryDTO> inventoryDTOList = inventoryService.getAllInventories();
-        return ResponseEntity.status(HttpStatus.OK).body(inventoryDTOList);
+        return ResponseEntity.ok(inventoryDTOList);
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<InventoryDTO> getAssetById(@PathVariable Long id) {
-        Optional<InventoryDTO> inventoryDTOOptional = inventoryService.getInventoryById(id);
-        return inventoryDTOOptional.map(ResponseEntity::ok)
+    public ResponseEntity<InventoryDTO> getInventoryById(@PathVariable Long id) {
+        return inventoryService.getInventoryById(id)
+                .map(ResponseEntity::ok)
                 .orElse(ResponseEntity.status(HttpStatus.NOT_FOUND).build());
     }
 
     @DeleteMapping("/{id}")
-    public ResponseEntity<String> deleteAssetById(@PathVariable Long id) {
-        boolean isDeleted = inventoryService.deleteInventoryById(id);
-        if (isDeleted) {
-            return ResponseEntity.noContent().build();
-        } else {
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
-        }
+    public ResponseEntity<Void> deleteInventoryById(@PathVariable Long id) {
+        return inventoryService.deleteInventoryById(id)
+                ? ResponseEntity.noContent().build()
+                : ResponseEntity.status(HttpStatus.NOT_FOUND).build();
     }
-
-
 }
