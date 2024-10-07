@@ -1,7 +1,7 @@
 package homecode.opteamer.model.dtos;
 
 
-import homecode.opteamer.model.enums.AssetType;
+
 import homecode.opteamer.model.enums.OperationState;
 import homecode.opteamer.validation.ValidEnum;
 import jakarta.validation.constraints.FutureOrPresent;

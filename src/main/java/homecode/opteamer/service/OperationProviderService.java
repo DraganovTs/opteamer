@@ -46,8 +46,11 @@ public class OperationProviderService {
     }
 
     public Optional<OperationProviderDTO> updateOperationProvider(String id, OperationProviderDTO operationProviderDTO) {
-        deleteOperationProvider(id);
-        return Optional.of(createOperationProvider(operationProviderDTO));
+        return operationProviderRepository.findByType(OperationProviderType.valueOf(id)).map(existingProvider -> {
+            existingProvider.setType(operationProviderDTO.getType());
+            OperationProvider updatedProvider = operationProviderRepository.save(existingProvider);
+            return MapperUtility.mapEntityToDTO(updatedProvider, OperationProviderDTO.class);
+        });
     }
 
 
