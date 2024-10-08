@@ -23,14 +23,15 @@ public class OperationReportService {
     private final TeamMemberRepository teamMemberRepository;
     private final OperationRepository operationRepository;
 
-    public OperationReportService(OperationReportRepository operationReportRepository, TeamMemberRepository teamMemberRepository, OperationRepository operationRepository) {
+    public OperationReportService(OperationReportRepository operationReportRepository,
+                                  TeamMemberRepository teamMemberRepository,
+                                  OperationRepository operationRepository) {
         this.operationReportRepository = operationReportRepository;
         this.teamMemberRepository = teamMemberRepository;
         this.operationRepository = operationRepository;
     }
 
-    public Optional<OperationReportDTO> findById(Long teamMemberId,
-                                                 Long operationId) {
+    public Optional<OperationReportDTO> findById(Long teamMemberId, Long operationId) {
         try {
             OperationReportId operationReportId = new OperationReportId(teamMemberId, operationId);
             OperationReport operationReport = operationReportRepository.findById(operationReportId).orElse(null);
@@ -66,9 +67,7 @@ public class OperationReportService {
         return OperationReportMapper.INSTANCE.toOperationReportDTO(operationReport);
     }
 
-    public Optional<OperationReportDTO> updateOperationReport(Long teamMemberId,
-                                                              Long operationId,
-                                                              OperationReportDTO operationReportDTO) {
+    public Optional<OperationReportDTO> updateOperationReport(Long teamMemberId, Long operationId, OperationReportDTO operationReportDTO) {
         OperationReportId operationReportId = new OperationReportId(teamMemberId, operationId);
         return operationReportRepository.findById(operationReportId).map(operationReport -> {
             operationReport.setReport(operationReportDTO.getReport());
@@ -77,15 +76,11 @@ public class OperationReportService {
         });
     }
 
-
-    public boolean deleteOperationReport(Long teamMemberId,
-                                         Long operationId) {
+    public boolean deleteOperationReport(Long teamMemberId, Long operationId) {
         OperationReportId operationReportId = new OperationReportId(teamMemberId, operationId);
         return operationReportRepository.findById(operationReportId).map(operationReport -> {
             operationReportRepository.delete(operationReport);
             return true;
         }).orElse(false);
     }
-
-
 }
