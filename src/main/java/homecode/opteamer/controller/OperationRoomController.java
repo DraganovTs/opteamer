@@ -27,6 +27,7 @@ public class OperationRoomController {
                 .status(HttpStatus.NOT_FOUND).build());
     }
 
+
     @GetMapping
     public ResponseEntity<List<OperationRoomDTO>> getOperationRooms() {
         List<OperationRoomDTO> operationRoomDTOList = operationRoomService.getAllOperationRooms();
@@ -41,16 +42,19 @@ public class OperationRoomController {
 
     @PutMapping("/{id}")
     public ResponseEntity<OperationRoomDTO> updateOperationRoom(@PathVariable Long id,
-                                                                @Valid @RequestBody OperationRoomDTO operationRoomDTO) {
-        Optional<OperationRoomDTO> operationRoomDTOOptional = operationRoomService.updateOperationRoom(id, operationRoomDTO);
+                                                               @Valid @RequestBody OperationRoomDTO operationRoomDTO) {
+        Optional<OperationRoomDTO> operationRoomDTOOptional = operationRoomService.updateOperationRoom(id,operationRoomDTO);
         return operationRoomDTOOptional.map(ResponseEntity::ok)
                 .orElseGet(() -> ResponseEntity.status(HttpStatus.NOT_FOUND).build());
     }
 
     @DeleteMapping("/{id}")
-    public ResponseEntity<Void> deleteOperationRoom(@PathVariable Long id) {
+    public ResponseEntity<OperationRoomDTO> deleteOperationRoom(@PathVariable Long id) {
         boolean isDeleted = operationRoomService.deleteOperationRoomById(id);
-        return isDeleted ? ResponseEntity.status(HttpStatus.NO_CONTENT).build() :
-                ResponseEntity.status(HttpStatus.NOT_FOUND).build();
+        if (isDeleted) {
+            return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
+        } else {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
+        }
     }
 }

@@ -1,6 +1,5 @@
 package homecode.opteamer.service;
 
-import homecode.opteamer.exception.ResourceNotFoundException;
 import homecode.opteamer.model.OperationRoom;
 import homecode.opteamer.model.dtos.OperationRoomDTO;
 import homecode.opteamer.repository.OperationRoomRepository;
@@ -9,9 +8,12 @@ import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.NoSuchElementException;
+import java.util.Optional;
 
 @Service
 public class OperationRoomService {
+
 
     private final OperationRoomRepository operationRoomRepository;
 
@@ -19,49 +21,49 @@ public class OperationRoomService {
         this.operationRoomRepository = operationRoomRepository;
     }
 
-
-    public OperationRoomDTO save(OperationRoomDTO operationRoomDTO) {
-        OperationRoom operationRoom = MapperUtility.mapDTOToEntity(operationRoomDTO, OperationRoom.class);
-        operationRoom = operationRoomRepository.save(operationRoom);
-        return MapperUtility.mapEntityToDTO(operationRoom, OperationRoomDTO.class);
-    }
-
-
-    public OperationRoomDTO updateOperationRoom(Long id, OperationRoomDTO operationRoomDTO) {
-        OperationRoom operationRoom = operationRoomRepository.findById(id)
-                .orElseThrow(() -> new ResourceNotFoundException("Operation room not found with id: " + id));
-
-        operationRoom.setRoomNr(operationRoomDTO.getRoomNr());
-        operationRoom.setBuildingBlock(operationRoomDTO.getBuildingBlock());
-        operationRoom.setFloor(operationRoomDTO.getFloor());
-        operationRoom.setType(operationRoomDTO.getType());
-        operationRoom.setState(operationRoomDTO.getState());
-
-        operationRoomRepository.save(operationRoom);
-        return MapperUtility.mapEntityToDTO(operationRoom, OperationRoomDTO.class);
+    public Optional<OperationRoomDTO> getOperationRoomById(Long id) {
+        try {
+            OperationRoom operationRoom = operationRoomRepository.findById(id).orElse(null);
+            return Optional.of(MapperUtility.mapEntityToDTO(operationRoom , OperationRoomDTO.class));
+        } catch (NoSuchElementException e) {
+            return Optional.empty();
+        }
     }
 
 
     public List<OperationRoomDTO> getAllOperationRooms() {
-        List<OperationRoomDTO> operationRoomDTOList = new ArrayList<>();
-        Iterable<OperationRoom> operationRooms = operationRoomRepository.findAll();
-        operationRooms.forEach(operationRoom ->
-                operationRoomDTOList.add(MapperUtility.mapEntityToDTO(operationRoom, OperationRoomDTO.class))
+        List<OperationRoomDTO> operationRooms = new ArrayList<>();
+        Iterable<OperationRoom> allOperationRooms = operationRoomRepository.findAll();
+        allOperationRooms.forEach(operationRoom ->
+                operationRooms.add(MapperUtility.mapEntityToDTO(operationRoom , OperationRoomDTO.class))
         );
-        return operationRoomDTOList;
+        return operationRooms;
     }
 
-
-    public OperationRoomDTO getOperationRoomById(Long id) {
-        OperationRoom operationRoom = operationRoomRepository.findById(id)
-                .orElseThrow(() -> new ResourceNotFoundException("Operation room not found with id: " + id));
-        return MapperUtility.mapEntityToDTO(operationRoom, OperationRoomDTO.class);
+    public OperationRoomDTO createOperationRoom(OperationRoomDTO operationRoomDTO) {
+        OperationRoom operationRoom = MapperUtility.mapDTOToEntity(operationRoomDTO , OperationRoom.class);
+        operationRoom = operationRoomRepository.save(operationRoom);
+        return MapperUtility.mapEntityToDTO(operationRoom , OperationRoomDTO.class);
     }
 
+    public Optional<OperationRoomDTO> updateOperationRoom(Long id, OperationRoomDTO operationRoomDTO) {
+        return operationRoomRepository.findById(id).map(operationRoom -> {
+            operationRoom.setRoomNr(operationRoomDTO.getRoomNr());
+            operationRoom.setBuildingBlock(operationRoomDTO.getBuildingBlock());
+            operationRoom.setFloor(operationRoomDTO.getFloor());
+            operationRoom.setType(operationRoomDTO.getType());
+            operationRoom.setState(operationRoomDTO.getState());
 
-    public void deleteOperationRoomById(Long id) {
-        OperationRoom operationRoom = operationRoomRepository.findById(id)
-                .orElseThrow(() -> new ResourceNotFoundException("Operation room not found with id: " + id));
-        operationRoomRepository.delete(operationRoom);
+            operationRoomRepository.save(operationRoom);
+            return MapperUtility.mapEntityToDTO(operationRoom , OperationRoomDTO.class);
+        });
     }
+
+    public boolean deleteOperationRoomById(Long id) {
+        return operationRoomRepository.findById(id).map(operationRoom -> {
+            operationRoomRepository.delete(operationRoom);
+            return true;
+        }).orElse(false);
+    }
+
 }
