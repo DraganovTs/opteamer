@@ -6,8 +6,8 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import jakarta.validation.Valid;
 import java.util.List;
-import java.util.Optional;
 
 @RestController
 @RequestMapping("/api/teamMembers")
@@ -21,38 +21,32 @@ public class TeamMemberController {
 
     @GetMapping("/{id}")
     public ResponseEntity<TeamMemberDTO> getTeamMember(@PathVariable Long id) {
-        Optional<TeamMemberDTO> teamMemberDTOOptional = teamMemberService.findTeamMemberById(id);
-        return teamMemberDTOOptional.map(ResponseEntity::ok)
-                .orElseGet(() -> ResponseEntity.status(HttpStatus.NOT_FOUND).build());
+        TeamMemberDTO teamMemberDTO = teamMemberService.findTeamMemberById(id);
+        return ResponseEntity.ok(teamMemberDTO);
     }
 
     @GetMapping
     public ResponseEntity<List<TeamMemberDTO>> getTeamMembers() {
         List<TeamMemberDTO> teamMemberDTOList = teamMemberService.getAllTeamMembers();
-        return ResponseEntity.status(HttpStatus.OK).body(teamMemberDTOList);
+        return ResponseEntity.ok(teamMemberDTOList);
     }
 
     @PostMapping
-    public ResponseEntity<TeamMemberDTO> createTeamMember(@RequestBody TeamMemberDTO teamMemberDTO) {
+    public ResponseEntity<TeamMemberDTO> createTeamMember(@Valid @RequestBody TeamMemberDTO teamMemberDTO) {
         TeamMemberDTO teamMemberDTOSaved = teamMemberService.createTeamMember(teamMemberDTO);
         return ResponseEntity.status(HttpStatus.CREATED).body(teamMemberDTOSaved);
     }
 
     @PutMapping("/{id}")
     public ResponseEntity<TeamMemberDTO> updateTeamMember(@PathVariable Long id,
-                                                          @RequestBody TeamMemberDTO teamMemberDTO) {
-        Optional<TeamMemberDTO> teamMemberDTOOptional = teamMemberService.updateTeamMember(id, teamMemberDTO);
-        return teamMemberDTOOptional.map(ResponseEntity::ok)
-                .orElseGet(() -> ResponseEntity.status(HttpStatus.NOT_FOUND).build());
+                                                          @Valid @RequestBody TeamMemberDTO teamMemberDTO) {
+        TeamMemberDTO updatedTeamMemberDTO = teamMemberService.updateTeamMember(id, teamMemberDTO);
+        return ResponseEntity.ok(updatedTeamMemberDTO);
     }
 
     @DeleteMapping("/{id}")
-    public ResponseEntity<TeamMemberDTO> deleteTeamMember(@PathVariable Long id) {
-        boolean teamMemberDeleted = teamMemberService.deleteTeamMember(id);
-        if (teamMemberDeleted) {
-            return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
-        } else {
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
-        }
+    public ResponseEntity<Void> deleteTeamMember(@PathVariable Long id) {
+        teamMemberService.deleteTeamMember(id);
+        return ResponseEntity.noContent().build();
     }
 }

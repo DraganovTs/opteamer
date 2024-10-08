@@ -1,5 +1,6 @@
 package homecode.opteamer.service;
 
+import homecode.opteamer.exception.ResourceNotFoundException;
 import homecode.opteamer.mapper.OperationProviderMapper;
 import homecode.opteamer.mapper.TeamMemberMapper;
 import homecode.opteamer.model.OperationProvider;
@@ -11,8 +12,6 @@ import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.NoSuchElementException;
-import java.util.Optional;
 
 @Service
 public class TeamMemberService {
@@ -26,20 +25,15 @@ public class TeamMemberService {
         this.operationProviderRepository = operationProviderRepository;
     }
 
-
-    public Optional<TeamMemberDTO> findTeamMemberById(Long id) {
-        try {
-            TeamMember teamMember = teamMemberRepository.findById(id).orElseThrow();
-            return Optional.of(TeamMemberMapper.INSTANCE.toTeamMemberDTO(teamMember));
-        } catch (NoSuchElementException e) {
-            return Optional.empty();
-        }
+    public TeamMemberDTO findTeamMemberById(Long id) {
+        TeamMember teamMember = teamMemberRepository.findById(id)
+                .orElseThrow(() -> new ResourceNotFoundException("Team Member not found with ID: " + id));
+        return TeamMemberMapper.INSTANCE.toTeamMemberDTO(teamMember);
     }
 
     public List<TeamMemberDTO> getAllTeamMembers() {
         List<TeamMemberDTO> teamMemberDTOList = new ArrayList<>();
-        Iterable<TeamMember> allTeamMembers = teamMemberRepository.findAll();
-        allTeamMembers.forEach(teamMember ->
+        teamMemberRepository.findAll().forEach(teamMember ->
                 teamMemberDTOList.add(TeamMemberMapper.INSTANCE.toTeamMemberDTO(teamMember))
         );
         return teamMemberDTOList;
@@ -59,24 +53,22 @@ public class TeamMemberService {
         return TeamMemberMapper.INSTANCE.toTeamMemberDTO(teamMember);
     }
 
-    public Optional<TeamMemberDTO> updateTeamMember(Long id, TeamMemberDTO teamMemberDTO) {
-        return teamMemberRepository.findById(id).map(teamMember -> {
-            teamMember.setName(teamMemberDTO.getName());
+    public TeamMemberDTO updateTeamMember(Long id, TeamMemberDTO teamMemberDTO) {
+        TeamMember teamMember = teamMemberRepository.findById(id)
+                .orElseThrow(() -> new ResourceNotFoundException("Team Member not found with ID: " + id));
 
-            OperationProvider operationProvider = OperationProviderMapper.INSTANCE.toOperationProvider(teamMemberDTO.getOperationProviderDTO());
-            teamMember.setOperationProvider(operationProvider);
+        teamMember.setName(teamMemberDTO.getName());
 
-            teamMemberRepository.save(teamMember);
-            return TeamMemberMapper.INSTANCE.toTeamMemberDTO(teamMember);
-        });
+        OperationProvider operationProvider = OperationProviderMapper.INSTANCE.toOperationProvider(teamMemberDTO.getOperationProviderDTO());
+        teamMember.setOperationProvider(operationProvider);
+
+        teamMemberRepository.save(teamMember);
+        return TeamMemberMapper.INSTANCE.toTeamMemberDTO(teamMember);
     }
 
-    public boolean deleteTeamMember(Long id) {
-        return teamMemberRepository.findById(id).map(teamMember -> {
-            teamMemberRepository.delete(teamMember);
-            return true;
-        }).orElse(false);
+    public void deleteTeamMember(Long id) {
+        TeamMember teamMember = teamMemberRepository.findById(id)
+                .orElseThrow(() -> new ResourceNotFoundException("Team Member not found with ID: " + id));
+        teamMemberRepository.delete(teamMember);
     }
-
-
 }
