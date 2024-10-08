@@ -1,5 +1,6 @@
 package homecode.opteamer.service;
 
+import homecode.opteamer.exception.ResourceNotFoundException;
 import homecode.opteamer.mapper.OperationReportMapper;
 import homecode.opteamer.model.Operation;
 import homecode.opteamer.model.OperationReport;
@@ -56,7 +57,7 @@ public class OperationReportService {
         Operation operation = operationRepository.findById(operationReportDTO.getOperationId()).get();
 
         if (teamMember == null || operation == null)
-            throw new NoSuchElementException();
+            throw new ResourceNotFoundException("Team member or operation not found");
 
         operationReport.setOperationReportId(new OperationReportId(teamMember.getId(), operation.getId()));
         operationReport.setTeamMember(teamMember);

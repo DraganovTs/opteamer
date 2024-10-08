@@ -2,6 +2,7 @@ package homecode.opteamer.controller;
 
 import homecode.opteamer.model.dtos.OperationRoomDTO;
 import homecode.opteamer.service.OperationRoomService;
+import jakarta.validation.Valid;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -26,7 +27,6 @@ public class OperationRoomController {
                 .status(HttpStatus.NOT_FOUND).build());
     }
 
-
     @GetMapping
     public ResponseEntity<List<OperationRoomDTO>> getOperationRooms() {
         List<OperationRoomDTO> operationRoomDTOList = operationRoomService.getAllOperationRooms();
@@ -34,26 +34,23 @@ public class OperationRoomController {
     }
 
     @PostMapping
-    public ResponseEntity<OperationRoomDTO> createOperationRoom(@RequestBody OperationRoomDTO operationRoomDTO) {
+    public ResponseEntity<OperationRoomDTO> createOperationRoom(@Valid @RequestBody OperationRoomDTO operationRoomDTO) {
         OperationRoomDTO operationRoomDTOCreated = operationRoomService.createOperationRoom(operationRoomDTO);
         return ResponseEntity.status(HttpStatus.CREATED).body(operationRoomDTOCreated);
     }
 
     @PutMapping("/{id}")
     public ResponseEntity<OperationRoomDTO> updateOperationRoom(@PathVariable Long id,
-                                                                @RequestBody OperationRoomDTO operationRoomDTO) {
-        Optional<OperationRoomDTO> operationRoomDTOOptional = operationRoomService.updateOperationRoom(id,operationRoomDTO);
+                                                                @Valid @RequestBody OperationRoomDTO operationRoomDTO) {
+        Optional<OperationRoomDTO> operationRoomDTOOptional = operationRoomService.updateOperationRoom(id, operationRoomDTO);
         return operationRoomDTOOptional.map(ResponseEntity::ok)
                 .orElseGet(() -> ResponseEntity.status(HttpStatus.NOT_FOUND).build());
     }
 
     @DeleteMapping("/{id}")
-    public ResponseEntity<OperationRoomDTO> deleteOperationRoom(@PathVariable Long id) {
+    public ResponseEntity<Void> deleteOperationRoom(@PathVariable Long id) {
         boolean isDeleted = operationRoomService.deleteOperationRoomById(id);
-        if (isDeleted) {
-            return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
-        } else {
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
-        }
+        return isDeleted ? ResponseEntity.status(HttpStatus.NO_CONTENT).build() :
+                ResponseEntity.status(HttpStatus.NOT_FOUND).build();
     }
 }
