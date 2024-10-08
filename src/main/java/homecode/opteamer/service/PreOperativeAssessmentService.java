@@ -1,5 +1,6 @@
 package homecode.opteamer.service;
 
+import homecode.opteamer.exception.ResourceNotFoundException;
 import homecode.opteamer.model.PreOperativeAssessment;
 import homecode.opteamer.model.dtos.PreOperativeAssessmentDTO;
 import homecode.opteamer.repository.PreOperativeAssessmentRepository;
@@ -8,52 +9,49 @@ import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.NoSuchElementException;
-import java.util.Optional;
 
 @Service
 public class PreOperativeAssessmentService {
 
     private final PreOperativeAssessmentRepository preOperativeAssessmentRepository;
 
-
     public PreOperativeAssessmentService(PreOperativeAssessmentRepository preOperativeAssessmentRepository) {
         this.preOperativeAssessmentRepository = preOperativeAssessmentRepository;
     }
 
-    public Optional<PreOperativeAssessmentDTO> getPreOperativeAssessment(String id) {
-        try {
-            PreOperativeAssessment preOperativeAssessment = preOperativeAssessmentRepository.findById(id).orElseThrow();
-            return Optional.of(MapperUtility.mapEntityToDTO(preOperativeAssessment, PreOperativeAssessmentDTO.class));
-        } catch (NoSuchElementException e) {
-            return Optional.empty();
-        }
+    public PreOperativeAssessmentDTO getPreOperativeAssessment(String name) {
+        PreOperativeAssessment preOperativeAssessment = preOperativeAssessmentRepository.findById(name)
+                .orElseThrow(() -> new ResourceNotFoundException("Pre-operative assessment not found with name: " + name));
+        return MapperUtility.mapEntityToDTO(preOperativeAssessment, PreOperativeAssessmentDTO.class);
     }
 
     public List<PreOperativeAssessmentDTO> getAllPreOperativeAssessments() {
         List<PreOperativeAssessmentDTO> list = new ArrayList<>();
         Iterable<PreOperativeAssessment> allPreOperativeAssessments = preOperativeAssessmentRepository.findAll();
-        allPreOperativeAssessments.forEach(preOperativeAssessment -> list.add(MapperUtility.mapEntityToDTO(preOperativeAssessment, PreOperativeAssessmentDTO.class)));
+        allPreOperativeAssessments.forEach(preOperativeAssessment ->
+                list.add(MapperUtility.mapEntityToDTO(preOperativeAssessment, PreOperativeAssessmentDTO.class))
+        );
         return list;
     }
 
     public PreOperativeAssessmentDTO createPreOperativeAssessment(PreOperativeAssessmentDTO preOperativeAssessmentDTO) {
         PreOperativeAssessment preOperativeAssessment = MapperUtility.mapDTOToEntity(preOperativeAssessmentDTO, PreOperativeAssessment.class);
-        PreOperativeAssessment preOperativeAssessmentSave = preOperativeAssessmentRepository.save(preOperativeAssessment);
-        return MapperUtility.mapEntityToDTO(preOperativeAssessmentSave,PreOperativeAssessmentDTO.class);
+        PreOperativeAssessment savedAssessment = preOperativeAssessmentRepository.save(preOperativeAssessment);
+        return MapperUtility.mapEntityToDTO(savedAssessment, PreOperativeAssessmentDTO.class);
     }
 
-    public Optional<PreOperativeAssessmentDTO> updatePreOperativeAssessment(String name, PreOperativeAssessmentDTO preOperativeAssessmentDTO) {
-        deletePreOperativeAssessment(name);
-        return Optional.of(createPreOperativeAssessment(preOperativeAssessmentDTO));
+    public PreOperativeAssessmentDTO updatePreOperativeAssessment(String name, PreOperativeAssessmentDTO preOperativeAssessmentDTO) {
+        PreOperativeAssessment existingAssessment = preOperativeAssessmentRepository.findById(name)
+                .orElseThrow(() -> new ResourceNotFoundException("Pre-operative assessment not found with name: " + name));
+
+        existingAssessment.setName(preOperativeAssessmentDTO.getName());
+        PreOperativeAssessment updatedAssessment = preOperativeAssessmentRepository.save(existingAssessment);
+        return MapperUtility.mapEntityToDTO(updatedAssessment, PreOperativeAssessmentDTO.class);
     }
 
-
-    public boolean deletePreOperativeAssessment(String name) {
-        return preOperativeAssessmentRepository.findByName(name).map(preOperativeAssessment -> {
-            preOperativeAssessmentRepository.delete(preOperativeAssessment);
-            return true;
-        }).orElse(false);
+    public void deletePreOperativeAssessment(String name) {
+        PreOperativeAssessment assessment = preOperativeAssessmentRepository.findById(name)
+                .orElseThrow(() -> new ResourceNotFoundException("Pre-operative assessment not found with name: " + name));
+        preOperativeAssessmentRepository.delete(assessment);
     }
-
 }
