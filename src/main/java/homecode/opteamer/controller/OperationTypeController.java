@@ -5,9 +5,8 @@ import homecode.opteamer.service.OperationTypeService;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-
+import jakarta.validation.Valid;
 import java.util.List;
-import java.util.Optional;
 
 @RestController
 @RequestMapping("/api/operationTypes")
@@ -21,9 +20,8 @@ public class OperationTypeController {
 
     @GetMapping("/{name}")
     public ResponseEntity<OperationTypeDTO> findByName(@PathVariable String name) {
-        Optional<OperationTypeDTO> operationTypeDTOOptional = operationTypeService.getOperationTypeById(name);
-        return operationTypeDTOOptional.map(ResponseEntity::ok)
-                .orElseGet(() -> ResponseEntity.status(HttpStatus.NOT_FOUND).build());
+        OperationTypeDTO operationTypeDTO = operationTypeService.getOperationTypeByName(name);
+        return ResponseEntity.ok(operationTypeDTO);
     }
 
     @GetMapping
@@ -33,29 +31,21 @@ public class OperationTypeController {
     }
 
     @PostMapping
-    public ResponseEntity<OperationTypeDTO> create(@RequestBody OperationTypeDTO operationTypeDTO) {
-        OperationTypeDTO operationType = operationTypeService.createOperationType(operationTypeDTO);
-        return ResponseEntity.status(HttpStatus.CREATED).body(operationType);
+    public ResponseEntity<OperationTypeDTO> create(@Valid @RequestBody OperationTypeDTO operationTypeDTO) {
+        OperationTypeDTO createdOperationType = operationTypeService.createOperationType(operationTypeDTO);
+        return ResponseEntity.status(HttpStatus.CREATED).body(createdOperationType);
     }
 
     @PutMapping("/{name}")
     public ResponseEntity<OperationTypeDTO> update(@PathVariable String name,
-                                                   @RequestBody OperationTypeDTO operationTypeDTO) {
-        Optional<OperationTypeDTO> operationTypeDTOOptional = operationTypeService.updateOperationType(name, operationTypeDTO);
-        return operationTypeDTOOptional.map(ResponseEntity::ok)
-                .orElseGet(() -> ResponseEntity.status(HttpStatus.NOT_FOUND).build());
+                                                   @Valid @RequestBody OperationTypeDTO operationTypeDTO) {
+        OperationTypeDTO updatedOperationType = operationTypeService.updateOperationType(name, operationTypeDTO);
+        return ResponseEntity.ok(updatedOperationType);
     }
-
 
     @DeleteMapping("/{name}")
-    public ResponseEntity<OperationTypeDTO> delete(@PathVariable String name) {
-        boolean isDeleted = operationTypeService.deleteOperationType(name);
-        if (isDeleted) {
-            return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
-        } else {
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
-        }
+    public ResponseEntity<Void> delete(@PathVariable String name) {
+        operationTypeService.deleteOperationType(name);
+        return ResponseEntity.noContent().build();
     }
-
-
 }
