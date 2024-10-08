@@ -1,5 +1,6 @@
 package homecode.opteamer.service;
 
+import homecode.opteamer.exception.ResourceNotFoundException;
 import homecode.opteamer.model.Patient;
 import homecode.opteamer.model.dtos.PatientDTO;
 import homecode.opteamer.repository.PatientRepository;
@@ -8,8 +9,6 @@ import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.NoSuchElementException;
-import java.util.Optional;
 
 @Service
 public class PatientService {
@@ -20,13 +19,10 @@ public class PatientService {
         this.patientRepository = patientRepository;
     }
 
-    public Optional<PatientDTO> getPatientById(Long id) {
-        try {
-            Patient patient = patientRepository.findById(id).orElse(null);
-            return Optional.of(MapperUtility.mapEntityToDTO(patient, PatientDTO.class));
-        } catch (NoSuchElementException e) {
-            return Optional.empty();
-        }
+    public PatientDTO getPatientById(Long id) {
+        Patient patient = patientRepository.findById(id)
+                .orElseThrow(() -> new ResourceNotFoundException("Patient not found with id: " + id));
+        return MapperUtility.mapEntityToDTO(patient, PatientDTO.class);
     }
 
     public List<PatientDTO> getAllPatients() {
@@ -44,20 +40,19 @@ public class PatientService {
         return MapperUtility.mapEntityToDTO(patient, PatientDTO.class);
     }
 
-    public Optional<PatientDTO> updatePatient(Long id, PatientDTO patientDTO) {
-        return patientRepository.findById(id).map(patient -> {
-            patient.setName(patientDTO.getName());
-            patient.setNin(patientDTO.getNin());
-            patientRepository.save(patient);
-            return MapperUtility.mapEntityToDTO(patient, PatientDTO.class);
-        });
+    public PatientDTO updatePatient(Long id, PatientDTO patientDTO) {
+        Patient patient = patientRepository.findById(id)
+                .orElseThrow(() -> new ResourceNotFoundException("Patient not found with id: " + id));
+
+        patient.setName(patientDTO.getName());
+        patient.setNin(patientDTO.getNin());
+        patient = patientRepository.save(patient);
+        return MapperUtility.mapEntityToDTO(patient, PatientDTO.class);
     }
 
-    public boolean deletePatient(Long id) {
-        return patientRepository.findById(id).map(patient -> {
-            patientRepository.delete(patient);
-            return true;
-        }).orElse(false);
+    public void deletePatient(Long id) {
+        Patient patient = patientRepository.findById(id)
+                .orElseThrow(() -> new ResourceNotFoundException("Patient not found with id: " + id));
+        patientRepository.delete(patient);
     }
-
 }
