@@ -6,9 +6,8 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import jakarta.validation.Valid;
 import java.util.List;
-import java.util.NoSuchElementException;
-import java.util.Optional;
 
 @RestController
 @RequestMapping("/api/roomInventories")
@@ -23,44 +22,33 @@ public class RoomInventoryController {
     @GetMapping("/{assetId}/{roomId}")
     public ResponseEntity<RoomInventoryDTO> getRoomInventory(@PathVariable("assetId") Long assetId,
                                                              @PathVariable("roomId") Long roomId) {
-        Optional<RoomInventoryDTO> roomInventoryDTOOptional = roomInventoryService.getRoomInventoryById(assetId, roomId);
-        return roomInventoryDTOOptional.map(ResponseEntity::ok)
-                .orElseGet(() -> ResponseEntity.status(HttpStatus.NOT_FOUND).build());
+        RoomInventoryDTO roomInventoryDTO = roomInventoryService.getRoomInventoryById(assetId, roomId);
+        return ResponseEntity.ok(roomInventoryDTO);
     }
 
     @GetMapping
-    public ResponseEntity<List<RoomInventoryDTO>> getAllRoomInventory() {
-        List<RoomInventoryDTO> roomInventoryDTOList = roomInventoryService.getAllRoomInventory();
-        return ResponseEntity.status(HttpStatus.OK).body(roomInventoryDTOList);
+    public ResponseEntity<List<RoomInventoryDTO>> getAllRoomInventories() {
+        List<RoomInventoryDTO> roomInventoryDTOList = roomInventoryService.getAllRoomInventories();
+        return ResponseEntity.ok(roomInventoryDTOList);
     }
 
     @PostMapping
-    public ResponseEntity<RoomInventoryDTO> createRoomInventory(@RequestBody RoomInventoryDTO roomInventoryDTO) {
-        try {
-            RoomInventoryDTO roomInventoryDTOCreated = roomInventoryService.createRoomInventory(roomInventoryDTO);
-            return ResponseEntity.status(HttpStatus.CREATED).body(roomInventoryDTOCreated);
-        } catch (NoSuchElementException e) {
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(roomInventoryDTO);
-        }
+    public ResponseEntity<RoomInventoryDTO> createRoomInventory(@Valid @RequestBody RoomInventoryDTO roomInventoryDTO) {
+        RoomInventoryDTO roomInventoryDTOCreated = roomInventoryService.createRoomInventory(roomInventoryDTO);
+        return ResponseEntity.status(HttpStatus.CREATED).body(roomInventoryDTOCreated);
     }
 
     @PutMapping("/{assetId}/{roomId}")
     public ResponseEntity<RoomInventoryDTO> updateRoomInventory(@PathVariable Long assetId,
                                                                 @PathVariable Long roomId,
-                                                                @RequestBody RoomInventoryDTO roomInventoryDTO) {
-        Optional<RoomInventoryDTO> roomInventoryDTOOptional = roomInventoryService.updateRoomInventory(assetId, roomId,
-                roomInventoryDTO);
-        return roomInventoryDTOOptional.map(ResponseEntity::ok)
-                .orElseGet(() -> ResponseEntity.status(HttpStatus.NOT_FOUND).build());
+                                                                @Valid @RequestBody RoomInventoryDTO roomInventoryDTO) {
+        RoomInventoryDTO updatedRoomInventoryDTO = roomInventoryService.updateRoomInventory(assetId, roomId, roomInventoryDTO);
+        return ResponseEntity.ok(updatedRoomInventoryDTO);
     }
 
     @DeleteMapping("/{assetId}/{roomId}")
     public ResponseEntity<Void> deleteInventory(@PathVariable Long assetId, @PathVariable Long roomId) {
-        boolean deleted = roomInventoryService.deleteRoomInventory(assetId, roomId);
-        if (deleted) {
-            return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
-        } else {
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
-        }
+        roomInventoryService.deleteRoomInventory(assetId, roomId);
+        return ResponseEntity.noContent().build();
     }
 }

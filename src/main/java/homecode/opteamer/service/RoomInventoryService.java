@@ -1,5 +1,6 @@
 package homecode.opteamer.service;
 
+import homecode.opteamer.exception.ResourceNotFoundException;
 import homecode.opteamer.model.Asset;
 import homecode.opteamer.model.OperationRoom;
 import homecode.opteamer.model.RoomInventory;
@@ -14,8 +15,6 @@ import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.NoSuchElementException;
-import java.util.Optional;
 
 @Service
 public class RoomInventoryService {
@@ -24,92 +23,75 @@ public class RoomInventoryService {
     private final AssetRepository assetRepository;
     private final OperationRoomRepository operationRoomRepository;
 
-
     public RoomInventoryService(RoomInventoryRepository roomInventoryRepository, AssetRepository assetRepository, OperationRoomRepository operationRoomRepository) {
         this.roomInventoryRepository = roomInventoryRepository;
         this.assetRepository = assetRepository;
         this.operationRoomRepository = operationRoomRepository;
     }
 
-    public Optional<RoomInventoryDTO> getRoomInventoryById(Long assetId, Long roomId)
-            throws NoSuchElementException {
-        try {
-            RoomInventoryId rId = new RoomInventoryId(assetId, roomId);
-            RoomInventory roomInventory = roomInventoryRepository.findById(rId).orElse(null);
-            return Optional.of(getRoomInventoryDTO(roomInventory,
-                    roomInventory.getAsset(),
-                    roomInventory.getOperationRoom()));
-        } catch (NoSuchElementException e) {
-            return Optional.empty();
-        }
+    public RoomInventoryDTO getRoomInventoryById(Long assetId, Long roomId) {
+        RoomInventoryId roomInventoryId = new RoomInventoryId(assetId, roomId);
+        RoomInventory roomInventory = roomInventoryRepository.findById(roomInventoryId)
+                .orElseThrow(() -> new ResourceNotFoundException("Room Inventory not found with assetId: " + assetId + " and roomId: " + roomId));
+
+        return convertToDTO(roomInventory);
     }
 
-    public List<RoomInventoryDTO> getAllRoomInventory() {
+    public List<RoomInventoryDTO> getAllRoomInventories() {
         List<RoomInventoryDTO> roomInventoryDTOList = new ArrayList<>();
-        Iterable<RoomInventory> roomInventoryIterable = roomInventoryRepository.findAll();
-        roomInventoryIterable.forEach(roomInventory ->
-            roomInventoryDTOList.add(getRoomInventoryDTO(roomInventory,
-                    roomInventory.getAsset(),
-                    roomInventory.getOperationRoom()))
+        roomInventoryRepository.findAll().forEach(roomInventory ->
+                roomInventoryDTOList.add(convertToDTO(roomInventory))
         );
         return roomInventoryDTOList;
     }
 
     public RoomInventoryDTO createRoomInventory(RoomInventoryDTO roomInventoryDTO) {
-        RoomInventory roomInventory = new RoomInventory();
-        System.out.println(roomInventoryDTO.getAssetDTO().getId());
-        System.out.println(roomInventoryDTO.getOperationRoomId());
-        Asset asset = assetRepository.findById(roomInventoryDTO.getAssetDTO().getId()).get();
-        OperationRoom operationRoom = operationRoomRepository.findById(roomInventoryDTO.getOperationRoomDTO().getId()).get();
-        if (asset == null || operationRoom == null)
-            throw new NoSuchElementException();
-        RoomInventoryId roomInventoryId = new RoomInventoryId();
-        roomInventoryId.setAssetId(asset.getId());
-        roomInventoryId.setRoomId(operationRoom.getId());
+        Asset asset = assetRepository.findById(roomInventoryDTO.getAssetDTO().getId())
+                .orElseThrow(() -> new ResourceNotFoundException("Asset not found with ID: " + roomInventoryDTO.getAssetDTO().getId()));
+        OperationRoom operationRoom = operationRoomRepository.findById(roomInventoryDTO.getOperationRoomId())
+                .orElseThrow(() -> new ResourceNotFoundException("Operation Room not found with ID: " + roomInventoryDTO.getOperationRoomId()));
 
+        RoomInventoryId roomInventoryId = new RoomInventoryId(asset.getId(), operationRoom.getId());
+        RoomInventory roomInventory = new RoomInventory();
         roomInventory.setRoomInventoryId(roomInventoryId);
         roomInventory.setAsset(asset);
         roomInventory.setOperationRoom(operationRoom);
         roomInventory.setCount(roomInventoryDTO.getCount());
+
         roomInventory = roomInventoryRepository.save(roomInventory);
-        return getRoomInventoryDTO(roomInventory,
-                roomInventory.getAsset(),
-                roomInventory.getOperationRoom());
+        return convertToDTO(roomInventory);
     }
 
-    public Optional<RoomInventoryDTO> updateRoomInventory(Long assetId, Long roomId,
-                                                          RoomInventoryDTO roomInventoryDTO) {
-
+    public RoomInventoryDTO updateRoomInventory(Long assetId, Long roomId, RoomInventoryDTO roomInventoryDTO) {
         RoomInventoryId roomInventoryId = new RoomInventoryId(assetId, roomId);
-        return roomInventoryRepository.findById(roomInventoryId).map(roomInventory -> {
-            roomInventory.setCount(roomInventoryDTO.getCount());
-            roomInventoryRepository.save(roomInventory);
-            return getRoomInventoryDTO(roomInventory,
-                    roomInventory.getAsset(),
-                    roomInventory.getOperationRoom());
-        });
+        RoomInventory roomInventory = roomInventoryRepository.findById(roomInventoryId)
+                .orElseThrow(() -> new ResourceNotFoundException("Room Inventory not found with assetId: " + assetId + " and roomId: " + roomId));
+
+        roomInventory.setCount(roomInventoryDTO.getCount());
+        roomInventoryRepository.save(roomInventory);
+        return convertToDTO(roomInventory);
     }
 
-    public boolean deleteRoomInventory(Long assetId, Long roomId) {
+    public void deleteRoomInventory(Long assetId, Long roomId) {
         RoomInventoryId roomInventoryId = new RoomInventoryId(assetId, roomId);
-        return roomInventoryRepository.findById(roomInventoryId).map(roomInventory -> {
-            roomInventoryRepository.delete(roomInventory);
-            return true;
-        }).orElse(false);
+        RoomInventory roomInventory = roomInventoryRepository.findById(roomInventoryId)
+                .orElseThrow(() -> new ResourceNotFoundException("Room Inventory not found with assetId: " + assetId + " and roomId: " + roomId));
+
+        roomInventoryRepository.delete(roomInventory);
     }
 
-
-    private static RoomInventoryDTO getRoomInventoryDTO(RoomInventory roomInventory, Asset asset, OperationRoom operationRoom) {
-        return new RoomInventoryDTO(roomInventory.getAsset().getId(),
+    private RoomInventoryDTO convertToDTO(RoomInventory roomInventory) {
+        return new RoomInventoryDTO(
+                roomInventory.getAsset().getId(),
                 roomInventory.getOperationRoom().getId(),
-                new AssetDTO(asset.getId(), asset.getType(), asset.getName()),
-                new OperationRoomDTO(operationRoom.getId(),
-                        operationRoom.getRoomNr(),
-                        operationRoom.getBuildingBlock(),
-                        operationRoom.getFloor(),
-                        operationRoom.getType(),
-                        operationRoom.getState()),
-                roomInventory.getCount());
+                new AssetDTO(roomInventory.getAsset().getId(), roomInventory.getAsset().getType(), roomInventory.getAsset().getName()),
+                new OperationRoomDTO(roomInventory.getOperationRoom().getId(),
+                        roomInventory.getOperationRoom().getRoomNr(),
+                        roomInventory.getOperationRoom().getBuildingBlock(),
+                        roomInventory.getOperationRoom().getFloor(),
+                        roomInventory.getOperationRoom().getType(),
+                        roomInventory.getOperationRoom().getState()),
+                roomInventory.getCount()
+        );
     }
-
 }
