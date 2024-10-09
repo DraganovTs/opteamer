@@ -1,7 +1,10 @@
 package homecode.opteamer.controller;
 
+import homecode.opteamer.model.dtos.ErrorResponseDTO;
 import homecode.opteamer.model.dtos.OperationReportDTO;
 import homecode.opteamer.service.OperationReportService;
+import io.swagger.v3.oas.annotations.media.Content;
+import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.validation.Valid;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -35,8 +38,10 @@ public class OperationReportController {
     )
     @ApiResponses({
             @ApiResponse(responseCode = "200", description = "Operation Report found and retrieved successfully"),
-            @ApiResponse(responseCode = "404", description = "Operation Report not found"),
-            @ApiResponse(responseCode = "500", description = "Internal server error")
+            @ApiResponse(responseCode = "404", description = "Operation Report not found",
+                    content = @Content(schema = @Schema(implementation = ErrorResponseDTO.class))),
+            @ApiResponse(responseCode = "500", description = "Internal server error",
+                    content = @Content(schema = @Schema(implementation = ErrorResponseDTO.class)))
     })
     @GetMapping("/{teamMemberId}/{operationId}")
     public ResponseEntity<OperationReportDTO> getOperationReportById(@PathVariable Long teamMemberId,
@@ -53,7 +58,8 @@ public class OperationReportController {
     )
     @ApiResponses({
             @ApiResponse(responseCode = "200", description = "Successfully retrieved all operation reports"),
-            @ApiResponse(responseCode = "500", description = "Internal server error")
+            @ApiResponse(responseCode = "500", description = "Internal server error",
+                    content = @Content(schema = @Schema(implementation = ErrorResponseDTO.class)))
     })
     @GetMapping
     public ResponseEntity<List<OperationReportDTO>> getAllOperationReports() {
@@ -67,8 +73,10 @@ public class OperationReportController {
     )
     @ApiResponses({
             @ApiResponse(responseCode = "201", description = "Operation Report created successfully"),
-            @ApiResponse(responseCode = "400", description = "Bad request"),
-            @ApiResponse(responseCode = "500", description = "Internal server error")
+            @ApiResponse(responseCode = "400", description = "Bad request",
+                    content = @Content(schema = @Schema(implementation = ErrorResponseDTO.class))),
+            @ApiResponse(responseCode = "500", description = "Internal server error",
+                    content = @Content(schema = @Schema(implementation = ErrorResponseDTO.class)))
     })
     @PostMapping
     public ResponseEntity<OperationReportDTO> createOperationReport(@Valid @RequestBody OperationReportDTO operationReportDTO) {
@@ -82,9 +90,12 @@ public class OperationReportController {
     )
     @ApiResponses({
             @ApiResponse(responseCode = "200", description = "Operation Report updated successfully"),
-            @ApiResponse(responseCode = "404", description = "Operation Report not found"),
-            @ApiResponse(responseCode = "400", description = "Bad request"),
-            @ApiResponse(responseCode = "500", description = "Internal server error")
+            @ApiResponse(responseCode = "404", description = "Operation Report not found",
+                    content = @Content(schema = @Schema(implementation = ErrorResponseDTO.class))),
+            @ApiResponse(responseCode = "400", description = "Bad request",
+                    content = @Content(schema = @Schema(implementation = ErrorResponseDTO.class))),
+            @ApiResponse(responseCode = "500", description = "Internal server error",
+                    content = @Content(schema = @Schema(implementation = ErrorResponseDTO.class)))
     })
     @PutMapping("/{teamMemberId}/{operationId}")
     public ResponseEntity<OperationReportDTO> updateOperationReport(@PathVariable Long teamMemberId,
@@ -102,8 +113,10 @@ public class OperationReportController {
     )
     @ApiResponses({
             @ApiResponse(responseCode = "204", description = "Operation Report deleted successfully"),
-            @ApiResponse(responseCode = "404", description = "Operation Report not found"),
-            @ApiResponse(responseCode = "500", description = "Internal server error")
+            @ApiResponse(responseCode = "404", description = "Operation Report not found",
+                    content = @Content(schema = @Schema(implementation = ErrorResponseDTO.class))),
+            @ApiResponse(responseCode = "500", description = "Internal server error",
+                    content = @Content(schema = @Schema(implementation = ErrorResponseDTO.class)))
     })
     @DeleteMapping("/{teamMemberId}/{operationId}")
     public ResponseEntity<Void> deleteOperationReport(@PathVariable Long teamMemberId,

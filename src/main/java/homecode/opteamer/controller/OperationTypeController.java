@@ -1,7 +1,10 @@
 package homecode.opteamer.controller;
 
+import homecode.opteamer.model.dtos.ErrorResponseDTO;
 import homecode.opteamer.model.dtos.OperationTypeDTO;
 import homecode.opteamer.service.OperationTypeService;
+import io.swagger.v3.oas.annotations.media.Content;
+import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.validation.Valid;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -34,8 +37,10 @@ public class OperationTypeController {
     )
     @ApiResponses({
             @ApiResponse(responseCode = "200", description = "Operation Type found and retrieved successfully"),
-            @ApiResponse(responseCode = "404", description = "Operation Type not found"),
-            @ApiResponse(responseCode = "500", description = "Internal server error")
+            @ApiResponse(responseCode = "404", description = "Operation Type not found",
+                    content = @Content(schema = @Schema(implementation = ErrorResponseDTO.class))),
+            @ApiResponse(responseCode = "500", description = "Internal server error",
+                    content = @Content(schema = @Schema(implementation = ErrorResponseDTO.class)))
     })
     @GetMapping("/{name}")
     public ResponseEntity<OperationTypeDTO> findByName(@PathVariable String name) {
@@ -49,7 +54,8 @@ public class OperationTypeController {
     )
     @ApiResponses({
             @ApiResponse(responseCode = "200", description = "Successfully retrieved all operation types"),
-            @ApiResponse(responseCode = "500", description = "Internal server error")
+            @ApiResponse(responseCode = "500", description = "Internal server error",
+                    content = @Content(schema = @Schema(implementation = ErrorResponseDTO.class)))
     })
     @GetMapping
     public ResponseEntity<List<OperationTypeDTO>> findAll() {
@@ -63,8 +69,10 @@ public class OperationTypeController {
     )
     @ApiResponses({
             @ApiResponse(responseCode = "201", description = "Operation Type created successfully"),
-            @ApiResponse(responseCode = "400", description = "Bad request"),
-            @ApiResponse(responseCode = "500", description = "Internal server error")
+            @ApiResponse(responseCode = "400", description = "Bad request",
+                    content = @Content(schema = @Schema(implementation = ErrorResponseDTO.class))),
+            @ApiResponse(responseCode = "500", description = "Internal server error",
+                    content = @Content(schema = @Schema(implementation = ErrorResponseDTO.class)))
     })
     @PostMapping
     public ResponseEntity<OperationTypeDTO> create(@Valid @RequestBody OperationTypeDTO operationTypeDTO) {
@@ -78,9 +86,12 @@ public class OperationTypeController {
     )
     @ApiResponses({
             @ApiResponse(responseCode = "200", description = "Operation Type updated successfully"),
-            @ApiResponse(responseCode = "404", description = "Operation Type not found"),
-            @ApiResponse(responseCode = "400", description = "Bad request"),
-            @ApiResponse(responseCode = "500", description = "Internal server error")
+            @ApiResponse(responseCode = "404", description = "Operation Type not found",
+                    content = @Content(schema = @Schema(implementation = ErrorResponseDTO.class))),
+            @ApiResponse(responseCode = "400", description = "Bad request",
+                    content = @Content(schema = @Schema(implementation = ErrorResponseDTO.class))),
+            @ApiResponse(responseCode = "500", description = "Internal server error",
+                    content = @Content(schema = @Schema(implementation = ErrorResponseDTO.class)))
     })
     @PutMapping("/{name}")
     public ResponseEntity<OperationTypeDTO> update(@PathVariable String name,
@@ -95,8 +106,10 @@ public class OperationTypeController {
     )
     @ApiResponses({
             @ApiResponse(responseCode = "204", description = "Operation Type deleted successfully"),
-            @ApiResponse(responseCode = "404", description = "Operation Type not found"),
-            @ApiResponse(responseCode = "500", description = "Internal server error")
+            @ApiResponse(responseCode = "404", description = "Operation Type not found",
+                    content = @Content(schema = @Schema(implementation = ErrorResponseDTO.class))),
+            @ApiResponse(responseCode = "500", description = "Internal server error",
+                    content = @Content(schema = @Schema(implementation = ErrorResponseDTO.class)))
     })
     @DeleteMapping("/{name}")
     public ResponseEntity<Void> delete(@PathVariable String name) {

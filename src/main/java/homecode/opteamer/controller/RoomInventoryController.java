@@ -1,7 +1,10 @@
 package homecode.opteamer.controller;
 
+import homecode.opteamer.model.dtos.ErrorResponseDTO;
 import homecode.opteamer.model.dtos.RoomInventoryDTO;
 import homecode.opteamer.service.RoomInventoryService;
+import io.swagger.v3.oas.annotations.media.Content;
+import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.validation.Valid;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -34,8 +37,10 @@ public class RoomInventoryController {
     )
     @ApiResponses({
             @ApiResponse(responseCode = "200", description = "Room inventory found and retrieved successfully"),
-            @ApiResponse(responseCode = "404", description = "Room inventory not found"),
-            @ApiResponse(responseCode = "500", description = "Internal server error")
+            @ApiResponse(responseCode = "404", description = "Room inventory not found",
+                    content = @Content(schema = @Schema(implementation = ErrorResponseDTO.class))),
+            @ApiResponse(responseCode = "500", description = "Internal server error",
+                    content = @Content(schema = @Schema(implementation = ErrorResponseDTO.class)))
     })
     @GetMapping("/{assetId}/{roomId}")
     public ResponseEntity<RoomInventoryDTO> getRoomInventory(@PathVariable("assetId") Long assetId,
@@ -50,7 +55,8 @@ public class RoomInventoryController {
     )
     @ApiResponses({
             @ApiResponse(responseCode = "200", description = "Successfully retrieved all room inventories"),
-            @ApiResponse(responseCode = "500", description = "Internal server error")
+            @ApiResponse(responseCode = "500", description = "Internal server error",
+                    content = @Content(schema = @Schema(implementation = ErrorResponseDTO.class)))
     })
     @GetMapping
     public ResponseEntity<List<RoomInventoryDTO>> getAllRoomInventories() {
@@ -64,8 +70,10 @@ public class RoomInventoryController {
     )
     @ApiResponses({
             @ApiResponse(responseCode = "201", description = "Room inventory created successfully"),
-            @ApiResponse(responseCode = "400", description = "Bad request"),
-            @ApiResponse(responseCode = "500", description = "Internal server error")
+            @ApiResponse(responseCode = "400", description = "Bad request",
+                    content = @Content(schema = @Schema(implementation = ErrorResponseDTO.class))),
+            @ApiResponse(responseCode = "500", description = "Internal server error",
+                    content = @Content(schema = @Schema(implementation = ErrorResponseDTO.class)))
     })
     @PostMapping
     public ResponseEntity<RoomInventoryDTO> createRoomInventory(@Valid @RequestBody RoomInventoryDTO roomInventoryDTO) {
@@ -79,9 +87,12 @@ public class RoomInventoryController {
     )
     @ApiResponses({
             @ApiResponse(responseCode = "200", description = "Room inventory updated successfully"),
-            @ApiResponse(responseCode = "404", description = "Room inventory not found"),
-            @ApiResponse(responseCode = "400", description = "Bad request"),
-            @ApiResponse(responseCode = "500", description = "Internal server error")
+            @ApiResponse(responseCode = "404", description = "Room inventory not found",
+                    content = @Content(schema = @Schema(implementation = ErrorResponseDTO.class))),
+            @ApiResponse(responseCode = "400", description = "Bad request",
+                    content = @Content(schema = @Schema(implementation = ErrorResponseDTO.class))),
+            @ApiResponse(responseCode = "500", description = "Internal server error",
+                    content = @Content(schema = @Schema(implementation = ErrorResponseDTO.class)))
     })
     @PutMapping("/{assetId}/{roomId}")
     public ResponseEntity<RoomInventoryDTO> updateRoomInventory(@PathVariable Long assetId,
@@ -97,8 +108,10 @@ public class RoomInventoryController {
     )
     @ApiResponses({
             @ApiResponse(responseCode = "204", description = "Room inventory deleted successfully"),
-            @ApiResponse(responseCode = "404", description = "Room inventory not found"),
-            @ApiResponse(responseCode = "500", description = "Internal server error")
+            @ApiResponse(responseCode = "404", description = "Room inventory not found",
+                    content = @Content(schema = @Schema(implementation = ErrorResponseDTO.class))),
+            @ApiResponse(responseCode = "500", description = "Internal server error",
+                    content = @Content(schema = @Schema(implementation = ErrorResponseDTO.class)))
     })
     @DeleteMapping("/{assetId}/{roomId}")
     public ResponseEntity<Void> deleteInventory(@PathVariable Long assetId, @PathVariable Long roomId) {

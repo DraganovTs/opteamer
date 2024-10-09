@@ -2,7 +2,10 @@ package homecode.opteamer.controller;
 
 import homecode.opteamer.model.dtos.AuthenticationRequestDTO;
 import homecode.opteamer.model.dtos.AuthenticationResponseDTO;
+import homecode.opteamer.model.dtos.ErrorResponseDTO;
 import homecode.opteamer.util.JwtUtil;
+import io.swagger.v3.oas.annotations.media.Content;
+import io.swagger.v3.oas.annotations.media.Schema;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -43,8 +46,10 @@ public class AuthenticationController {
     )
     @ApiResponses({
             @ApiResponse(responseCode = "200", description = "Authentication was successful"),
-            @ApiResponse(responseCode = "401", description = "Invalid username or password"),
-            @ApiResponse(responseCode = "500", description = "Internal server error")
+            @ApiResponse(responseCode = "401", description = "Invalid username or password",
+                    content = @Content(schema = @Schema(implementation = ErrorResponseDTO.class))),
+            @ApiResponse(responseCode = "500", description = "Internal server error",
+                    content = @Content(schema = @Schema(implementation = ErrorResponseDTO.class)))
     })
     @PostMapping
     public ResponseEntity<?> getAuthenticationToken(@RequestBody AuthenticationRequestDTO authenticationRequestDTO) {

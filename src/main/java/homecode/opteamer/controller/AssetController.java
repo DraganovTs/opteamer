@@ -1,7 +1,10 @@
 package homecode.opteamer.controller;
 
 import homecode.opteamer.model.dtos.AssetDTO;
+import homecode.opteamer.model.dtos.ErrorResponseDTO;
 import homecode.opteamer.service.AssetService;
+import io.swagger.v3.oas.annotations.media.Content;
+import io.swagger.v3.oas.annotations.media.Schema;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -34,7 +37,8 @@ public class AssetController {
     )
     @ApiResponses({
             @ApiResponse(responseCode = "201", description = "Asset created successfully"),
-            @ApiResponse(responseCode = "400", description = "Invalid input data")
+            @ApiResponse(responseCode = "400", description = "Invalid input data",
+                    content = @Content(schema = @Schema(implementation = ErrorResponseDTO.class))),
     })
     @PostMapping
     public ResponseEntity<AssetDTO> createAsset(@Valid @RequestBody AssetDTO assetDTO) {
@@ -48,8 +52,10 @@ public class AssetController {
     )
     @ApiResponses({
             @ApiResponse(responseCode = "200", description = "Asset updated successfully"),
-            @ApiResponse(responseCode = "404", description = "Asset not found"),
-            @ApiResponse(responseCode = "400", description = "Invalid input data")
+            @ApiResponse(responseCode = "404", description = "Asset not found",
+                    content = @Content(schema = @Schema(implementation = ErrorResponseDTO.class))),
+            @ApiResponse(responseCode = "400", description = "Invalid input data",
+                    content = @Content(schema = @Schema(implementation = ErrorResponseDTO.class)))
     })
     @PutMapping("/{id}")
     public ResponseEntity<AssetDTO> updateAsset(@PathVariable Long id, @Valid @RequestBody AssetDTO assetDTO) {
@@ -76,7 +82,8 @@ public class AssetController {
     )
     @ApiResponses({
             @ApiResponse(responseCode = "200", description = "Asset fetched successfully"),
-            @ApiResponse(responseCode = "404", description = "Asset not found")
+            @ApiResponse(responseCode = "404", description = "Asset not found",
+                    content = @Content(schema = @Schema(implementation = ErrorResponseDTO.class)))
     })
     @GetMapping("/{id}")
     public ResponseEntity<AssetDTO> getAssetById(@PathVariable Long id) {
@@ -90,7 +97,8 @@ public class AssetController {
     )
     @ApiResponses({
             @ApiResponse(responseCode = "204", description = "Asset deleted successfully"),
-            @ApiResponse(responseCode = "404", description = "Asset not found")
+            @ApiResponse(responseCode = "404", description = "Asset not found",
+                    content = @Content(schema = @Schema(implementation = ErrorResponseDTO.class)))
     })
     @DeleteMapping("/{id}")
     public ResponseEntity<Void> deleteAssetById(@PathVariable Long id) {

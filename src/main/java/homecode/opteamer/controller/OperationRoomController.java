@@ -1,7 +1,10 @@
 package homecode.opteamer.controller;
 
+import homecode.opteamer.model.dtos.ErrorResponseDTO;
 import homecode.opteamer.model.dtos.OperationRoomDTO;
 import homecode.opteamer.service.OperationRoomService;
+import io.swagger.v3.oas.annotations.media.Content;
+import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.validation.Valid;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -35,8 +38,10 @@ public class OperationRoomController {
     )
     @ApiResponses({
             @ApiResponse(responseCode = "200", description = "Operation Room found and retrieved successfully"),
-            @ApiResponse(responseCode = "404", description = "Operation Room not found"),
-            @ApiResponse(responseCode = "500", description = "Internal server error")
+            @ApiResponse(responseCode = "404", description = "Operation Room not found",
+                    content = @Content(schema = @Schema(implementation = ErrorResponseDTO.class))),
+            @ApiResponse(responseCode = "500", description = "Internal server error",
+                    content = @Content(schema = @Schema(implementation = ErrorResponseDTO.class)))
     })
     @GetMapping("/{id}")
     public ResponseEntity<OperationRoomDTO> getOperationRoomById(@PathVariable Long id) {
@@ -51,7 +56,8 @@ public class OperationRoomController {
     )
     @ApiResponses({
             @ApiResponse(responseCode = "200", description = "Successfully retrieved all operation rooms"),
-            @ApiResponse(responseCode = "500", description = "Internal server error")
+            @ApiResponse(responseCode = "500", description = "Internal server error",
+                    content = @Content(schema = @Schema(implementation = ErrorResponseDTO.class)))
     })
     @GetMapping
     public ResponseEntity<List<OperationRoomDTO>> getOperationRooms() {
@@ -65,8 +71,10 @@ public class OperationRoomController {
     )
     @ApiResponses({
             @ApiResponse(responseCode = "201", description = "Operation Room created successfully"),
-            @ApiResponse(responseCode = "400", description = "Bad request"),
-            @ApiResponse(responseCode = "500", description = "Internal server error")
+            @ApiResponse(responseCode = "400", description = "Bad request",
+                    content = @Content(schema = @Schema(implementation = ErrorResponseDTO.class))),
+            @ApiResponse(responseCode = "500", description = "Internal server error",
+                    content = @Content(schema = @Schema(implementation = ErrorResponseDTO.class)))
     })
     @PostMapping
     public ResponseEntity<OperationRoomDTO> createOperationRoom(@Valid @RequestBody OperationRoomDTO operationRoomDTO) {
@@ -80,9 +88,12 @@ public class OperationRoomController {
     )
     @ApiResponses({
             @ApiResponse(responseCode = "200", description = "Operation Room updated successfully"),
-            @ApiResponse(responseCode = "404", description = "Operation Room not found"),
-            @ApiResponse(responseCode = "400", description = "Bad request"),
-            @ApiResponse(responseCode = "500", description = "Internal server error")
+            @ApiResponse(responseCode = "404", description = "Operation Room not found",
+                    content = @Content(schema = @Schema(implementation = ErrorResponseDTO.class))),
+            @ApiResponse(responseCode = "400", description = "Bad request",
+                    content = @Content(schema = @Schema(implementation = ErrorResponseDTO.class))),
+            @ApiResponse(responseCode = "500", description = "Internal server error",
+                    content = @Content(schema = @Schema(implementation = ErrorResponseDTO.class)))
     })
     @PutMapping("/{id}")
     public ResponseEntity<OperationRoomDTO> updateOperationRoom(@PathVariable Long id,
@@ -98,8 +109,10 @@ public class OperationRoomController {
     )
     @ApiResponses({
             @ApiResponse(responseCode = "204", description = "Operation Room deleted successfully"),
-            @ApiResponse(responseCode = "404", description = "Operation Room not found"),
-            @ApiResponse(responseCode = "500", description = "Internal server error")
+            @ApiResponse(responseCode = "404", description = "Operation Room not found",
+                    content = @Content(schema = @Schema(implementation = ErrorResponseDTO.class))),
+            @ApiResponse(responseCode = "500", description = "Internal server error",
+                    content = @Content(schema = @Schema(implementation = ErrorResponseDTO.class)))
     })
     @DeleteMapping("/{id}")
     public ResponseEntity<Void> deleteOperationRoom(@PathVariable Long id) {

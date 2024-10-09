@@ -1,8 +1,11 @@
 package homecode.opteamer.controller;
 
 import homecode.opteamer.model.dtos.AssessmentDTO;
+import homecode.opteamer.model.dtos.ErrorResponseDTO;
 import homecode.opteamer.service.AssessmentService;
 import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.media.Content;
+import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.tags.Tag;
@@ -33,7 +36,8 @@ public class AssessmentController {
     )
     @ApiResponses({
             @ApiResponse(responseCode = "200", description = "Assessment fetched successfully"),
-            @ApiResponse(responseCode = "404", description = "Assessment not found")
+            @ApiResponse(responseCode = "404", description = "Assessment not found",
+                    content = @Content(schema = @Schema(implementation = ErrorResponseDTO.class)))
     })
     @GetMapping("/{teamMemberId}/{patientId}/{preOpAName}")
     public ResponseEntity<AssessmentDTO> getAssessment(@PathVariable Long teamMemberId,
@@ -63,7 +67,8 @@ public class AssessmentController {
     )
     @ApiResponses({
             @ApiResponse(responseCode = "201", description = "Assessment created successfully"),
-            @ApiResponse(responseCode = "400", description = "Invalid input data")
+            @ApiResponse(responseCode = "400", description = "Invalid input data",
+                    content = @Content(schema = @Schema(implementation = ErrorResponseDTO.class)))
     })
     @PostMapping
     public ResponseEntity<AssessmentDTO> createAssessment(@Valid @RequestBody AssessmentDTO assessmentDTO) {
@@ -77,8 +82,10 @@ public class AssessmentController {
     )
     @ApiResponses({
             @ApiResponse(responseCode = "200", description = "Assessment updated successfully"),
-            @ApiResponse(responseCode = "404", description = "Assessment not found"),
-            @ApiResponse(responseCode = "400", description = "Invalid input data")
+            @ApiResponse(responseCode = "404", description = "Assessment not found",
+                    content = @Content(schema = @Schema(implementation = ErrorResponseDTO.class))),
+            @ApiResponse(responseCode = "400", description = "Invalid input data",
+                    content = @Content(schema = @Schema(implementation = ErrorResponseDTO.class)))
     })
     @PutMapping("/{teamMemberId}/{patientId}/{preOpAName}")
     public ResponseEntity<AssessmentDTO> updateAssessment(@PathVariable Long teamMemberId,
@@ -96,7 +103,8 @@ public class AssessmentController {
     )
     @ApiResponses({
             @ApiResponse(responseCode = "200", description = "Assessment deleted successfully"),
-            @ApiResponse(responseCode = "404", description = "Assessment not found")
+            @ApiResponse(responseCode = "404", description = "Assessment not found",
+                    content = @Content(schema = @Schema(implementation = ErrorResponseDTO.class)))
     })
     @DeleteMapping("/{teamMemberId}/{patientId}/{preOpAName}")
     public ResponseEntity<Void> deleteAssessment(@PathVariable Long teamMemberId,

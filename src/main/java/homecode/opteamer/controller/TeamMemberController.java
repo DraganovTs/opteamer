@@ -1,7 +1,10 @@
 package homecode.opteamer.controller;
 
+import homecode.opteamer.model.dtos.ErrorResponseDTO;
 import homecode.opteamer.model.dtos.TeamMemberDTO;
 import homecode.opteamer.service.TeamMemberService;
+import io.swagger.v3.oas.annotations.media.Content;
+import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.validation.Valid;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -34,8 +37,10 @@ public class TeamMemberController {
     )
     @ApiResponses({
             @ApiResponse(responseCode = "200", description = "Team member found and retrieved successfully"),
-            @ApiResponse(responseCode = "404", description = "Team member not found"),
-            @ApiResponse(responseCode = "500", description = "Internal server error")
+            @ApiResponse(responseCode = "404", description = "Team member not found",
+                    content = @Content(schema = @Schema(implementation = ErrorResponseDTO.class))),
+            @ApiResponse(responseCode = "500", description = "Internal server error",
+                    content = @Content(schema = @Schema(implementation = ErrorResponseDTO.class)))
     })
     @GetMapping("/{id}")
     public ResponseEntity<TeamMemberDTO> getTeamMember(@PathVariable Long id) {
@@ -49,7 +54,8 @@ public class TeamMemberController {
     )
     @ApiResponses({
             @ApiResponse(responseCode = "200", description = "Successfully retrieved all team members"),
-            @ApiResponse(responseCode = "500", description = "Internal server error")
+            @ApiResponse(responseCode = "500", description = "Internal server error",
+                    content = @Content(schema = @Schema(implementation = ErrorResponseDTO.class)))
     })
     @GetMapping
     public ResponseEntity<List<TeamMemberDTO>> getTeamMembers() {
@@ -63,8 +69,10 @@ public class TeamMemberController {
     )
     @ApiResponses({
             @ApiResponse(responseCode = "201", description = "Team member created successfully"),
-            @ApiResponse(responseCode = "400", description = "Bad request"),
-            @ApiResponse(responseCode = "500", description = "Internal server error")
+            @ApiResponse(responseCode = "400", description = "Bad request",
+                    content = @Content(schema = @Schema(implementation = ErrorResponseDTO.class))),
+            @ApiResponse(responseCode = "500", description = "Internal server error",
+                    content = @Content(schema = @Schema(implementation = ErrorResponseDTO.class)))
     })
     @PostMapping
     public ResponseEntity<TeamMemberDTO> createTeamMember(@Valid @RequestBody TeamMemberDTO teamMemberDTO) {
@@ -78,9 +86,12 @@ public class TeamMemberController {
     )
     @ApiResponses({
             @ApiResponse(responseCode = "200", description = "Team member updated successfully"),
-            @ApiResponse(responseCode = "404", description = "Team member not found"),
-            @ApiResponse(responseCode = "400", description = "Bad request"),
-            @ApiResponse(responseCode = "500", description = "Internal server error")
+            @ApiResponse(responseCode = "404", description = "Team member not found",
+                    content = @Content(schema = @Schema(implementation = ErrorResponseDTO.class))),
+            @ApiResponse(responseCode = "400", description = "Bad request",
+                    content = @Content(schema = @Schema(implementation = ErrorResponseDTO.class))),
+            @ApiResponse(responseCode = "500", description = "Internal server error",
+                    content = @Content(schema = @Schema(implementation = ErrorResponseDTO.class)))
     })
     @PutMapping("/{id}")
     public ResponseEntity<TeamMemberDTO> updateTeamMember(@PathVariable Long id,
@@ -95,8 +106,10 @@ public class TeamMemberController {
     )
     @ApiResponses({
             @ApiResponse(responseCode = "204", description = "Team member deleted successfully"),
-            @ApiResponse(responseCode = "404", description = "Team member not found"),
-            @ApiResponse(responseCode = "500", description = "Internal server error")
+            @ApiResponse(responseCode = "404", description = "Team member not found",
+                    content = @Content(schema = @Schema(implementation = ErrorResponseDTO.class))),
+            @ApiResponse(responseCode = "500", description = "Internal server error",
+                    content = @Content(schema = @Schema(implementation = ErrorResponseDTO.class)))
     })
     @DeleteMapping("/{id}")
     public ResponseEntity<Void> deleteTeamMember(@PathVariable Long id) {

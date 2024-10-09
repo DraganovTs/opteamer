@@ -1,7 +1,10 @@
 package homecode.opteamer.controller;
 
+import homecode.opteamer.model.dtos.ErrorResponseDTO;
 import homecode.opteamer.model.dtos.PreOperativeAssessmentDTO;
 import homecode.opteamer.service.PreOperativeAssessmentService;
+import io.swagger.v3.oas.annotations.media.Content;
+import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.validation.Valid;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -34,8 +37,10 @@ public class PreOperativeAssessmentController {
     )
     @ApiResponses({
             @ApiResponse(responseCode = "200", description = "Pre-operative assessment found and retrieved successfully"),
-            @ApiResponse(responseCode = "404", description = "Pre-operative assessment not found"),
-            @ApiResponse(responseCode = "500", description = "Internal server error")
+            @ApiResponse(responseCode = "404", description = "Pre-operative assessment not found",
+                    content = @Content(schema = @Schema(implementation = ErrorResponseDTO.class))),
+            @ApiResponse(responseCode = "500", description = "Internal server error",
+                    content = @Content(schema = @Schema(implementation = ErrorResponseDTO.class)))
     })
     @GetMapping("/{name}")
     public ResponseEntity<PreOperativeAssessmentDTO> getPreOperativeAssessmentById(@PathVariable String name) {
@@ -49,7 +54,8 @@ public class PreOperativeAssessmentController {
     )
     @ApiResponses({
             @ApiResponse(responseCode = "200", description = "Successfully retrieved all pre-operative assessments"),
-            @ApiResponse(responseCode = "500", description = "Internal server error")
+            @ApiResponse(responseCode = "500", description = "Internal server error",
+                    content = @Content(schema = @Schema(implementation = ErrorResponseDTO.class)))
     })
     @GetMapping
     public ResponseEntity<List<PreOperativeAssessmentDTO>> getPreOperativeAssessments() {
@@ -63,8 +69,10 @@ public class PreOperativeAssessmentController {
     )
     @ApiResponses({
             @ApiResponse(responseCode = "201", description = "Pre-operative assessment created successfully"),
-            @ApiResponse(responseCode = "400", description = "Bad request"),
-            @ApiResponse(responseCode = "500", description = "Internal server error")
+            @ApiResponse(responseCode = "400", description = "Bad request",
+                    content = @Content(schema = @Schema(implementation = ErrorResponseDTO.class))),
+            @ApiResponse(responseCode = "500", description = "Internal server error",
+                    content = @Content(schema = @Schema(implementation = ErrorResponseDTO.class)))
     })
     @PostMapping
     public ResponseEntity<PreOperativeAssessmentDTO> createPreOperativeAssessment(@Valid @RequestBody PreOperativeAssessmentDTO preOperativeAssessmentDTO) {
@@ -78,9 +86,12 @@ public class PreOperativeAssessmentController {
     )
     @ApiResponses({
             @ApiResponse(responseCode = "200", description = "Pre-operative assessment updated successfully"),
-            @ApiResponse(responseCode = "404", description = "Pre-operative assessment not found"),
-            @ApiResponse(responseCode = "400", description = "Bad request"),
-            @ApiResponse(responseCode = "500", description = "Internal server error")
+            @ApiResponse(responseCode = "404", description = "Pre-operative assessment not found",
+                    content = @Content(schema = @Schema(implementation = ErrorResponseDTO.class))),
+            @ApiResponse(responseCode = "400", description = "Bad request",
+                    content = @Content(schema = @Schema(implementation = ErrorResponseDTO.class))),
+            @ApiResponse(responseCode = "500", description = "Internal server error",
+                    content = @Content(schema = @Schema(implementation = ErrorResponseDTO.class)))
     })
     @PutMapping("/{name}")
     public ResponseEntity<PreOperativeAssessmentDTO> updatePreOperativeAssessment(@PathVariable String name,
@@ -95,8 +106,10 @@ public class PreOperativeAssessmentController {
     )
     @ApiResponses({
             @ApiResponse(responseCode = "204", description = "Pre-operative assessment deleted successfully"),
-            @ApiResponse(responseCode = "404", description = "Pre-operative assessment not found"),
-            @ApiResponse(responseCode = "500", description = "Internal server error")
+            @ApiResponse(responseCode = "404", description = "Pre-operative assessment not found",
+                    content = @Content(schema = @Schema(implementation = ErrorResponseDTO.class))),
+            @ApiResponse(responseCode = "500", description = "Internal server error",
+                    content = @Content(schema = @Schema(implementation = ErrorResponseDTO.class)))
     })
     @DeleteMapping("/{name}")
     public ResponseEntity<Void> deletePreOperativeAssessment(@PathVariable String name) {

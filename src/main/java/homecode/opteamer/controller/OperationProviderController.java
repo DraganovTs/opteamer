@@ -1,7 +1,10 @@
 package homecode.opteamer.controller;
 
+import homecode.opteamer.model.dtos.ErrorResponseDTO;
 import homecode.opteamer.model.dtos.OperationProviderDTO;
 import homecode.opteamer.service.OperationProviderService;
+import io.swagger.v3.oas.annotations.media.Content;
+import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.validation.Valid;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -34,8 +37,10 @@ public class OperationProviderController {
     )
     @ApiResponses({
             @ApiResponse(responseCode = "200", description = "Operation Provider found and retrieved successfully"),
-            @ApiResponse(responseCode = "404", description = "Operation Provider not found"),
-            @ApiResponse(responseCode = "500", description = "Internal server error")
+            @ApiResponse(responseCode = "404", description = "Operation Provider not found",
+                    content = @Content(schema = @Schema(implementation = ErrorResponseDTO.class))),
+            @ApiResponse(responseCode = "500", description = "Internal server error",
+                    content = @Content(schema = @Schema(implementation = ErrorResponseDTO.class)))
     })
     @GetMapping("/{id}")
     public ResponseEntity<OperationProviderDTO> getOperationProvider(@PathVariable String id) {
@@ -50,7 +55,8 @@ public class OperationProviderController {
     )
     @ApiResponses({
             @ApiResponse(responseCode = "200", description = "Successfully retrieved all operation providers"),
-            @ApiResponse(responseCode = "500", description = "Internal server error")
+            @ApiResponse(responseCode = "500", description = "Internal server error",
+                    content = @Content(schema = @Schema(implementation = ErrorResponseDTO.class)))
     })
     @GetMapping
     public ResponseEntity<List<OperationProviderDTO>> getAllOperationProviders() {
@@ -64,8 +70,10 @@ public class OperationProviderController {
     )
     @ApiResponses({
             @ApiResponse(responseCode = "201", description = "Operation Provider created successfully"),
-            @ApiResponse(responseCode = "400", description = "Bad request"),
-            @ApiResponse(responseCode = "500", description = "Internal server error")
+            @ApiResponse(responseCode = "400", description = "Bad request",
+                    content = @Content(schema = @Schema(implementation = ErrorResponseDTO.class))),
+            @ApiResponse(responseCode = "500", description = "Internal server error",
+                    content = @Content(schema = @Schema(implementation = ErrorResponseDTO.class)))
     })
     @PostMapping
     public ResponseEntity<OperationProviderDTO> createOperationProvider(@Valid @RequestBody OperationProviderDTO operationProviderDTO) {
@@ -79,9 +87,12 @@ public class OperationProviderController {
     )
     @ApiResponses({
             @ApiResponse(responseCode = "200", description = "Operation Provider updated successfully"),
-            @ApiResponse(responseCode = "404", description = "Operation Provider not found"),
-            @ApiResponse(responseCode = "400", description = "Bad request"),
-            @ApiResponse(responseCode = "500", description = "Internal server error")
+            @ApiResponse(responseCode = "404", description = "Operation Provider not found",
+                    content = @Content(schema = @Schema(implementation = ErrorResponseDTO.class))),
+            @ApiResponse(responseCode = "400", description = "Bad request",
+                    content = @Content(schema = @Schema(implementation = ErrorResponseDTO.class))),
+            @ApiResponse(responseCode = "500", description = "Internal server error",
+                    content = @Content(schema = @Schema(implementation = ErrorResponseDTO.class)))
     })
     @PutMapping("/{id}")
     public ResponseEntity<OperationProviderDTO> updateOperationProvider(@PathVariable String id,
@@ -97,8 +108,10 @@ public class OperationProviderController {
     )
     @ApiResponses({
             @ApiResponse(responseCode = "204", description = "Operation Provider deleted successfully"),
-            @ApiResponse(responseCode = "404", description = "Operation Provider not found"),
-            @ApiResponse(responseCode = "500", description = "Internal server error")
+            @ApiResponse(responseCode = "404", description = "Operation Provider not found",
+                    content = @Content(schema = @Schema(implementation = ErrorResponseDTO.class))),
+            @ApiResponse(responseCode = "500", description = "Internal server error",
+                    content = @Content(schema = @Schema(implementation = ErrorResponseDTO.class)))
     })
     @DeleteMapping("/{id}")
     public ResponseEntity<Void> deleteOperationProvider(@PathVariable String id) {
