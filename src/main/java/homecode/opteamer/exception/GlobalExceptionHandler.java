@@ -1,8 +1,6 @@
 package homecode.opteamer.exception;
 
 import homecode.opteamer.model.dtos.ErrorResponseDTO;
-import homecode.opteamer.model.enums.AssetType;
-import homecode.opteamer.util.EnumUtils;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.http.converter.HttpMessageNotReadableException;
