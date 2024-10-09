@@ -10,6 +10,15 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 import java.util.Optional;
 
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.responses.ApiResponse;
+import io.swagger.v3.oas.annotations.responses.ApiResponses;
+import io.swagger.v3.oas.annotations.tags.Tag;
+
+@Tag(
+        name = "CRUD REST APIs for Operation Reports",
+        description = "CRUD REST APIs for managing operation reports in the Opteamer Application"
+)
 @RestController
 @RequestMapping("/api/operationReport")
 public class OperationReportController {
@@ -20,6 +29,15 @@ public class OperationReportController {
         this.operationReportService = operationReportService;
     }
 
+    @Operation(
+            summary = "Get Operation Report by Team Member ID and Operation ID",
+            description = "REST API to fetch a specific operation report by team member ID and operation ID"
+    )
+    @ApiResponses({
+            @ApiResponse(responseCode = "200", description = "Operation Report found and retrieved successfully"),
+            @ApiResponse(responseCode = "404", description = "Operation Report not found"),
+            @ApiResponse(responseCode = "500", description = "Internal server error")
+    })
     @GetMapping("/{teamMemberId}/{operationId}")
     public ResponseEntity<OperationReportDTO> getOperationReportById(@PathVariable Long teamMemberId,
                                                                      @PathVariable Long operationId) {
@@ -29,18 +47,45 @@ public class OperationReportController {
                 .orElseGet(() -> ResponseEntity.status(HttpStatus.NOT_FOUND).build());
     }
 
+    @Operation(
+            summary = "Get All Operation Reports",
+            description = "REST API to fetch all operation reports"
+    )
+    @ApiResponses({
+            @ApiResponse(responseCode = "200", description = "Successfully retrieved all operation reports"),
+            @ApiResponse(responseCode = "500", description = "Internal server error")
+    })
     @GetMapping
     public ResponseEntity<List<OperationReportDTO>> getAllOperationReports() {
         List<OperationReportDTO> operationReportDTOList = operationReportService.findAll();
         return ResponseEntity.status(HttpStatus.OK).body(operationReportDTOList);
     }
 
+    @Operation(
+            summary = "Create a New Operation Report",
+            description = "REST API to create a new operation report"
+    )
+    @ApiResponses({
+            @ApiResponse(responseCode = "201", description = "Operation Report created successfully"),
+            @ApiResponse(responseCode = "400", description = "Bad request"),
+            @ApiResponse(responseCode = "500", description = "Internal server error")
+    })
     @PostMapping
     public ResponseEntity<OperationReportDTO> createOperationReport(@Valid @RequestBody OperationReportDTO operationReportDTO) {
         OperationReportDTO operationReport = operationReportService.createOperationReport(operationReportDTO);
         return ResponseEntity.status(HttpStatus.CREATED).body(operationReport);
     }
 
+    @Operation(
+            summary = "Update an Existing Operation Report",
+            description = "REST API to update an operation report by team member ID and operation ID"
+    )
+    @ApiResponses({
+            @ApiResponse(responseCode = "200", description = "Operation Report updated successfully"),
+            @ApiResponse(responseCode = "404", description = "Operation Report not found"),
+            @ApiResponse(responseCode = "400", description = "Bad request"),
+            @ApiResponse(responseCode = "500", description = "Internal server error")
+    })
     @PutMapping("/{teamMemberId}/{operationId}")
     public ResponseEntity<OperationReportDTO> updateOperationReport(@PathVariable Long teamMemberId,
                                                                     @PathVariable Long operationId,
@@ -51,6 +96,15 @@ public class OperationReportController {
                 .orElseGet(() -> ResponseEntity.status(HttpStatus.NOT_FOUND).build());
     }
 
+    @Operation(
+            summary = "Delete an Operation Report",
+            description = "REST API to delete an operation report by team member ID and operation ID"
+    )
+    @ApiResponses({
+            @ApiResponse(responseCode = "204", description = "Operation Report deleted successfully"),
+            @ApiResponse(responseCode = "404", description = "Operation Report not found"),
+            @ApiResponse(responseCode = "500", description = "Internal server error")
+    })
     @DeleteMapping("/{teamMemberId}/{operationId}")
     public ResponseEntity<Void> deleteOperationReport(@PathVariable Long teamMemberId,
                                                       @PathVariable Long operationId) {

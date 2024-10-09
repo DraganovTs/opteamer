@@ -12,6 +12,15 @@ import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.web.bind.annotation.*;
 
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.responses.ApiResponse;
+import io.swagger.v3.oas.annotations.responses.ApiResponses;
+import io.swagger.v3.oas.annotations.tags.Tag;
+
+@Tag(
+        name = "Authentication API",
+        description = "REST API for Authentication in Opteamer Application"
+)
 @RestController
 @RequestMapping("/api/authenticate")
 public class AuthenticationController {
@@ -28,6 +37,15 @@ public class AuthenticationController {
         this.jwtUtil = jwtUtil;
     }
 
+    @Operation(
+            summary = "Authenticate User",
+            description = "REST API to authenticate a user and return a JWT token"
+    )
+    @ApiResponses({
+            @ApiResponse(responseCode = "200", description = "Authentication was successful"),
+            @ApiResponse(responseCode = "401", description = "Invalid username or password"),
+            @ApiResponse(responseCode = "500", description = "Internal server error")
+    })
     @PostMapping
     public ResponseEntity<?> getAuthenticationToken(@RequestBody AuthenticationRequestDTO authenticationRequestDTO) {
         try {
