@@ -56,7 +56,8 @@ public class GlobalExceptionHandler {
     }
 
     @ExceptionHandler(HttpMessageNotReadableException.class)
-    public ResponseEntity<ErrorResponseDTO> handleHttpMessageNotReadableException(HttpMessageNotReadableException ex, WebRequest request) {
+    public ResponseEntity<ErrorResponseDTO> handleHttpMessageNotReadableException(HttpMessageNotReadableException ex,
+                                                                                  WebRequest request) {
 
         String message = "Malformed JSON request. Please check your input.";
 
@@ -67,7 +68,8 @@ public class GlobalExceptionHandler {
             if (matcher.find()) {
                 String invalidValue = matcher.group(1);
                 String acceptedValues = matcher.group(2);
-                message = String.format("Invalid value '%s' provided for enum. Accepted values are: [%s]", invalidValue, acceptedValues);
+                message = String.format("Invalid value '%s' provided for enum. Accepted values are: [%s]", invalidValue,
+                        acceptedValues);
             }
         }
 
