@@ -59,29 +59,23 @@ public class GlobalExceptionHandler {
 
     @ExceptionHandler(HttpMessageNotReadableException.class)
     public ResponseEntity<ErrorResponseDTO> handleHttpMessageNotReadableException(HttpMessageNotReadableException ex, WebRequest request) {
-        String message = ex.getMostSpecificCause().getMessage();
 
-        if (message.contains("not one of the values accepted for Enum class")) {
-            Pattern pattern = Pattern.compile("Enum class (.+?),");
-            Matcher matcher = pattern.matcher(message);
+        String message = "Malformed JSON request. Please check your input.";
+
+        if (ex.getMostSpecificCause().getMessage().contains("not one of the values accepted for Enum class")) {
+            Pattern pattern = Pattern.compile("from String \"(.*?)\": not one of the values accepted for Enum class: \\[(.*?)\\]");
+            Matcher matcher = pattern.matcher(ex.getMostSpecificCause().getMessage());
 
             if (matcher.find()) {
-                try {
-                    String enumClassName = matcher.group(1);
-                    Class<?> enumClass = Class.forName(enumClassName);
-
-                    if (enumClass.isEnum()) {
-                        message = "Invalid value provided. Accepted values are: " +
-                                EnumUtils.getEnumValues((Class<? extends Enum>) enumClass);
-                    }
-                } catch (ClassNotFoundException e) {
-                    message = "Invalid enum value.";
-                }
+                String invalidValue = matcher.group(1);
+                String acceptedValues = matcher.group(2);
+                message = String.format("Invalid value '%s' provided for enum. Accepted values are: [%s]", invalidValue, acceptedValues);
             }
         }
 
         return buildErrorResponse(message, HttpStatus.BAD_REQUEST, request);
     }
+
 
     @ExceptionHandler(Exception.class)
     public ResponseEntity<ErrorResponseDTO> handleGlobalException(Exception ex, WebRequest request) {

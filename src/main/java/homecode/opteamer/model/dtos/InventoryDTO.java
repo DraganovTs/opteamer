@@ -12,7 +12,6 @@ import lombok.Setter;
 @Getter
 @Setter
 public class InventoryDTO {
-    @NotNull(message = "Asset ID cannot be null")
     private Long assetId;
 
     private AssetDTO asset;

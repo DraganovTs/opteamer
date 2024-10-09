@@ -7,6 +7,7 @@ import homecode.opteamer.model.dtos.InventoryDTO;
 import homecode.opteamer.repository.AssetRepository;
 import homecode.opteamer.repository.InventoryRepository;
 import homecode.opteamer.util.MapperUtility;
+import org.modelmapper.ModelMapper;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
@@ -51,15 +52,13 @@ public class InventoryService {
     public List<InventoryDTO> getAllInventories() {
         List<InventoryDTO> list = new ArrayList<>();
         inventoryRepository.findAll().forEach(inventory ->
-                list.add(new InventoryDTO(inventory.getAssetId(),
-                        new AssetDTO(inventory.getAsset().getId(), inventory.getAsset().getType(), inventory.getAsset().getName()),
-                        inventory.getCount())));
+                list.add(mapInventoryToDTO(inventory)));
         return list;
     }
 
     public Optional<InventoryDTO> getInventoryById(Long id) {
         return inventoryRepository.findById(id)
-                .map(inventory -> MapperUtility.mapEntityToDTO(inventory, InventoryDTO.class));
+                .map(this::mapInventoryToDTO);
     }
 
     public boolean deleteInventoryById(Long id) {
@@ -68,4 +67,11 @@ public class InventoryService {
             return true;
         }).orElse(false);
     }
+
+    private InventoryDTO mapInventoryToDTO(Inventory inventory) {
+        AssetDTO assetDTO = MapperUtility.mapEntityToDTO(inventory.getAsset(),AssetDTO.class);
+       return new InventoryDTO(inventory.getAssetId(), assetDTO, inventory.getCount());
+    }
+
+
 }
