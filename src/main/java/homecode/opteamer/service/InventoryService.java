@@ -42,14 +42,18 @@ public class InventoryService {
         return inventoryRepository.findById(id).map(inventory -> {
             inventory.setCount(inventoryDTO.getCount());
             inventoryRepository.save(inventory);
-            return MapperUtility.mapEntityToDTO(inventory, InventoryDTO.class);
+            return new InventoryDTO(inventory.getAssetId(),
+                    new AssetDTO(inventory.getAsset().getId(), inventory.getAsset().getType(), inventory.getAsset().getName()),
+                    inventory.getCount());
         });
     }
 
     public List<InventoryDTO> getAllInventories() {
         List<InventoryDTO> list = new ArrayList<>();
         inventoryRepository.findAll().forEach(inventory ->
-                list.add(MapperUtility.mapEntityToDTO(inventory, InventoryDTO.class)));
+                list.add(new InventoryDTO(inventory.getAssetId(),
+                        new AssetDTO(inventory.getAsset().getId(), inventory.getAsset().getType(), inventory.getAsset().getName()),
+                        inventory.getCount())));
         return list;
     }
 
