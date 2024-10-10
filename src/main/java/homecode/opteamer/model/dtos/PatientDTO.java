@@ -33,10 +33,10 @@ public class PatientDTO {
     private String name;
 
     @NotBlank(message = "NIN cannot be blank")
-    @Size(min = 2, max = 20, message = "Nin must be between 1 and 2 characters")
+    @Size(min = 10, max = 10, message = "Nin must be 10 characters")
     @Schema(
             description = "National Identification Number of the patient",
-            example = "123456"
+            example = "1234567897"
     )
     private String nin;
 }
