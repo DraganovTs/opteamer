@@ -44,3 +44,19 @@ The application provides a RESTful API. You can find the API documentation at th
 
    ```bash
    git clone https://github.com/yourusername/opteamer.git
+Navigate to the project directory:
+
+2. Navigate to the project directory:
+bash
+
+cd opteamer
+Build the application:
+
+3.Build the application
+
+./mvnw clean install
+Run the application:
+
+4.Run the application:
+Copy code
+./mvnw spring-boot:run
