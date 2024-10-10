@@ -18,11 +18,7 @@ import lombok.Setter;
 )
 public class TeamMemberDTO {
 
-    @NotNull(message = "ID cannot be null")
-    @Schema(
-            description = "Unique identifier for the team member",
-            example = "1"
-    )
+
     private Long id;
 
     @NotNull(message = "Name cannot be null")
