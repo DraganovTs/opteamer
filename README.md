@@ -1,6 +1,6 @@
 # Opteamer
 
-Opteamer is a comprehensive application designed to manage operations and inventory in a medical environment. It provides APIs for managing assets, team members, operations, assessments, and user registrations.
+Opteamer is a comprehensive application built to streamline the management of operations and inventory in a medical environment. It offers APIs for managing assets, team members, operations, assessments, and user registrations.
 
 ## Table of Contents
 
@@ -14,49 +14,70 @@ Opteamer is a comprehensive application designed to manage operations and invent
 
 ## Features
 
-- **Asset Management**: Create, read, update, and delete assets.
-- **Team Member Management**: Manage team members and their associated roles.
-- **Operation Management**: Schedule and manage operations.
-- **Assessment Management**: Conduct pre-operative assessments for patients.
-- **Inventory Management**: Track room inventories.
-- **User Registration**: Register new users in the system.
+- **Asset Management**: Handle the creation, reading, updating, and deletion of medical assets such as equipment, tools, and machines.
+- **Team Member Management**: Manage medical team members, their roles, and responsibilities.
+- **Operation Scheduling**: Plan and manage surgeries and other medical operations.
+- **Pre-Operative Assessments**: Conduct and manage assessments before operations.
+- **Inventory Management**: Keep track of room inventories, including the count of assets available for operations.
+- **User Registration**: Enable new users to register and manage their access within the system.
 
 ## Technologies Used
 
-- **Java**: The primary programming language used for development.
-- **Spring Boot**: Framework for building the RESTful API.
-- **Spring Data JPA**: For database interactions.
-- **Hibernate**: ORM framework for managing database entities.
-- **OpenAPI (Swagger)**: For API documentation and testing.
-- **H2 Database**: For development and testing.
-- **PostgreSQL**: For development.
+- **Java**: Core language for application development.
+- **Spring Boot**: Framework for building the RESTful API and managing business logic.
+- **Spring Data JPA**: Manages database interactions for persistent data.
+- **Hibernate**: ORM framework for managing data persistence.
+- **OpenAPI (Swagger)**: API documentation and testing tool.
+- **H2 Database**: In-memory database for local development and testing.
+- **PostgreSQL**: Database for production and advanced development use.
 
 ## API Documentation
 
-The application provides a RESTful API. You can find the API documentation at the following endpoints:
+The application offers a RESTful API documented using OpenAPI (Swagger). You can access the documentation and explore the available endpoints via the following URLs:
 
-- Swagger UI: [http://localhost:8080/swagger-ui.html](http://localhost:8080/swagger-ui.html)
-- OpenAPI JSON: [http://localhost:8080/v3/api-docs](http://localhost:8080/v3/api-docs)
+- **Swagger UI**: [http://localhost:8080/swagger-ui.html](http://localhost:8080/swagger-ui.html)  
+  Provides a user-friendly interface to test the APIs.
+  
+- **OpenAPI JSON**: [http://localhost:8080/v3/api-docs](http://localhost:8080/v3/api-docs)  
+  This endpoint returns the full OpenAPI specification in JSON format.
 
 ## Installation
 
-1. Clone the repository:
+### Prerequisites
+
+- **Java 17** or higher
+- **Maven**
+- **PostgreSQL** (or H2 for local development)
+
+### Steps to Install
+
+1. Clone the repository to your local machine:
 
    ```bash
    git clone https://github.com/yourusername/opteamer.git
-Navigate to the project directory:
 
 2. Navigate to the project directory:
-bash
 
-cd opteamer
-Build the application:
+   ```bash
+   ./mvnw clean install
 
-3.Build the application
+3. Build the application:
 
-./mvnw clean install
-Run the application:
+   ```bash
+   ./mvnw clean install
 
-4.Run the application:
-Copy code
-./mvnw spring-boot:run
+4. Run the application:
+
+   ```bash
+   ./mvnw spring-boot:run
+
+## Usage
+Once the application is running, you can access the Swagger UI to interact with the APIs, test requests, and explore the available operations. To access Swagger UI, visit http://localhost:8080/swagger-ui.html in your browser.
+
+## Contributing
+Contributions are welcome! If you find a bug or have suggestions for improvements, feel free to open an issue or submit a pull request.
+
+## License
+This project is licensed under the MIT License. See the LICENSE file for details.
+
+
