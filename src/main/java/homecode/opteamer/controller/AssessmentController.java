@@ -39,7 +39,7 @@ public class AssessmentController {
             @ApiResponse(responseCode = "404", description = "Assessment not found",
                     content = @Content(schema = @Schema(implementation = ErrorResponseDTO.class)))
     })
-    @GetMapping("/{teamMemberId}/{patientId}/{preOpAName}")
+    @GetMapping("/{teamMemberId}/{preOpAName}/{patientId}")
     public ResponseEntity<AssessmentDTO> getAssessment(@PathVariable Long teamMemberId,
                                                        @PathVariable Long patientId,
                                                        @PathVariable String preOpAName) {
