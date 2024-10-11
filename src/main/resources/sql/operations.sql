@@ -2,12 +2,12 @@
 INSERT INTO operations (type_id, room_id, start_date, state)
 VALUES
     ('Appendectomy', 'GENERAL_SURGERY', '2024-10-15 08:00:00', 'SCHEDULED'),
-    ('Cholecystectomy', 'GENERAL_SURGERY', '2024-10-16 09:00:00', 'SCHEDULED'),
+    ('Cholecystectomy', 'GENERAL_SURGERY', '2024-10-16 09:00:00', 'READY_TO_BEGIN'),
     ('Hernia Repair', 'GENERAL_SURGERY', '2024-10-17 10:00:00', 'SCHEDULED'),
-    ('Spinal Fusion', 'NEURO_SURGERY', '2024-10-18 11:00:00', 'SCHEDULED'),
-    ('Gallbladder Removal', 'GENERAL_SURGERY', '2024-10-19 08:00:00', 'SCHEDULED'),
-    ('Plastic Surgery', 'PLASTIC_SURGERY', '2024-10-20 09:00:00', 'SCHEDULED'),
-    ('Coronary Bypass', 'CARDIAC_SURGERY', '2024-10-21 07:00:00', 'SCHEDULED'),
+    ('Spinal Fusion', 'NEURO_SURGERY', '2024-10-18 11:00:00', 'IN_PROGRESS'),
+    ('Gallbladder Removal', 'GENERAL_SURGERY', '2024-10-19 08:00:00', 'COMPLETED'),
+    ('Plastic Surgery', 'PLASTIC_SURGERY', '2024-10-20 09:00:00', 'CANCELLED'),
+    ('Coronary Bypass', 'CARDIAC_SURGERY', '2024-10-21 07:00:00', 'READY_TO_BEGIN'),
     ('Laparoscopic Surgery', 'GENERAL_SURGERY', '2024-10-22 08:30:00', 'SCHEDULED');
 
 -- Insert operation providers (surgeons, nurses, etc.) for each operation

@@ -78,11 +78,11 @@ VALUES
     (6, 16)  -- SURGICAL DRILL for Knee Replacement
 ON CONFLICT DO NOTHING;
 
--- Insert into operation assessments table (to link pre-operative assessments with operations)
-INSERT INTO op_type_assets (op_type_id, asset_id)
-VALUES
-    (5, (SELECT op_type_id FROM pre_operative_assessments WHERE name = 'Appendectomy')),
-    (5, (SELECT op_type_id FROM pre_operative_assessments WHERE name = 'Cholecystectomy')),
-    (6, (SELECT op_type_id FROM pre_operative_assessments WHERE name = 'Spinal Fusion')),
-    (6, (SELECT op_type_id FROM pre_operative_assessments WHERE name = 'Gallbladder Removal'))
-ON CONFLICT DO NOTHING;
+-- -- Insert into operation assessments table (to link pre-operative assessments with operations)
+-- INSERT INTO operation_pre_operative_assessments (operation_id, assessment_id)
+-- VALUES
+--     (5, (SELECT id FROM pre_operative_assessments WHERE name = 'Eye Examination')),
+--     (5, (SELECT id FROM pre_operative_assessments WHERE name = 'Vision Assessment')),
+--     (6, (SELECT id FROM pre_operative_assessments WHERE name = 'Joint X-ray')),
+--     (6, (SELECT id FROM pre_operative_assessments WHERE name = 'Blood Pressure Check'))
+-- ON CONFLICT DO NOTHING;
