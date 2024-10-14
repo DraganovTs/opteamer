@@ -1,5 +1,6 @@
 package homecode.opteamer.service;
 
+import homecode.opteamer.exception.ResourceNotFoundException;
 import homecode.opteamer.model.OperationProvider;
 import homecode.opteamer.model.dtos.OperationProviderDTO;
 import homecode.opteamer.model.enums.OperationProviderType;
@@ -21,41 +22,40 @@ public class OperationProviderService {
         this.operationProviderRepository = operationProviderRepository;
     }
 
-    public Optional<OperationProviderDTO> getOperationProviderById(String type) {
-        try {
-            OperationProvider operationProvider = operationProviderRepository.findByType(OperationProviderType.valueOf(type)).orElseThrow();
-            return Optional.of(MapperUtility.mapEntityToDTO(operationProvider , OperationProviderDTO.class));
-        } catch (NoSuchElementException e) {
-            return Optional.empty();
-        }
+    public OperationProviderDTO getOperationProviderById(String type) {
+        OperationProvider operationProvider = operationProviderRepository.findByType(OperationProviderType.valueOf(type))
+                .orElseThrow(() -> new ResourceNotFoundException("Operation Provider whit type " + type + "was not found"));
+        return MapperUtility.mapEntityToDTO(operationProvider, OperationProviderDTO.class);
     }
 
 
     public List<OperationProviderDTO> getAllOperationProviders() {
         List<OperationProviderDTO> operationProviderDTOList = new ArrayList<>();
         operationProviderRepository.findAll().forEach(operationProvider ->
-            operationProviderDTOList.add(MapperUtility.mapEntityToDTO(operationProvider , OperationProviderDTO.class))
+                operationProviderDTOList.add(MapperUtility.mapEntityToDTO(operationProvider, OperationProviderDTO.class))
         );
         return operationProviderDTOList;
     }
 
     public OperationProviderDTO createOperationProvider(OperationProviderDTO operationProviderDTO) {
-        OperationProvider operationProvider = MapperUtility.mapDTOToEntity(operationProviderDTO ,  OperationProvider.class);
+        OperationProvider operationProvider = MapperUtility.mapDTOToEntity(operationProviderDTO, OperationProvider.class);
         operationProvider = operationProviderRepository.save(operationProvider);
-        return MapperUtility.mapEntityToDTO(operationProvider , OperationProviderDTO.class);
+        return MapperUtility.mapEntityToDTO(operationProvider, OperationProviderDTO.class);
     }
 
-    public Optional<OperationProviderDTO> updateOperationProvider(String id, OperationProviderDTO operationProviderDTO) {
-        return operationProviderRepository.findByType(OperationProviderType.valueOf(id)).map(existingProvider -> {
-            existingProvider.setType(operationProviderDTO.getType());
-            OperationProvider updatedProvider = operationProviderRepository.save(existingProvider);
-            return MapperUtility.mapEntityToDTO(updatedProvider, OperationProviderDTO.class);
-        });
+    public OperationProviderDTO updateOperationProvider(String id, OperationProviderDTO operationProviderDTO) {
+        OperationProvider existingProvider = operationProviderRepository.findByType(OperationProviderType.valueOf(id))
+                .orElseThrow(() -> new IllegalArgumentException("Operation Provider not found for type: " + id));
+
+        existingProvider.setType(operationProviderDTO.getType());
+        OperationProvider updatedProvider = operationProviderRepository.save(existingProvider);
+        return MapperUtility.mapEntityToDTO(updatedProvider, OperationProviderDTO.class);
     }
+
 
 
     public boolean deleteOperationProvider(String id) {
-        return operationProviderRepository.findById(OperationProviderType.valueOf(id)).map(operationProvider -> {
+        return operationProviderRepository.findByType(OperationProviderType.valueOf(id)).map(operationProvider -> {
             operationProviderRepository.deleteById(OperationProviderType.valueOf(id));
             return true;
         }).orElse(false);

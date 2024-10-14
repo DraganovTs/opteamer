@@ -44,9 +44,8 @@ public class OperationProviderController {
     })
     @GetMapping("/{id}")
     public ResponseEntity<OperationProviderDTO> getOperationProvider(@PathVariable String id) {
-        return operationProviderService.getOperationProviderById(id)
-                .map(ResponseEntity::ok)
-                .orElse(ResponseEntity.status(HttpStatus.NOT_FOUND).build());
+        OperationProviderDTO operationProviderDTO = operationProviderService.getOperationProviderById(id);
+        return ResponseEntity.ok(operationProviderDTO);
     }
 
     @Operation(
@@ -97,9 +96,8 @@ public class OperationProviderController {
     @PutMapping("/{id}")
     public ResponseEntity<OperationProviderDTO> updateOperationProvider(@PathVariable String id,
                                                                         @Valid @RequestBody OperationProviderDTO operationProviderDTO) {
-        return operationProviderService.updateOperationProvider(id, operationProviderDTO)
-                .map(ResponseEntity::ok)
-                .orElse(ResponseEntity.status(HttpStatus.NOT_FOUND).build());
+      OperationProviderDTO operationProviderDTOUpdated = operationProviderService.updateOperationProvider(id, operationProviderDTO);
+      return ResponseEntity.ok(operationProviderDTOUpdated);
     }
 
     @Operation(

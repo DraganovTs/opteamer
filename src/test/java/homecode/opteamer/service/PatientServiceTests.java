@@ -61,7 +61,7 @@ public class PatientServiceTests {
     }
 
     @Test
-    void getPatient_ShouldReturnPatient() {
+    void getPatient_ShouldReturnPatientDTO() {
         when(patientRepository.findById(anyLong())).thenReturn(Optional.of(patient));
 
         PatientDTO foundPatient = patientService.getPatientById(1L);
