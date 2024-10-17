@@ -76,6 +76,25 @@ public class TeamMemberServiceTests {
     }
 
     @Test
+    void createTeamMember_ShouldCreateAndSaveNewOperationProvider_WhenNotFound() {
+        when(operationProviderRepository.findByType(any(OperationProviderType.class)))
+                .thenReturn(Optional.empty());  // Simulating no provider found
+        when(operationProviderRepository.save(any(OperationProvider.class)))
+                .thenReturn(operationProvider);  // Saving new provider
+        when(teamMemberRepository.save(any(TeamMember.class)))
+                .thenReturn(teamMember);
+
+        TeamMemberDTO savedTeamMemberDTO = teamMemberService.createTeamMember(teamMemberDTO);
+
+        assertNotNull(savedTeamMemberDTO);
+        assertEquals(teamMember.getName(), savedTeamMemberDTO.getName());
+
+        verify(operationProviderRepository, times(1)).findByType(any(OperationProviderType.class));
+        verify(operationProviderRepository, times(1)).save(any(OperationProvider.class));  // New provider is saved
+        verify(teamMemberRepository, times(1)).save(any(TeamMember.class));
+    }
+
+    @Test
     void getTeamMember_ShouldReturnTeamMemberDTO() {
         when(teamMemberRepository.findById(anyLong())).thenReturn(Optional.of(teamMember));
 
