@@ -87,7 +87,7 @@ public class OperationTypeService {
                 .collect(Collectors.toSet());
 
         Set<OperationProvider> operationProviders = operationTypeDTO.getOperationProvidersDTO().stream()
-                .map(operationProviderDTO -> operationProviderRepository.findById(operationProviderDTO.getType())
+                .map(operationProviderDTO -> operationProviderRepository.findByType(operationProviderDTO.getType())
                         .orElseThrow(() -> new ResourceNotFoundException("Operation provider not found with type: " + operationProviderDTO.getType())))
                 .collect(Collectors.toSet());
 
