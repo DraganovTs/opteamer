@@ -13,6 +13,8 @@ import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
 
+import java.util.Arrays;
+import java.util.List;
 import java.util.Optional;
 
 import static org.junit.jupiter.api.Assertions.*;
@@ -29,6 +31,7 @@ public class OperationProviderServiceTests {
     private OperationProviderService operationProviderService;
 
      OperationProvider operationProvider;
+     OperationProvider operationProvider2;
      OperationProviderDTO operationProviderDTO;
 
 
@@ -37,6 +40,9 @@ public class OperationProviderServiceTests {
 
         operationProvider = new OperationProvider();
         operationProvider.setType(OperationProviderType.ANESTHESIOLOGIST);
+
+        operationProvider2 = new OperationProvider();
+        operationProvider2.setType(OperationProviderType.SURGEON);
 
         operationProviderDTO = new OperationProviderDTO();
         operationProviderDTO.setType(OperationProviderType.ANESTHESIOLOGIST);
@@ -77,6 +83,17 @@ public class OperationProviderServiceTests {
 
         verify(operationProviderRepository,times(1)).findByType(any(OperationProviderType.class));
     }
+
+    @Test
+    void getAllOperationProvider_ShouldReturnListOfOperationProviderDTO(){
+        when(operationProviderRepository.findAll()).thenReturn(Arrays.asList(operationProvider,operationProvider2));
+
+        List<OperationProviderDTO> getAllOperationProviderDTOs = operationProviderService.getAllOperationProviders();
+        assertNotNull(getAllOperationProviderDTOs);
+        assertEquals(operationProvider.getType(), getAllOperationProviderDTOs.get(0).getType());
+        assertEquals(operationProvider2.getType(), getAllOperationProviderDTOs.get(1).getType());
+    }
+
 
     @Test
     void updateOperationProvider_ShouldUpdateAndSaveOperationProviderDTO() {
