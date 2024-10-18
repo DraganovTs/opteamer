@@ -1,6 +1,7 @@
 package homecode.opteamer.service;
 
 import homecode.opteamer.exception.InvalidOperationException;
+import homecode.opteamer.exception.ResourceNotFoundException;
 import homecode.opteamer.mapper.OperationMapper;
 import homecode.opteamer.model.*;
 import homecode.opteamer.model.dtos.OperationDTO;
@@ -72,15 +73,15 @@ public class OperationService {
 
     private void setChildEntities(OperationDTO operationDTO, Operation operation) {
         OperationType operationType = operationTypeRepository.findByName(operationDTO.getOperationTypeDTO().getName())
-                .orElseThrow(() -> new NoSuchElementException("Operation type not found"));
+                .orElseThrow(() -> new ResourceNotFoundException("Operation type not found"));
         OperationRoom operationRoom = operationRoomRepository.findById(operationDTO.getOperationRoomDTO().getId())
-                .orElseThrow(() -> new NoSuchElementException("Operation room not found"));
+                .orElseThrow(() -> new ResourceNotFoundException("Operation room not found"));
         Patient patient = patientRepository.findById(operationDTO.getPatientDTO().getId())
-                .orElseThrow(() -> new NoSuchElementException("Patient not found"));
+                .orElseThrow(() -> new ResourceNotFoundException("Patient not found"));
 
         Set<TeamMember> teamMembers = operationDTO.getTeamMembersDTO().stream()
                 .map(teamMemberDTO -> teamMemberRepository.findById(teamMemberDTO.getId())
-                        .orElseThrow(() -> new NoSuchElementException("Team member not found")))
+                        .orElseThrow(() -> new ResourceNotFoundException("Team member not found")))
                 .collect(Collectors.toSet());
 
         operation.setOperationType(operationType);
