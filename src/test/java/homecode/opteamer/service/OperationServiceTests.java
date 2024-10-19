@@ -1,5 +1,6 @@
 package homecode.opteamer.service;
 
+import homecode.opteamer.exception.InvalidOperationException;
 import homecode.opteamer.exception.ResourceNotFoundException;
 import homecode.opteamer.model.*;
 import homecode.opteamer.model.dtos.*;
@@ -14,6 +15,7 @@ import org.mockito.junit.jupiter.MockitoExtension;
 
 import java.time.LocalDateTime;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Optional;
 import java.util.Set;
 
@@ -272,4 +274,111 @@ public class OperationServiceTests {
         verify(patientRepository,times(1)).findById(any());
         verify(teamMemberRepository,times(1)).findById(any());
     }
+    @Test
+    void getOperationById_ShouldReturnOperationDTO_WhenOperationExists() {
+        when(operationRepository.findById(anyLong())).thenReturn(Optional.of(operation));
+
+        Optional<OperationDTO> foundOperation = operationService.getOperationById(1L);
+
+        assertTrue(foundOperation.isPresent());
+        assertEquals(operationDTO.getId(), foundOperation.get().getId());
+
+        verify(operationRepository, times(1)).findById(anyLong());
+    }
+
+    @Test
+    void getOperationById_ShouldReturnEmpty_WhenOperationDoesNotExist() {
+        when(operationRepository.findById(anyLong())).thenReturn(Optional.empty());
+
+        Optional<OperationDTO> foundOperation = operationService.getOperationById(1L);
+
+        assertFalse(foundOperation.isPresent());
+
+        verify(operationRepository, times(1)).findById(anyLong());
+    }
+
+    @Test
+    void getAllOperations_ShouldReturnListOfOperationDTOs() {
+        when(operationRepository.findAll()).thenReturn(List.of(operation));
+
+        List<OperationDTO> operationList = operationService.getAllOperations();
+
+        assertNotNull(operationList);
+        assertEquals(1, operationList.size());
+        assertEquals(operationDTO.getId(), operationList.get(0).getId());
+
+        verify(operationRepository, times(1)).findAll();
+    }
+
+    @Test
+    void updateOperation_ShouldUpdateAndReturnOperationDTO_WhenOperationExists() {
+        when(operationRepository.save(any(Operation.class))).thenReturn(operation);
+        when(operationTypeRepository.findByName(any())).thenReturn(Optional.of(operationType));
+        when(operationRoomRepository.findById(any())).thenReturn(Optional.of(operationRoom));
+        when(patientRepository.findById(any())).thenReturn(Optional.of(patient));
+        when(teamMemberRepository.findById(any())).thenReturn(Optional.of(teamMember));
+
+        operationDTO.setState(OperationState.COMPLETED);
+
+        Optional<OperationDTO> updatedOperation = operationService.updateOperation(1L, operationDTO);
+
+        assertTrue(updatedOperation.isPresent());
+        assertEquals(operationDTO.getState(), updatedOperation.get().getState());
+
+        verify(operationRepository, times(1)).findById(anyLong());
+        verify(operationRepository, times(1)).save(any(Operation.class));
+    }
+
+    @Test
+    void updateOperation_ShouldReturnEmpty_WhenOperationDoesNotExist() {
+        when(operationRepository.findById(anyLong())).thenReturn(Optional.empty());
+
+        Optional<OperationDTO> updatedOperation = operationService.updateOperation(1L, operationDTO);
+
+        assertFalse(updatedOperation.isPresent());
+
+        verify(operationRepository, times(1)).findById(anyLong());
+    }
+
+    @Test
+    void deleteOperationById_ShouldReturnTrue_WhenOperationExists() {
+        when(operationRepository.findById(anyLong())).thenReturn(Optional.of(operation));
+
+        boolean isDeleted = operationService.deleteOperationById(1L);
+
+        assertTrue(isDeleted);
+        verify(operationRepository, times(1)).findById(anyLong());
+        verify(operationRepository, times(1)).delete(any(Operation.class));
+    }
+
+    @Test
+    void deleteOperationById_ShouldReturnFalse_WhenOperationDoesNotExist() {
+        when(operationRepository.findById(anyLong())).thenReturn(Optional.empty());
+
+        boolean isDeleted = operationService.deleteOperationById(1L);
+
+        assertFalse(isDeleted);
+        verify(operationRepository, times(1)).findById(anyLong());
+        verify(operationRepository, never()).delete(any(Operation.class));
+    }
+
+
+    @Test
+    void validateOperationTeam_ShouldThrowInvalidOperationException_WhenTeamIsIncomplete() {
+        operationType.setOperationProviders(Set.of(operationProvider)); // Only 1 provider is required
+        operation.setOperationType(operationType);
+
+        teamMember.setOperationProvider(operationProvider2);
+
+        operation.setTeamMembers(Set.of(teamMember));
+
+        assertThrows(InvalidOperationException.class, () -> {
+            operationService.createOperation(operationDTO);
+        });
+
+        verify(operationRepository, never()).save(any(Operation.class));
+    }
+
+
+
 }
