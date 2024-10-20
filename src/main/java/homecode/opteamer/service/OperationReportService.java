@@ -33,14 +33,16 @@ public class OperationReportService {
     }
 
     public Optional<OperationReportDTO> findById(Long teamMemberId, Long operationId) {
-        try {
-            OperationReportId operationReportId = new OperationReportId(teamMemberId, operationId);
-            OperationReport operationReport = operationReportRepository.findById(operationReportId).orElse(null);
-            return Optional.of(OperationReportMapper.INSTANCE.toOperationReportDTO(operationReport));
-        } catch (NoSuchElementException e) {
+        OperationReportId operationReportId = new OperationReportId(teamMemberId, operationId);
+        OperationReport operationReport = operationReportRepository.findById(operationReportId).orElse(null);
+
+        if (operationReport == null) {
             return Optional.empty();
         }
+
+        return Optional.of(OperationReportMapper.INSTANCE.toOperationReportDTO(operationReport));
     }
+
 
     public List<OperationReportDTO> findAll() {
         List<OperationReportDTO> operationReportDTOS = new ArrayList<>();
@@ -52,13 +54,12 @@ public class OperationReportService {
     }
 
     public OperationReportDTO createOperationReport(OperationReportDTO operationReportDTO) {
+        TeamMember teamMember = teamMemberRepository.findById(operationReportDTO.getTeamMemberId())
+                .orElseThrow(() -> new ResourceNotFoundException("Team member not found"));
+        Operation operation = operationRepository.findById(operationReportDTO.getOperationId())
+                .orElseThrow(() -> new ResourceNotFoundException("Operation not found"));
+
         OperationReport operationReport = new OperationReport();
-        TeamMember teamMember = teamMemberRepository.findById(operationReportDTO.getTeamMemberId()).get();
-        Operation operation = operationRepository.findById(operationReportDTO.getOperationId()).get();
-
-        if (teamMember == null || operation == null)
-            throw new ResourceNotFoundException("Team member or operation not found");
-
         operationReport.setOperationReportId(new OperationReportId(teamMember.getId(), operation.getId()));
         operationReport.setTeamMember(teamMember);
         operationReport.setOperation(operation);
@@ -67,6 +68,7 @@ public class OperationReportService {
         operationReport = operationReportRepository.save(operationReport);
         return OperationReportMapper.INSTANCE.toOperationReportDTO(operationReport);
     }
+
 
     public Optional<OperationReportDTO> updateOperationReport(Long teamMemberId, Long operationId, OperationReportDTO operationReportDTO) {
         OperationReportId operationReportId = new OperationReportId(teamMemberId, operationId);
