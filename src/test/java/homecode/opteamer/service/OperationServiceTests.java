@@ -1,6 +1,5 @@
 package homecode.opteamer.service;
 
-import homecode.opteamer.exception.InvalidOperationException;
 import homecode.opteamer.exception.ResourceNotFoundException;
 import homecode.opteamer.model.*;
 import homecode.opteamer.model.dtos.*;

@@ -37,10 +37,10 @@ public class InventoryServiceTests {
     @InjectMocks
     private InventoryService inventoryService;
 
-    private AssetDTO assetDTO;
-    private Asset asset;
-    private InventoryDTO inventoryDTO;
-    private Inventory inventory;
+     AssetDTO assetDTO;
+     Asset asset;
+     InventoryDTO inventoryDTO;
+     Inventory inventory;
 
     @BeforeEach
     public void setUp() {
