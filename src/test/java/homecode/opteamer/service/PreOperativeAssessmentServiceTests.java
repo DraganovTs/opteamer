@@ -29,8 +29,8 @@ public class PreOperativeAssessmentServiceTests {
     @InjectMocks
     private PreOperativeAssessmentService preOperativeAssessmentService;
 
-    private PreOperativeAssessment preOperativeAssessment;
-    private PreOperativeAssessmentDTO preOperativeAssessmentDTO;
+     PreOperativeAssessment preOperativeAssessment;
+     PreOperativeAssessmentDTO preOperativeAssessmentDTO;
 
     @BeforeEach
     public void setUp() {

@@ -80,18 +80,6 @@ public class AssessmentService {
     }
 
 
-    private TeamMember fetchTeamMember(Long teamMemberId) {
-        return teamMemberRepository.findById(teamMemberId).orElseThrow(() -> new NoSuchElementException("Team Member not found"));
-    }
-
-    private Patient fetchPatient(Long patientId) {
-        return patientRepository.findById(patientId).orElseThrow(() -> new NoSuchElementException("Patient not found"));
-    }
-
-    private PreOperativeAssessment fetchPreOpAssessment(String preOpName) {
-        return preOperativeAssessmentRepository.findByName(preOpName).orElseThrow(() -> new NoSuchElementException("Pre-Op Assessment not found"));
-    }
-
 
     private AssessmentDTO convertToDTO(Assessment assessment) {
         TeamMemberDTO teamMemberDTO = new TeamMemberDTO(
