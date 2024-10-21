@@ -213,7 +213,6 @@ public class OperationTypeServiceTests {
         when(assetRepository.findById(1L)).thenReturn(Optional.of(asset));
         when(assetRepository.findById(2L)).thenReturn(Optional.of(asset2));
         when(preOperativeAssessmentRepository.findByName("preOperativeAssessment")).thenReturn(Optional.empty());
-        when(preOperativeAssessmentRepository.findByName("preOperativeAssessment2")).thenReturn(Optional.of(preOperativeAssessment2));
 
         assertThrows(ResourceNotFoundException.class, () -> operationTypeService.createOperationType(operationTypeDTO));
 
