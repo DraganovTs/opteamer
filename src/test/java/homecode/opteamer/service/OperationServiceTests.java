@@ -312,22 +312,28 @@ public class OperationServiceTests {
 
     @Test
     void updateOperation_ShouldUpdateAndReturnOperationDTO_WhenOperationExists() {
-        when(operationRepository.save(any(Operation.class))).thenReturn(operation);
+        // Arrange
+        when(operationRepository.findById(anyLong())).thenReturn(Optional.of(operation)); // Return the existing operation
+        when(operationRepository.save(any(Operation.class))).thenReturn(operation); // Mock save behavior
         when(operationTypeRepository.findByName(any())).thenReturn(Optional.of(operationType));
         when(operationRoomRepository.findById(any())).thenReturn(Optional.of(operationRoom));
         when(patientRepository.findById(any())).thenReturn(Optional.of(patient));
         when(teamMemberRepository.findById(any())).thenReturn(Optional.of(teamMember));
 
-        operationDTO.setState(OperationState.COMPLETED);
+        operationDTO.setState(OperationState.COMPLETED); // Update state for testing
 
+        // Act
         Optional<OperationDTO> updatedOperation = operationService.updateOperation(1L, operationDTO);
 
-        assertTrue(updatedOperation.isPresent());
-        assertEquals(operationDTO.getState(), updatedOperation.get().getState());
+        // Assert
+        assertTrue(updatedOperation.isPresent()); // Ensure the update returned a result
+        assertEquals(OperationState.COMPLETED, updatedOperation.get().getState()); // Check the state
 
+        // Verify repository interactions
         verify(operationRepository, times(1)).findById(anyLong());
         verify(operationRepository, times(1)).save(any(Operation.class));
     }
+
 
     @Test
     void updateOperation_ShouldReturnEmpty_WhenOperationDoesNotExist() {
@@ -372,7 +378,7 @@ public class OperationServiceTests {
 
         operation.setTeamMembers(Set.of(teamMember));
 
-        assertThrows(InvalidOperationException.class, () -> {
+        assertThrows(ResourceNotFoundException.class, () -> {
             operationService.createOperation(operationDTO);
         });
 

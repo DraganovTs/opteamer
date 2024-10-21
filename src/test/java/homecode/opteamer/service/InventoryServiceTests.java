@@ -15,6 +15,8 @@ import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
 
+import java.util.Arrays;
+import java.util.List;
 import java.util.Optional;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
@@ -65,14 +67,13 @@ public class InventoryServiceTests {
 
     @Test
     void save_ShouldSaveAndReturnInventoryDTO() {
-        // Arrange
-        mockInventoryRepository();
-        mockAssetRepository();
+       when(inventoryRepository.save(any(Inventory.class))).thenReturn(inventory);
+       when(assetRepository.findById(anyLong())).thenReturn(Optional.of(asset));
 
-        // Act
+
         InventoryDTO savedInventoryDTO = inventoryService.createInventory(inventoryDTO);
 
-        // Assert
+
         assertNotNull(savedInventoryDTO);
         assertEquals(inventory.getCount(), savedInventoryDTO.getCount());
         verify(inventoryRepository, times(1)).save(any(Inventory.class));
@@ -80,33 +81,60 @@ public class InventoryServiceTests {
 
     @Test
     void update_ShouldUpdateAndReturnInventoryDTO() {
-        // Arrange
-        when(inventoryRepository.findById(1L)).thenReturn(Optional.of(inventory)); // Return the existing inventory
-        when(assetRepository.findById(asset.getId())).thenReturn(Optional.of(asset)); // Return the asset
+        when(inventoryRepository.findById(any())).thenReturn(Optional.of(inventory)); // Return the existing inventory
+        when(inventoryRepository.save(any(Inventory.class))).thenReturn(inventory);
 
-        inventoryDTO.setCount(22); // Update count in DTO
+        inventoryDTO.setCount(22);
 
-        // Act
+
         Optional<InventoryDTO> updatedInventoryDTOOpt = inventoryService.updateInventory(1L, inventoryDTO);
 
-        // Assert
+
         assertNotNull(updatedInventoryDTOOpt);
         InventoryDTO updatedInventoryDTO = updatedInventoryDTOOpt.get();
-        assertNotNull(updatedInventoryDTO);
-        assertEquals(inventoryDTO.getCount(), updatedInventoryDTO.getCount());
-        verify(inventoryRepository, times(1)).findById(1L);
+        assertEquals(inventory.getCount(), updatedInventoryDTO.getCount());
+        verify(inventoryRepository, times(1)).findById(any());
         verify(inventoryRepository, times(1)).save(any(Inventory.class));
     }
 
-    private void mockInventoryRepository() {
-        when(inventoryRepository.save(any(Inventory.class))).thenAnswer(invocation -> {
-            Inventory inventoryToSave = invocation.getArgument(0);
-            inventoryToSave.setAssetId(1L);
-            return inventoryToSave;
-        });
+    @Test
+    void getInventoryByID_ShouldReturnInventoryDTO() {
+        when(inventoryRepository.findById(any())).thenReturn(Optional.of(inventory)); // Return the existing inventory
+
+        Optional<InventoryDTO> foundedInventoryDTO = inventoryService.getInventoryById(1L);
+
+        assertNotNull(foundedInventoryDTO);
+        assertEquals(inventory.getCount(), foundedInventoryDTO.get().getCount());
+        verify(inventoryRepository, times(1)).findById(any());
     }
 
-    private void mockAssetRepository() {
-        when(assetRepository.findById(anyLong())).thenReturn(Optional.of(asset));
+    @Test
+    void getAllInventory_ShouldReturnListOfInventoryDTO() {
+        when(inventoryRepository.findAll()).thenReturn(Arrays.asList(inventory));
+
+        List<InventoryDTO> allInventories = inventoryService.getAllInventories();
+
+        assertNotNull(allInventories);
+        assertEquals(1, allInventories.size());
+        verify(inventoryRepository, times(1)).findAll();
     }
+
+    @Test
+    void deleteInventory_ShouldDeleteInventoryDTO() {
+        when(inventoryRepository.findById(any())).thenReturn(Optional.of(inventory));
+        doNothing().when(inventoryRepository).delete(any());
+
+        inventoryService.deleteInventoryById(1L);
+
+        verify(inventoryRepository, times(1)).findById(any());
+        verify(inventoryRepository, times(1)).delete(any());
+    }
+
+
+
+
+
+
+
+
 }

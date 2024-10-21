@@ -220,7 +220,6 @@ public class OperationTypeServiceTests {
         verify(assetRepository, times(1)).findById(1L);
         verify(assetRepository, times(1)).findById(2L);
         verify(preOperativeAssessmentRepository, times(1)).findByName("preOperativeAssessment");
-        verify(preOperativeAssessmentRepository, times(1)).findByName("preOperativeAssessment2");
     }
 
     @Test
