@@ -102,4 +102,15 @@ public class InventoryControllerTests {
                 .andExpect(jsonPath("$.asset.name").value("Test Asset"))
                 .andExpect(jsonPath("$.assetId").value(1L));
     }
+
+    @Test
+    void testDeleteInventoryById() throws Exception {
+        Mockito.when(inventoryService.deleteInventoryById(1L)).thenReturn(true);
+
+        mockMvc.perform(delete("/api/inventories/{id}", 1L)
+                        .contentType(MediaType.APPLICATION_JSON))
+                .andExpect(status().isNoContent());
+    }
+
+
 }
