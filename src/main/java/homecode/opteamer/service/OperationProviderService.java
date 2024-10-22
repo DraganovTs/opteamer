@@ -24,7 +24,7 @@ public class OperationProviderService {
 
     public OperationProviderDTO getOperationProviderById(String type) {
         OperationProvider operationProvider = operationProviderRepository.findByType(OperationProviderType.valueOf(type))
-                .orElseThrow(() -> new ResourceNotFoundException("Operation Provider whit type " + type + "was not found"));
+                .orElseThrow(() -> new ResourceNotFoundException("Operation Provider whit type " + type + " was not found"));
         return MapperUtility.mapEntityToDTO(operationProvider, OperationProviderDTO.class);
     }
 
