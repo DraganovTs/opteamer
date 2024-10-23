@@ -2,6 +2,7 @@ package homecode.opteamer.model;
 
 import homecode.opteamer.model.enums.OperationRoomState;
 import homecode.opteamer.model.enums.OperationRoomType;
+import homecode.opteamer.validation.ValidEnum;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -29,10 +30,12 @@ public class OperationRoom {
 
     @Column(name = "type")
     @Enumerated(EnumType.STRING)
+    @ValidEnum(enumClass = OperationRoomType.class)
     private OperationRoomType type;
 
     @Column(name = "state")
     @Enumerated(EnumType.STRING)
+    @ValidEnum(enumClass = OperationRoomState.class)
     private OperationRoomState state;
 
 }
