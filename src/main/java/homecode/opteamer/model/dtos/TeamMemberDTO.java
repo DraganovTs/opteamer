@@ -1,6 +1,7 @@
 package homecode.opteamer.model.dtos;
 
 import io.swagger.v3.oas.annotations.media.Schema;
+import jakarta.validation.Valid;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
 import lombok.AllArgsConstructor;
@@ -34,5 +35,6 @@ public class TeamMemberDTO {
             description = "Details of the operation provider associated with the team member",
             implementation = OperationProviderDTO.class
     )
+    @Valid
     private OperationProviderDTO operationProviderDTO;
 }

@@ -3,6 +3,7 @@ package homecode.opteamer.model.dtos;
 import homecode.opteamer.model.enums.OperationRoomType;
 import homecode.opteamer.validation.ValidEnum;
 import io.swagger.v3.oas.annotations.media.Schema;
+import jakarta.validation.Valid;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import lombok.AllArgsConstructor;
@@ -49,17 +50,20 @@ public class OperationTypeDTO {
             description = "Set of assets required for this operation type",
             implementation = AssetDTO.class
     )
+    @Valid
     private Set<AssetDTO> assetDTOS = new HashSet<>();
 
     @Schema(
             description = "Set of operation providers associated with this operation type",
             implementation = OperationProviderDTO.class
     )
+    @Valid
     private Set<OperationProviderDTO> operationProvidersDTO = new HashSet<>();
 
     @Schema(
             description = "Set of pre-operative assessments associated with this operation type",
             implementation = PreOperativeAssessmentDTO.class
     )
+    @Valid
     private Set<PreOperativeAssessmentDTO> preOperativeAssessmentsDTO = new HashSet<>();
 }

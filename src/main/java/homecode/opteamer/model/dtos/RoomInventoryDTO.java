@@ -1,6 +1,7 @@
 package homecode.opteamer.model.dtos;
 
 import io.swagger.v3.oas.annotations.media.Schema;
+import jakarta.validation.Valid;
 import jakarta.validation.constraints.NotNull;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -36,6 +37,7 @@ public class RoomInventoryDTO {
             description = "Details of the asset in the room inventory",
             implementation = AssetDTO.class
     )
+    @Valid
     private AssetDTO assetDTO;
 
     @NotNull(message = "Operation Room cannot be null")
@@ -43,6 +45,7 @@ public class RoomInventoryDTO {
             description = "Details of the operation room",
             implementation = OperationRoomDTO.class
     )
+    @Valid
     private OperationRoomDTO operationRoomDTO;
 
     @NotNull(message = "Count cannot be null")

@@ -1,6 +1,7 @@
 package homecode.opteamer.model.dtos;
 
 import io.swagger.v3.oas.annotations.media.Schema;
+import jakarta.validation.Valid;
 import jakarta.validation.constraints.Min;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -26,6 +27,7 @@ public class InventoryDTO {
     @Schema(
             description = "Details of the asset associated with this inventory item"
     )
+    @Valid
     private AssetDTO asset;
 
     @Min(value = 1, message = "Count must be at least 1")

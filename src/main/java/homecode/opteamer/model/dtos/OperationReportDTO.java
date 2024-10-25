@@ -1,6 +1,7 @@
 package homecode.opteamer.model.dtos;
 
 import io.swagger.v3.oas.annotations.media.Schema;
+import jakarta.validation.Valid;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
@@ -38,6 +39,7 @@ public class OperationReportDTO {
             description = "Details of the team member responsible for the report",
             implementation = TeamMemberDTO.class
     )
+    @Valid
     private TeamMemberDTO teamMemberDTO;
 
     @NotNull(message = "OperationDTO cannot be null")
@@ -45,6 +47,7 @@ public class OperationReportDTO {
             description = "Details of the operation associated with the report",
             implementation = OperationDTO.class
     )
+    @Valid
     private OperationDTO operationDTO;
 
     @NotBlank(message = "Report cannot be blank")

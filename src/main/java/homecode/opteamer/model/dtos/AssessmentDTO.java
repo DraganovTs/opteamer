@@ -1,6 +1,7 @@
 package homecode.opteamer.model.dtos;
 
 import io.swagger.v3.oas.annotations.media.Schema;
+import jakarta.validation.Valid;
 import jakarta.validation.constraints.FutureOrPresent;
 import jakarta.validation.constraints.NotNull;
 import lombok.AllArgsConstructor;
@@ -44,6 +45,7 @@ public class AssessmentDTO {
     @Schema(
             description = "Details of the team member associated with this assessment"
     )
+    @Valid
     private TeamMemberDTO teamMemberDTO;
 
     @Schema(
@@ -54,6 +56,7 @@ public class AssessmentDTO {
     @Schema(
             description = "Details of the patient associated with this assessment"
     )
+    @Valid
     private PatientDTO patientDTO;
 
     @NotNull(message = "Start date cannot be null")
