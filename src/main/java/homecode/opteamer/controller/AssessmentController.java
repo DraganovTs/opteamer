@@ -21,7 +21,7 @@ import java.util.List;
         description = "CRUD REST APIs in Opteamer Application to CREATE, UPDATE, FETCH, AND DELETE Assessments"
 )
 @RestController
-@RequestMapping("/api/assessments")
+@RequestMapping("/api/v1/assessments")
 public class AssessmentController {
 
     private final AssessmentService assessmentService;
