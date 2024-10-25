@@ -3,7 +3,6 @@ package homecode.opteamer.controller;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import homecode.opteamer.model.dtos.*;
 import homecode.opteamer.model.enums.*;
-import homecode.opteamer.repository.OperationRepository;
 import homecode.opteamer.service.OperationService;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
