@@ -121,7 +121,7 @@ public class RoomInventoryControllerTests {
         mockMvc.perform(MockMvcRequestBuilders.get("/api/roomInventories")
                         .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isOk())
-                .andExpect(jsonPath("$.size()").value(0));  // Check for empty list
+                .andExpect(jsonPath("$.size()").value(0));
     }
 
 
