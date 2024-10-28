@@ -118,100 +118,73 @@ VALUES
 
 
 -- Insert Operation Type Assets
-INSERT INTO op_type_assets (op_type_id, asset_id)
+INSERT INTO optype_assets (optype_id, asset_id)
 VALUES
 
-    (1, 2),
-    (1, 1),
-    (2, 3),
-    (2, 4),
-    (3, 10),
-    (3, 9),
-    (4, 12),
-    (4, 13),
-    (5, 4),
-    (5, 1),
-    (6, 5),
-    (6, 6),
-    (7, 5),
-    (7, 2),
-    (8, 3),
-    (8, 8);
+    ('Appendectomy', 2),
+    ('Appendectomy', 1),
+    ('Cholecystectomy', 3),
+    ('Cholecystectomy', 4),
+    ('Hernia Repair', 10),
+    ('Hernia Repair', 9),
+    ('Spinal Fusion', 12),
+    ('Spinal Fusion', 13),
+    ('Gallbladder Removal', 4),
+    ('Gallbladder Removal', 1),
+    ('Plastic Surgery', 5),
+    ('Plastic Surgery', 6),
+    ('Coronary Bypass', 5),
+    ('Coronary Bypass', 2),
+    ('Laparoscopic Surgery', 3),
+    ('Laparoscopic Surgery', 8);
 
 
 INSERT INTO optype_pre_op_a (optype_id, pre_op_a_id)
 VALUES
-    (1, 1),
-    (1, 2),
-    (2, 4),
-    (2, 3),
-    (3, 3),
-    (3, 5),
-    (4, 7),
-    (4, 6),
-    (5, 1),
-    (5, 5),
-    (6, 4),
-    (6, 8),
-    (7, 2),
-    (7, 3),
-    (8, 5),
-    (8, 9);
+    ('Appendectomy', 'Medical History Review'),
+    ('Appendectomy', 'Physical Examination'),
+    ('Cholecystectomy', 'Cardiac Assessment'),
+    ('Cholecystectomy', 'Blood Tests'),
+    ('Hernia Repair', 'Blood Tests'),
+    ('Hernia Repair', 'Nutritional Assessment'),
+    ('Spinal Fusion', 'Infection Screening'),
+    ('Spinal Fusion', 'Anesthetic Assessment'),
+    ('Gallbladder Removal', 'Medical History Review'),
+    ('Gallbladder Removal', 'Nutritional Assessment'),
+    ('Plastic Surgery', 'Cardiac Assessment'),
+    ('Plastic Surgery', 'Psychological and Social Assessment'),
+    ('Coronary Bypass', 'Physical Examination'),
+    ('Coronary Bypass', 'Blood Tests'),
+    ('Laparoscopic Surgery', 'Nutritional Assessment'),
+    ('Laparoscopic Surgery', 'Infection Screening');
 
 
 -- Insert operations
 INSERT INTO operations (type_id, room_id, start_date, state)
 VALUES
-    ('Appendectomy', 'GENERAL_SURGERY', '2024-10-15 08:00:00', 'SCHEDULED'),
-    ('Cholecystectomy', 'GENERAL_SURGERY', '2024-10-16 09:00:00', 'READY_TO_BEGIN'),
-    ('Hernia Repair', 'GENERAL_SURGERY', '2024-10-17 10:00:00', 'SCHEDULED'),
-    ('Spinal Fusion', 'NEURO_SURGERY', '2024-10-18 11:00:00', 'IN_PROGRESS'),
-    ('Gallbladder Removal', 'GENERAL_SURGERY', '2024-10-19 08:00:00', 'COMPLETED'),
-    ('Plastic Surgery', 'PLASTIC_SURGERY', '2024-10-20 09:00:00', 'CANCELLED'),
-    ('Coronary Bypass', 'CARDIAC_SURGERY', '2024-10-21 07:00:00', 'READY_TO_BEGIN'),
-    ('Laparoscopic Surgery', 'GENERAL_SURGERY', '2024-10-22 08:30:00', 'SCHEDULED');
+    ('Appendectomy', 1, '2024-10-15 08:00:00', 'SCHEDULED'),
+    ('Cholecystectomy', 2, '2024-10-16 09:00:00', 'READY_TO_BEGIN'),
+    ('Hernia Repair', 3, '2024-10-17 10:00:00', 'SCHEDULED'),
+    ('Spinal Fusion', 4, '2024-10-18 11:00:00', 'IN_PROGRESS'),
+    ('Gallbladder Removal',5, '2024-10-19 08:00:00', 'COMPLETED'),
+    ('Plastic Surgery', 6, '2024-10-20 09:00:00', 'CANCELLED'),
+    ('Coronary Bypass', 7, '2024-10-21 07:00:00', 'READY_TO_BEGIN'),
+    ('Laparoscopic Surgery', 8, '2024-10-22 08:30:00', 'SCHEDULED');
 
 
 INSERT INTO optype_opproviders (optype_id, opprovider_id)
 VALUES
-    (1, 1),
-    (1, 2),
-    (2, 1),
-    (2, 3),
-    (3, 3),
-    (3, 5),
-    (4, 2),
-    (4, 1),
-    (5, 1),
-    (5, 3),
-    (6, 5),
-    (6, 1),
-    (7, 1),
-    (7, 2),
+    ('Appendectomy', 'SURGEON'),
+    ('Cholecystectomy', 'SURGEON'),
+    ('Hernia Repair', 'SURGICAL_TECH'),
+    ('Spinal Fusion', 'ANESTHESIOLOGIST'),
+    ('Gallbladder Removal', 'CERTIFIED_NURSE'),
+    ('Plastic Surgery', 'CP_ROOM_NURSE'),
+    ('Coronary Bypass', 'CERTIFIED_NURSE');
 
 
-    (8, 3),
-    (8, 1);
 
 
-INSERT INTO optype_pre_op_a (optype_id, pre_op_a_id)
-VALUES
-    (1, 'Medical History Review'),
-    (1, 'Anesthetic Assessment'),
-    (2, 'Physical Examination'),
-    (2, 'Blood Tests'),
-    (3, 'Infection Screening'),
-    (3, 'Blood Tests'),
-    (4, 'Nutritional Assessment'),
-    (4, 'Renal Function Tests'),
-    (5, 'Medical History Review'),
-    (5, 'Infection Screening'),
-    (6, 'Physical Examination'),
-    (6, 'Psychological and Social Assessment'),
-    (7, 2),
-    (7, 5),
-    (8, 8),
-    (8, 3);
 
 
 UPDATE operations
@@ -278,10 +251,14 @@ ON CONFLICT DO NOTHING;
 
 
 INSERT INTO operations (id, type_id, room_id, patient_id, state, start_date)
-VALUES
-    (5, (SELECT id FROM operation_types WHERE name = 'Cataract Surgery'), 10, 5, 'SCHEDULED', '2024-10-12 14:00:00'),
-    (6, (SELECT id FROM operation_types WHERE name = 'Knee Replacement'), 9, 6, 'SCHEDULED', '2024-10-12 15:00:00')
-ON CONFLICT DO NOTHING;
+SELECT v.id, ot.name, v.room_id, v.patient_id, v.state, v.start_date::timestamp
+FROM (VALUES
+          (5, 'Cataract Surgery', 10, 5, 'SCHEDULED', '2024-10-12 14:00:00'),
+          (6, 'Knee Replacement', 9, 6, 'SCHEDULED', '2024-10-12 15:00:00')
+     ) AS v(id, type_name, room_id, patient_id, state, start_date)
+         JOIN operation_types ot ON v.type_name = ot.name
+ON CONFLICT (id) DO NOTHING;
+
 
 
 INSERT INTO optype_team_member (operation_id, team_member_id)
@@ -321,11 +298,13 @@ VALUES
     (2,'READ'),
     (3,'UPDATE'),
     (4,'DELETE'),
-    (5,'CRUD')
+    (5,'CRUD');
 
 
-INSERT INTO users (email, password, username)
+INSERT INTO use (email, password, username)
 VALUES
     ('admin@gmail.com','1234','adminUser'),
     ('test@gmail.com','1234','testUser'),
     ('business@gmail.com','1234','businessUser');
+
+
