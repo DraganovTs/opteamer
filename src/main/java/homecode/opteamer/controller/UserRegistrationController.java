@@ -5,6 +5,7 @@ import homecode.opteamer.service.UserRegistrationService;
 import homecode.opteamer.model.dtos.UserRegistrationDTO;
 import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.Schema;
+import jakarta.validation.Valid;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -43,7 +44,7 @@ public class UserRegistrationController {
                     content = @Content(schema = @Schema(implementation = ErrorResponseDTO.class)))
     })
     @PostMapping
-    public ResponseEntity<?> createUser(@RequestBody UserRegistrationDTO userRegistrationDTO) {
+    public ResponseEntity<?> createUser(@Valid @RequestBody UserRegistrationDTO userRegistrationDTO) {
         userRegistrationService.createUser(userRegistrationDTO);
         return ResponseEntity.status(HttpStatus.CREATED).build();
     }

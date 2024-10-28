@@ -1,5 +1,6 @@
 package homecode.opteamer.service;
 
+import homecode.opteamer.exception.InvalidOperationException;
 import homecode.opteamer.model.Role;
 import homecode.opteamer.model.User;
 import homecode.opteamer.model.dtos.UserRegistrationDTO;
@@ -26,10 +27,20 @@ public class UserRegistrationService {
     }
 
     public void createUser(UserRegistrationDTO userRegistrationDTO) {
-        Role role = roleRepository.findByName(ERole.ROLE_USER).get();
+        if (userRepository.existsByUsername(userRegistrationDTO.getUsername()) ||
+                userRepository.existsByEmail(userRegistrationDTO.getEmail())) {
+            throw new InvalidOperationException("User with this username or email already exists.");
+        }
 
-        User user = new User(userRegistrationDTO.getUsername(), userRegistrationDTO.getEmail(),
-                passwordEncoder.encode(userRegistrationDTO.getPassword()), new HashSet<>(Arrays.asList(role)));
+        Role role = roleRepository.findByName(ERole.ROLE_USER)
+                .orElseThrow(() -> new InvalidOperationException("Default user role not found."));
+
+        User user = new User(
+                userRegistrationDTO.getUsername(),
+                userRegistrationDTO.getEmail(),
+                passwordEncoder.encode(userRegistrationDTO.getPassword()),
+                new HashSet<>(Arrays.asList(role))
+        );
 
         userRepository.save(user);
     }
