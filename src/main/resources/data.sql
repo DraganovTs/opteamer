@@ -197,8 +197,8 @@ WHERE operations.type_id IN ('GENERAL_SURGERY', 'NEURO_SURGERY', 'CARDIAC_SURGER
 
 INSERT INTO operation_types (name, room_type, duration_hours)
 VALUES
-    ('Cataract Surgery', 'OPHTHALMOLOGY', 1.5),
-    ('Knee Replacement', 'ORTHOPEDICS', 3)
+    ('Cataract Surgery', 'CARDIAC_SURGERY', 1.5),
+    ('Knee Replacement', 'EMERGENCY_SURGERY', 3)
 ON CONFLICT DO NOTHING;
 
 
@@ -213,9 +213,9 @@ ON CONFLICT DO NOTHING;
 
 INSERT INTO operation_providers (type)
 VALUES
-    ('ANESTHESIOLOGIST'),
-    ('OPHTHALMIC_SURGEON'),
-    ('ORTHOPEDIC_SURGEON')
+    ('CERTIFIED_NURSE'),
+    ('SURGEON'),
+    ('SURGICAL_TECH')
 ON CONFLICT DO NOTHING;
 
 
@@ -230,8 +230,8 @@ ON CONFLICT DO NOTHING;
 
 INSERT INTO operation_rooms (id, room_nr, building_block, floor, type, state)
 VALUES
-    (10, 203, 'West Wing', '2', 'OPHTHALMOLOGY', 'AVAILABLE'),
-    (9, 305, 'North Wing', '3', 'ORTHOPEDICS', 'AVAILABLE')
+    (10, 203, 'West Wing', '2', 'CARDIAC_SURGERY', 'AVAILABLE'),
+    (9, 305, 'North Wing', '3', 'EMERGENCY_SURGERY', 'AVAILABLE')
 ON CONFLICT DO NOTHING;
 
 
@@ -244,9 +244,9 @@ ON CONFLICT DO NOTHING;
 
 INSERT INTO team_members (id, name, opprovider_id)
 VALUES
-    (8, 'Karen White', 'ANESTHESIOLOGIST'),
-    (9, 'George Harris', 'OPHTHALMIC_SURGEON'),
-    (4, 'David Miller', 'ORTHOPEDIC_SURGEON')
+    (8, 'Karen White', 'CERTIFIED_NURSE'),
+    (9, 'George Harris', 'CP_ROOM_NURSE'),
+    (4, 'David Miller', 'SURGICAL_TECH')
 ON CONFLICT DO NOTHING;
 
 
@@ -305,9 +305,9 @@ VALUES
 
 INSERT INTO users (email, password, username)
 VALUES
-    ('admin@gmail.com', '1234', 'adminUser'),
-    ('test@gmail.com', '1234', 'testUser'),
-    ('business@gmail.com', '1234', 'businessUser');
+    ('admin@gmail.com', '$2a$10$OX5rXYPj5Vpfq.oWT/JQ3u4eal0f4w7Lyxep2he34XpdiBnA7Pt1G', 'adminUser'),
+    ('test@gmail.com', '$2a$10$OX5rXYPj5Vpfq.oWT/JQ3u4eal0f4w7Lyxep2he34XpdiBnA7Pt1G', 'testUser'),
+    ('business@gmail.com', '$2a$10$OX5rXYPj5Vpfq.oWT/JQ3u4eal0f4w7Lyxep2he34XpdiBnA7Pt1G', 'businessUser');
 
 
 INSERT INTO operation_reports (team_member_id, operation_id, report)

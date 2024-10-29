@@ -15,7 +15,7 @@ export class AssessmentService {
     constructor(private httpClient: HttpClient) { }
 
     loadAllAssessments(): Observable<any> {
-        return this.httpClient.get<any>(`${this.serverUrl}/api/assessments`)
+        return this.httpClient.get<any>(`${this.serverUrl}/api/v1/assessments`)
             .pipe(
                 map(response => {
                     this.dataSubject.next(response)
