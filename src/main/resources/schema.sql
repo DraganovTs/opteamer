@@ -17,6 +17,10 @@ DROP TABLE IF EXISTS assets CASCADE;
 DROP TABLE IF EXISTS privileges CASCADE;
 DROP TABLE IF EXISTS roles CASCADE;
 DROP TABLE IF EXISTS role_privileges CASCADE;
+DROP TABLE IF EXISTS optype_team_member CASCADE;
+DROP TABLE IF EXISTS op_type_assets CASCADE;
+DROP TABLE IF EXISTS users CASCADE;
+DROP TABLE IF EXISTS user_roles CASCADE;
 
 -- Table for Assets
 CREATE TABLE IF NOT EXISTS assets (
@@ -165,4 +169,34 @@ CREATE TABLE IF NOT EXISTS opType_assets (
                                              PRIMARY KEY (optype_id, asset_id),
                                              FOREIGN KEY (optype_id) REFERENCES operation_types(name),  -- Make sure this matches the primary key in operation_types
                                              FOREIGN KEY (asset_id) REFERENCES assets(id)               -- Make sure this matches the primary key in assets
+);
+
+CREATE TABLE optype_team_member (
+                                    operation_id INT NOT NULL,
+                                    team_member_id INT NOT NULL,
+                                    PRIMARY KEY (operation_id, team_member_id),
+                                    FOREIGN KEY (operation_id) REFERENCES operations(id) ON DELETE CASCADE,
+                                    FOREIGN KEY (team_member_id) REFERENCES team_members(id) ON DELETE CASCADE
+);
+
+CREATE TABLE IF NOT EXISTS op_type_assets (
+                                              op_type_id VARCHAR(50) REFERENCES operation_types(name) ON DELETE CASCADE,
+                                              asset_id BIGINT REFERENCES assets(id) ON DELETE CASCADE,
+                                              PRIMARY KEY (op_type_id, asset_id)
+);
+
+CREATE TABLE IF NOT EXISTS users (
+                                     id BIGSERIAL PRIMARY KEY,
+                                     email VARCHAR(100) UNIQUE NOT NULL,
+                                     password VARCHAR(100) NOT NULL,
+                                     username VARCHAR(50) UNIQUE NOT NULL
+);
+
+
+CREATE TABLE IF NOT EXISTS user_roles (
+                                          user_id BIGINT,
+                                          role_id BIGINT,
+                                          PRIMARY KEY (user_id, role_id),
+                                          FOREIGN KEY (user_id) REFERENCES users (id),  -- Assuming you have a users table
+                                          FOREIGN KEY (role_id) REFERENCES roles (id)
 );

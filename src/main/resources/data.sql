@@ -160,16 +160,16 @@ VALUES
 
 
 -- Insert operations
-INSERT INTO operations (type_id, room_id, start_date, state)
+INSERT INTO operations (type_id, room_id, patient_id, start_date, state)
 VALUES
-    ('Appendectomy', 1, '2024-10-15 08:00:00', 'SCHEDULED'),
-    ('Cholecystectomy', 2, '2024-10-16 09:00:00', 'READY_TO_BEGIN'),
-    ('Hernia Repair', 3, '2024-10-17 10:00:00', 'SCHEDULED'),
-    ('Spinal Fusion', 4, '2024-10-18 11:00:00', 'IN_PROGRESS'),
-    ('Gallbladder Removal',5, '2024-10-19 08:00:00', 'COMPLETED'),
-    ('Plastic Surgery', 6, '2024-10-20 09:00:00', 'CANCELLED'),
-    ('Coronary Bypass', 7, '2024-10-21 07:00:00', 'READY_TO_BEGIN'),
-    ('Laparoscopic Surgery', 8, '2024-10-22 08:30:00', 'SCHEDULED');
+    ('Appendectomy', 1, 1, '2024-10-15 08:00:00', 'SCHEDULED'),
+    ('Cholecystectomy', 2, 2, '2024-10-16 09:00:00', 'READY_TO_BEGIN'),
+    ('Hernia Repair', 3, 3, '2024-10-17 10:00:00', 'SCHEDULED'),
+    ('Spinal Fusion', 4, 4, '2024-10-18 11:00:00', 'IN_PROGRESS'),
+    ('Gallbladder Removal', 5, 5, '2024-10-19 08:00:00', 'COMPLETED'),
+    ('Plastic Surgery', 6, 6, '2024-10-20 09:00:00', 'CANCELLED'),
+    ('Coronary Bypass', 7, 7, '2024-10-21 07:00:00', 'READY_TO_BEGIN'),
+    ('Laparoscopic Surgery', 8, 8, '2024-10-22 08:30:00', 'SCHEDULED');
 
 
 INSERT INTO optype_opproviders (optype_id, opprovider_id)
@@ -272,11 +272,13 @@ ON CONFLICT DO NOTHING;
 
 INSERT INTO op_type_assets (op_type_id, asset_id)
 VALUES
-    (5, 20),
-    (5, 21),
-    (6, 15),
-    (6, 16)
+    ('Appendectomy', 20),
+    ('Cholecystectomy', 21),
+    ('Hernia Repair', 15),
+    ('Spinal Fusion', 16)
 ON CONFLICT DO NOTHING;
+
+
 
 INSERT INTO assessments (team_member_id, pre_op_a_id, patient_id, start_date)
 VALUES
@@ -301,10 +303,47 @@ VALUES
     (5,'CRUD');
 
 
-INSERT INTO user (email, password, username)
+INSERT INTO users (email, password, username)
 VALUES
-    ('admin@gmail.com','1234','adminUser'),
-    ('test@gmail.com','1234','testUser'),
-    ('business@gmail.com','1234','businessUser');
+    ('admin@gmail.com', '1234', 'adminUser'),
+    ('test@gmail.com', '1234', 'testUser'),
+    ('business@gmail.com', '1234', 'businessUser');
 
+
+INSERT INTO operation_reports (team_member_id, operation_id, report)
+VALUES
+    (1, 1, 'Operation completed successfully with no complications.'),
+    (2, 1, 'Assisted with patient monitoring during operation.'),
+    (3, 2, 'Prepped the patient and managed anesthesia.'),
+    (4, 3, 'Conducted post-operative follow-up.'),
+    (5, 5, 'Assisted with surgical tools and maintained a sterile field.'),
+    (6, 4, 'Assisted with surgical procedures during Spinal Fusion.');
+
+
+INSERT INTO assessments (team_member_id, pre_op_a_id, patient_id, start_date)
+VALUES
+    (1, 'Medical History Review', 1, '2024-10-12 10:00:00'),
+    (2, 'Physical Examination', 2, '2024-10-12 11:00:00'),
+    (3, 'Blood Tests', 3, '2024-10-12 12:00:00'),
+    (4, 'Cardiac Assessment', 4, '2024-10-12 13:00:00')
+ON CONFLICT (team_member_id, patient_id, pre_op_a_id) DO NOTHING;
+
+
+
+-- Insert role privileges
+INSERT INTO role_privileges (role_id, privilege_id)
+VALUES
+    (1, 1),
+    (1, 2),
+    (2, 1),
+    (2, 4),
+    (3, 1),
+    (3, 3);
+
+-- Insert user roles
+INSERT INTO user_roles (user_id, role_id)
+VALUES
+    (1, 1),
+    (2, 2),
+    (3, 3);
 
