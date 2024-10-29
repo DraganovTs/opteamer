@@ -301,7 +301,7 @@ VALUES
     (5,'CRUD');
 
 
-INSERT INTO use (email, password, username)
+INSERT INTO user (email, password, username)
 VALUES
     ('admin@gmail.com','1234','adminUser'),
     ('test@gmail.com','1234','testUser'),
