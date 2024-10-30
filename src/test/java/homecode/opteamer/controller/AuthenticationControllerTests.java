@@ -1,11 +1,13 @@
-package homecode.opteamer.service;
+package homecode.opteamer.controller;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import homecode.opteamer.model.dtos.AuthenticationRequestDTO;
 import homecode.opteamer.util.JwtUtil;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.Mockito;
+import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -27,6 +29,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 
 @SpringBootTest
 @AutoConfigureMockMvc(addFilters = false)
+@ExtendWith(MockitoExtension.class)
 public class AuthenticationControllerTests {
     @Autowired
     private MockMvc mockMvc;

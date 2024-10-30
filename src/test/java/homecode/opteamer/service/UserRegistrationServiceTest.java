@@ -1,5 +1,6 @@
 package homecode.opteamer.service;
 
+import homecode.opteamer.exception.InvalidOperationException;
 import homecode.opteamer.model.Role;
 import homecode.opteamer.model.User;
 import homecode.opteamer.model.dtos.UserRegistrationDTO;
@@ -14,7 +15,6 @@ import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.security.crypto.password.PasswordEncoder;
 
-import java.util.NoSuchElementException;
 import java.util.Optional;
 
 import static org.junit.jupiter.api.Assertions.assertThrows;
@@ -69,11 +69,12 @@ public class UserRegistrationServiceTest {
     void testCreateUser_RoleNotFound() {
         when(roleRepository.findByName(ERole.ROLE_USER)).thenReturn(Optional.empty());
 
-        assertThrows(NoSuchElementException.class, () -> {
+        assertThrows(InvalidOperationException.class, () -> {
             userRegistrationService.createUser(userRegistrationDTO);
         });
 
         verify(userRepository, never()).save(any(User.class));
     }
+
 
 }

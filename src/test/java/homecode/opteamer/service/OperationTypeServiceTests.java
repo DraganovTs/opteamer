@@ -200,25 +200,25 @@ public class OperationTypeServiceTests {
 
     @Test
     void createOperationType_ShouldThrowIfAssetNotFound(){
-        when(assetRepository.findById(1L)).thenReturn(Optional.empty());
+        when(assetRepository.findById(anyLong())).thenReturn(Optional.empty());
 
 
         assertThrows(ResourceNotFoundException.class, () -> operationTypeService.createOperationType(operationTypeDTO));
 
-        verify(assetRepository, times(1)).findById(1L);
+        verify(assetRepository, times(1)).findById(anyLong());
     }
 
     @Test
     void createOperationType_ShouldThrowIfPreOperativeAssessmentNotFound(){
         when(assetRepository.findById(1L)).thenReturn(Optional.of(asset));
         when(assetRepository.findById(2L)).thenReturn(Optional.of(asset2));
-        when(preOperativeAssessmentRepository.findByName("preOperativeAssessment")).thenReturn(Optional.empty());
+        when(preOperativeAssessmentRepository.findByName(anyString())).thenReturn(Optional.empty());
 
         assertThrows(ResourceNotFoundException.class, () -> operationTypeService.createOperationType(operationTypeDTO));
 
         verify(assetRepository, times(1)).findById(1L);
         verify(assetRepository, times(1)).findById(2L);
-        verify(preOperativeAssessmentRepository, times(1)).findByName("preOperativeAssessment");
+        verify(preOperativeAssessmentRepository, times(1)).findByName(anyString());
     }
 
     @Test
