@@ -1,8 +1,9 @@
 services:
   db:
     image: postgres:latest
+    container_name: postgresql
     healthcheck:
-      test: ["CMD-SHELL", "pg_isready", "-d", "db_prod"]
+      test: ["CMD-SHELL", "pg_isready", "-d", "opteamer", "-U", "postgres"]
       interval: 30s
       timeout: 60s
       retries: 5
@@ -11,6 +12,7 @@ services:
       POSTGRES_DB: opteamer
       POSTGRES_USER: postgres
       POSTGRES_PASSWORD: postgres
+      PGUSER: postgres
     volumes:
       - ./docker/initdb:/docker-entrypoint-initdb.d
     ports:
@@ -36,27 +38,20 @@ services:
     networks:
       - op
 
+  opteamer-frontend:
+    build:
+      context: ../opteamer-client
+      dockerfile: ../opteamer-client/Dockerfile
+    container_name: opteamer-frontend
+    ports:
+      - "4200:4200"
+    depends_on:
+      - db
+    networks:
+      - op
+
+
 networks:
   op:
     driver: "bridge"
 
-#  opteamer-app:
-#    build:
-#      context: ..  # Set to the root of your project
-#      dockerfile: ../src/main/java/homecode/opteamer/Dockerfile  # Path to the Dockerfile
-#    ports:
-#      - "8080:8080"
-#    environment:
-#      SPRING_DATASOURCE_URL: jdbc:postgresql://db:5432/opteamer
-#      SPRING_DATASOURCE_USERNAME: postgres
-#      SPRING_DATASOURCE_PASSWORD: postgres
-#    depends_on:
-#      - db
-#    volumes:
-#      - ./target:/app
-#    command: ["./wait-for-it.sh", "db", "--", "java", "-jar", "/app/opteamer.jar"]
-#
-#
-#networks:
-#  opteamer:
-#    driver: "bridge"
