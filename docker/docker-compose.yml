@@ -1,6 +1,12 @@
 services:
   db:
     image: postgres:latest
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready", "-d", "db_prod"]
+      interval: 30s
+      timeout: 60s
+      retries: 5
+      start_period: 80s
     environment:
       POSTGRES_DB: opteamer
       POSTGRES_USER: postgres
@@ -9,11 +15,12 @@ services:
       - ./docker/initdb:/docker-entrypoint-initdb.d
     ports:
       - "5432:5432"
+    networks:
+      - op
 
-  opteamer-app:
-    build:
-      context: ..  # Set to the root of your project
-      dockerfile: docker/Dockerfile  # Path to the Dockerfile
+  opteamer-backend:
+    image: "tzetzaka2/opteamer:s1"
+    container_name: opteamer-backend
     ports:
       - "8080:8080"
     environment:
@@ -22,6 +29,34 @@ services:
       SPRING_DATASOURCE_PASSWORD: postgres
     depends_on:
       - db
-    volumes:
-      - ./target:/app
-    command: ["./wait-for-it.sh", "db", "--", "java", "-jar", "/app/opteamer.jar"]
+    deploy:
+      resources:
+        limits:
+          memory: 700m
+    networks:
+      - op
+
+networks:
+  op:
+    driver: "bridge"
+
+#  opteamer-app:
+#    build:
+#      context: ..  # Set to the root of your project
+#      dockerfile: ../src/main/java/homecode/opteamer/Dockerfile  # Path to the Dockerfile
+#    ports:
+#      - "8080:8080"
+#    environment:
+#      SPRING_DATASOURCE_URL: jdbc:postgresql://db:5432/opteamer
+#      SPRING_DATASOURCE_USERNAME: postgres
+#      SPRING_DATASOURCE_PASSWORD: postgres
+#    depends_on:
+#      - db
+#    volumes:
+#      - ./target:/app
+#    command: ["./wait-for-it.sh", "db", "--", "java", "-jar", "/app/opteamer.jar"]
+#
+#
+#networks:
+#  opteamer:
+#    driver: "bridge"
