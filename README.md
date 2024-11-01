@@ -9,6 +9,7 @@ Opteamer is a comprehensive application built to streamline the management of op
 - [API Documentation](#api-documentation)
 - [Installation](#installation)
 - [Usage](#usage)
+- [Docker](#docker)
 - [Contributing](#contributing)
 - [License](#license)
 
@@ -59,7 +60,7 @@ The application offers a RESTful API documented using OpenAPI (Swagger). You can
 2. Navigate to the project directory:
 
    ```bash
-   ./mvnw clean install
+   cd opteamer
 
 3. Build the application:
 
@@ -73,6 +74,28 @@ The application offers a RESTful API documented using OpenAPI (Swagger). You can
 
 ## Usage
 Once the application is running, you can access the Swagger UI to interact with the APIs, test requests, and explore the available operations. To access Swagger UI, visit http://localhost:8080/swagger-ui.html in your browser.
+
+## Docker
+To run the application using Docker and initialize the database with data, follow these steps:
+
+Prerequisites
+Docker: Ensure Docker is installed and running on your machine.
+
+### Steps to Run with Docker
+
+1. Build the Docker images:
+  Navigate to the project directory and run
+   ```bash
+   docker-compose build
+
+2. Start the containers:
+
+   ```bash
+   docker-compose up
+
+3.Access the application:
+
+ Once the containers are up, you can access the Swagger UI at http://localhost:8080/swagger-ui.html.
 
 ## Contributing
 Contributions are welcome! If you find a bug or have suggestions for improvements, feel free to open an issue or submit a pull request.
