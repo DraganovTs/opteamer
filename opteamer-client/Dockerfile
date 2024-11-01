@@ -4,7 +4,7 @@ FROM node:18 AS build
 # Set the working directory
 WORKDIR /app
 
-# Copy package.json and package-lock.json (or yarn.lock)
+# Copy package.json and package-lock.json
 COPY package.json package-lock.json ./
 
 # Install dependencies
@@ -13,14 +13,15 @@ RUN npm install
 # Copy the rest of the application
 COPY . .
 
-# Build the application
-RUN npm run build
+# Build the application and show output directory
+RUN npm run build && ls -la /app/dist/opteamer-client/browser
 
 # Use nginx to serve the application
 FROM nginx:alpine
-COPY --from=build /app/dist /usr/share/nginx/html
+# Make sure to copy the correct path
+COPY --from=build /app/dist/opteamer-client/browser /usr/share/nginx/html
 
-# Expose port 4200
-EXPOSE 4200
+# Expose port 80 for Nginx
+EXPOSE 80
 
 CMD ["nginx", "-g", "daemon off;"]

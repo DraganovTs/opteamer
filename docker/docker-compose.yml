@@ -41,12 +41,12 @@ services:
   opteamer-frontend:
     build:
       context: ../opteamer-client
-      dockerfile: ../opteamer-client/Dockerfile
+      dockerfile: Dockerfile
     container_name: opteamer-frontend
     ports:
-      - "4200:4200"
+      - "4200:80"
     depends_on:
-      - db
+      - opteamer-backend
     networks:
       - op
 
